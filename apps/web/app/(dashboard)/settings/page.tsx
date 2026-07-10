@@ -6,7 +6,7 @@ import { orgApi, authApi, billingApi } from '@/lib/api';
 import { toast } from 'sonner';
 import { useAuthStore } from '@/stores/auth.store';
 import {
-  Building2, Users, CreditCard, UserPlus, AlertCircle, Settings,
+  Building2, Users, CreditCard, UserPlus, AlertCircle, Settings, Shield,
 } from 'lucide-react';
 
 type Tab = 'general' | 'integrations' | 'team' | 'billing';
