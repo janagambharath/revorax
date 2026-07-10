@@ -4,9 +4,8 @@ import { useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import {
-  LayoutDashboard, Users, Target, ListTodo,
-  Megaphone, BarChart3, Sparkles, Settings, LogOut,
-  Bell, ChevronDown, Zap, Building2, MessageSquare
+  LayoutDashboard, Users, Settings, LogOut,
+  Bell, ChevronDown, MessageSquare
 } from 'lucide-react';
 import { useAuthStore } from '@/stores/auth.store';
 import { toast } from 'sonner';
