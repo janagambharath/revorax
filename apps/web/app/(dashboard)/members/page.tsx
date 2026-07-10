@@ -49,8 +49,11 @@ export default function MembersPage() {
   const expiringQuery = useQuery({
     queryKey: ['members', 'expiring'],
     queryFn: () => {
-      if (businessType === 'CLINIC' || businessType === 'SALON') {
-        return api.scheduledReminders(7) as any;
+      if (businessType === 'CLINIC') {
+        return patientsApi.scheduledReminders(7) as any;
+      }
+      if (businessType === 'SALON') {
+        return clientsApi.scheduledReminders(7) as any;
       }
       return membersApi.expiringSoon(7) as any;
     },
