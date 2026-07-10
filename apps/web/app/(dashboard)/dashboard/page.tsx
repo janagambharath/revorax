@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { analyticsApi, membersApi } from '@/lib/api';
+import { analyticsApi, membersApi, patientsApi, clientsApi } from '@/lib/api';
 import { daysUntil, formatCurrency, formatDate, getVerticalPack } from '@revorax/shared';
 import {
   AlertCircle,
@@ -103,7 +103,15 @@ export default function DashboardPage() {
 
   const { data: expiring } = useQuery({
     queryKey: ['members', 'expiring-soon'],
-    queryFn: () => membersApi.expiringSoon(7) as any,
+    queryFn: () => {
+      if (org?.businessType === 'CLINIC') {
+        return patientsApi.scheduledReminders(7) as any;
+      }
+      if (org?.businessType === 'SALON') {
+        return clientsApi.scheduledReminders(7) as any;
+      }
+      return membersApi.expiringSoon(7) as any;
+    },
   });
 
   const { data: activity } = useQuery({
@@ -262,7 +270,19 @@ export default function DashboardPage() {
           ) : (
             <div className="space-y-3">
               {(expiring as any[]).slice(0, 5).map((member: any) => {
-                const days = daysUntil(member.renewalDate);
+                const dateVal = org?.businessType === 'CLINIC'
+                  ? member.nextAppointmentDate || member.lastAppointmentDate
+                  : org?.businessType === 'SALON'
+                  ? member.nextBookingDate || member.lastVisitDate
+                  : member.renewalDate;
+
+                const amountVal = org?.businessType === 'CLINIC'
+                  ? member.treatmentValue
+                  : org?.businessType === 'SALON'
+                  ? member.averageSpend
+                  : member.amount;
+
+                const days = daysUntil(dateVal);
                 return (
                   <Link key={member.id} href={`/dashboard/members/${member.id}`} className="flex items-center gap-3 p-3 rounded-xl hover:bg-surface-100 transition-colors group">
                     <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 text-xs font-bold">
@@ -270,13 +290,13 @@ export default function DashboardPage() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-zinc-200 truncate">{member.contact.name}</p>
-                      <p className="text-xs text-zinc-500">{pack.retentionObject} - {formatCurrency(Number(member.amount))}</p>
+                      <p className="text-xs text-zinc-500">{pack.retentionObject} - {formatCurrency(Number(amountVal))}</p>
                     </div>
                     <div className="text-right">
                       <p className={`text-xs font-bold ${days <= 3 ? 'text-red-400' : 'text-amber-400'}`}>
                         {days === 0 ? 'Today' : `${days}d`}
                       </p>
-                      <p className="text-xs text-zinc-600">{formatDate(member.renewalDate)}</p>
+                      <p className="text-xs text-zinc-600">{formatDate(dateVal)}</p>
                     </div>
                   </Link>
                 );

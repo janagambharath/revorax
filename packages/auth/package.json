@@ -2,10 +2,11 @@
   "name": "@revorax/auth",
   "version": "0.1.0",
   "private": true,
-  "main": "./src/index.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
-    ".": "./src/index.ts",
-    "./client": "./src/client.ts"
+    ".": "./dist/index.js",
+    "./client": "./dist/client.js"
   },
   "scripts": {
     "build": "tsc",

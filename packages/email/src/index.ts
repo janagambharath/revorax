@@ -1,6 +1,6 @@
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = new Resend(process.env.RESEND_API_KEY || 're_dummy_key_for_startup');
 
 const FROM = process.env.EMAIL_FROM || 'Revorax <noreply@revorax.online>';
 const REPLY_TO = process.env.EMAIL_REPLY_TO || 'support@revorax.online';
