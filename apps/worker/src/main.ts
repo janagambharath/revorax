@@ -66,7 +66,7 @@ const renewalWorker = new Worker(
       amount: formatCurrency(Number(member.amount)),
     };
 
-    const body = template.body.replace(/{{(\w+)}}/g, (_, key) => variables[key] || `{{${key}}}`);
+    const body = template.body.replace(/{{(\w+)}}/g, (_: string, key: string) => variables[key] || `{{${key}}}`);
 
     if (channel === 'WHATSAPP') {
       const whatsapp = await getWhatsAppClient(orgId);

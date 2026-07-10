@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import {
-  LayoutDashboard, Users, UserCheck, Target, ListTodo,
+  LayoutDashboard, Users, Target, ListTodo,
   Megaphone, BarChart3, Sparkles, Settings, LogOut,
   Bell, ChevronDown, Zap, Building2, MessageSquare
 } from 'lucide-react';
