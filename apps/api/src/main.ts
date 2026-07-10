@@ -52,10 +52,10 @@ async function bootstrap() {
     swaggerOptions: { persistAuthorization: true },
   });
 
-  const port = process.env.API_PORT || 3001;
-  await app.listen(port);
+  const port = process.env.PORT || process.env.API_PORT || 3001;
+  await app.listen(port, '0.0.0.0');
 
-  logger.log(`🚀 Revorax API running on: http://localhost:${port}`);
+  logger.log(`🚀 Revorax API running on: http://0.0.0.0:${port}`);
   logger.log(`📚 Swagger docs: http://localhost:${port}/docs`);
 }
 
