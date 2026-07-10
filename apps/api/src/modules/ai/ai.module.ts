@@ -32,7 +32,7 @@ class AiController {
   @Post('generate-copy')
   @ApiOperation({ summary: 'Generate AI campaign copy' })
   generateCopy(@OrgId() orgId: string, @Body() body: { purpose: string; channel?: string; audience?: string; tone?: string }) {
-    return this.aiService.generateCopy(orgId, body);
+    return this.aiService.generateCopy(orgId, { channel: 'WHATSAPP', ...body });
   }
 
   @Post('summarize/:contactId')

@@ -89,7 +89,7 @@ export default function SignupPage() {
                   </div>
                   <div>
                     <label className="label">Business name</label>
-                    <input {...register('orgName')} type="text" placeholder="FitZone Gym" className="input" />
+                    <input {...register('orgName')} type="text" placeholder="Your Business" className="input" />
                     {errors.orgName && <p className="text-red-400 text-xs mt-1">{errors.orgName.message}</p>}
                   </div>
                 </div>
@@ -120,7 +120,7 @@ export default function SignupPage() {
             {step === 2 && (
               <div className="space-y-5 animate-fade-in">
                 <h2 className="text-xl font-bold text-zinc-100 mb-1">Choose your business type</h2>
-                <p className="text-zinc-500 text-sm mb-6">We'll set up the right workflows for you</p>
+                <p className="text-zinc-500 text-sm mb-6">We'll set up the right revenue workflows for you</p>
 
                 <div className="grid grid-cols-2 gap-3">
                   {Object.entries(BUSINESS_TYPES).map(([key, val]) => (
@@ -136,6 +136,7 @@ export default function SignupPage() {
                     >
                       <div className="text-2xl mb-1">{val.icon}</div>
                       <div className="text-sm font-medium">{val.label}</div>
+                      <div className="text-xs text-zinc-500 mt-1">{val.hint}</div>
                     </button>
                   ))}
                 </div>

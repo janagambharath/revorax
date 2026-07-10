@@ -1,15 +1,15 @@
 'use client';
 
 import { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { membersApi } from '@/lib/api';
-import { formatCurrency, formatDate, daysUntil } from '@revorax/shared';
-import { toast } from 'sonner';
+import { formatCurrency, formatDate, daysUntil, getRetentionOptions, getVerticalPack } from '@revorax/shared';
 import Link from 'next/link';
 import {
-  Search, Plus, Filter, Users, AlertCircle, Clock,
-  CheckCircle, ChevronRight, Phone, MessageSquare, RefreshCw,
+  Search, Plus, Users, AlertCircle, Clock,
+  ChevronRight, Phone, MessageSquare, RefreshCw,
 } from 'lucide-react';
+import { useAuthStore } from '@/stores/auth.store';
 
 const STATUS_CONFIG: Record<string, { label: string; cls: string }> = {
   ACTIVE: { label: 'Active', cls: 'badge-green' },
@@ -19,17 +19,16 @@ const STATUS_CONFIG: Record<string, { label: string; cls: string }> = {
   CANCELLED: { label: 'Cancelled', cls: 'badge-gray' },
 };
 
-const MEMBERSHIP_LABELS: Record<string, string> = {
-  MONTHLY: 'Monthly',
-  QUARTERLY: 'Quarterly',
-  HALF_YEARLY: 'Half Yearly',
-  ANNUAL: 'Annual',
-  DAY_PASS: 'Day Pass',
-  CUSTOM: 'Custom',
-};
+function titleCase(value: string) {
+  return value.replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
 
 export default function MembersPage() {
-  const qc = useQueryClient();
+  const { org } = useAuthStore();
+  const pack = getVerticalPack(org?.businessType);
+  const retentionLabels = Object.fromEntries(
+    getRetentionOptions(org?.businessType).map((option) => [option.value, option.label]),
+  );
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [activeTab, setActiveTab] = useState<'all' | 'expiring' | 'overdue' | 'reactivation'>('all');
@@ -70,10 +69,10 @@ export default function MembersPage() {
     activeTab === 'overdue' ? overdueQuery.isLoading : reactivationQuery.isLoading;
 
   const tabs = [
-    { id: 'all', label: 'All Members', icon: Users, count: listQuery.data?.meta?.total },
-    { id: 'expiring', label: 'Expiring Soon', icon: Clock, count: expiringQuery.data?.length, urgent: true },
-    { id: 'overdue', label: 'Overdue', icon: AlertCircle, count: overdueQuery.data?.length, urgent: true },
-    { id: 'reactivation', label: 'Reactivation', icon: RefreshCw, count: reactivationQuery.data?.length },
+    { id: 'all', label: `All ${pack.primaryNavLabel}`, icon: Users, count: listQuery.data?.meta?.total },
+    { id: 'expiring', label: pack.expiringLabel, icon: Clock, count: expiringQuery.data?.length, urgent: true },
+    { id: 'overdue', label: pack.overdueLabel, icon: AlertCircle, count: overdueQuery.data?.length, urgent: true },
+    { id: 'reactivation', label: pack.reactivationLabel, icon: RefreshCw, count: reactivationQuery.data?.length },
   ];
 
   return (
@@ -81,11 +80,11 @@ export default function MembersPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-zinc-100">Members</h1>
-          <p className="text-zinc-500 text-sm mt-1">Track memberships, renewals, and revenue</p>
+          <h1 className="text-2xl font-bold text-zinc-100">{pack.primaryNavLabel}</h1>
+          <p className="text-zinc-500 text-sm mt-1">{pack.recoveryListLabel}: {pack.positioning}</p>
         </div>
         <Link href="/dashboard/members/new" className="btn-primary text-sm flex items-center gap-2">
-          <Plus className="w-4 h-4" /> Add Member
+          <Plus className="w-4 h-4" /> Add {titleCase(pack.primaryEntity)}
         </Link>
       </div>
 
@@ -122,7 +121,7 @@ export default function MembersPage() {
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search by name, phone, email..."
+              placeholder={`Search ${pack.primaryEntityPlural} by name, phone, email...`}
               className="input pl-10"
             />
           </div>
@@ -149,19 +148,19 @@ export default function MembersPage() {
         ) : members.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-center">
             <Users className="w-12 h-12 text-zinc-600 mb-4" />
-            <p className="text-zinc-400 font-medium">No members found</p>
+            <p className="text-zinc-400 font-medium">No {pack.primaryEntityPlural} found</p>
             <p className="text-zinc-600 text-sm mt-1">
-              {activeTab === 'all' ? 'Add your first member to get started' : 'No members in this category'}
+              {activeTab === 'all' ? `Add your first ${pack.primaryEntity} to get started` : `No ${pack.primaryEntityPlural} in this category`}
             </p>
           </div>
         ) : (
           <table className="data-table">
             <thead>
               <tr>
-                <th>Member</th>
-                <th>Membership</th>
-                <th>Renewal Date</th>
-                <th>Amount</th>
+                <th>{titleCase(pack.primaryEntity)}</th>
+                <th>{titleCase(pack.retentionObject)}</th>
+                <th>{titleCase(pack.retentionDateLabel)}</th>
+                <th>{titleCase(pack.amountLabel)}</th>
                 <th>Status</th>
                 <th>Last Contact</th>
                 <th></th>
@@ -188,7 +187,7 @@ export default function MembersPage() {
                       </div>
                     </td>
                     <td>
-                      <span className="text-sm text-zinc-300">{MEMBERSHIP_LABELS[m.membershipType] || m.membershipType}</span>
+                      <span className="text-sm text-zinc-300">{retentionLabels[m.membershipType] || m.membershipType}</span>
                     </td>
                     <td>
                       <div>
@@ -200,7 +199,7 @@ export default function MembersPage() {
                             days <= 7 ? 'text-yellow-400' : 'text-zinc-500'
                           }`}>
                             {days < 0 ? `${Math.abs(days)}d overdue` :
-                             days === 0 ? 'Expires today' :
+                             days === 0 ? 'Due today' :
                              `${days}d left`}
                           </p>
                         )}
@@ -219,12 +218,14 @@ export default function MembersPage() {
                     </td>
                     <td>
                       <div className="flex items-center gap-1">
-                        <button
-                          onClick={(e) => { e.stopPropagation(); toast.info('Send message: coming soon'); }}
+                        <Link
+                          href={`/dashboard/members/${m.id}`}
+                          title="Open follow-up workspace"
                           className="p-1.5 rounded-lg hover:bg-surface-200 text-zinc-500 hover:text-brand-400 transition-colors"
+                          onClick={(e) => e.stopPropagation()}
                         >
                           <MessageSquare className="w-4 h-4" />
-                        </button>
+                        </Link>
                         <Link
                           href={`/dashboard/members/${m.id}`}
                           onClick={(e) => e.stopPropagation()}
@@ -245,7 +246,7 @@ export default function MembersPage() {
         {activeTab === 'all' && listQuery.data?.meta && (
           <div className="px-4 py-3 border-t border-surface-200 flex items-center justify-between">
             <p className="text-xs text-zinc-500">
-              Showing {members.length} of {listQuery.data.meta.total} members
+              Showing {members.length} of {listQuery.data.meta.total} {pack.primaryEntityPlural}
             </p>
             <div className="flex gap-2">
               <button className="btn-secondary text-xs py-1.5 px-3" disabled={!listQuery.data.meta.hasPrev}>

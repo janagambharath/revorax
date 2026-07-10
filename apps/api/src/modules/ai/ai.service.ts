@@ -7,6 +7,7 @@ import {
   generateCampaignCopy,
   summarizeContactHistory,
 } from '@revorax/ai';
+import { getVerticalPack } from '@revorax/shared';
 
 @Injectable()
 export class AiService {
@@ -23,13 +24,14 @@ export class AiService {
     if (!contact) throw new Error('Contact not found');
 
     const org = await this.prisma.organization.findUnique({ where: { id: orgId } });
+    const pack = getVerticalPack(org?.businessType);
 
     const message = await generateFollowUpMessage({
       contactName: contact.name,
       businessName: org?.name || 'the business',
-      businessType: org?.businessType?.toLowerCase() || 'gym',
+      businessType: pack.targetNiche,
       channel: params.channel as 'WHATSAPP' | 'EMAIL',
-      context: params.context || (contact.member ? `Member status: ${contact.member.status}` : 'Lead follow-up'),
+      context: params.context || (contact.member ? `${pack.primaryEntity} status: ${contact.member.status}` : `${pack.leadLabel} follow-up`),
       memberStatus: contact.member?.status,
     });
 
@@ -44,13 +46,14 @@ export class AiService {
     if (!lead) throw new Error('Lead not found');
 
     const org = await this.prisma.organization.findUnique({ where: { id: orgId } });
+    const pack = getVerticalPack(org?.businessType);
 
     const result = await classifyAndScoreLead({
       contactName: lead.contact.name,
       source: lead.source,
       notes: lead.notes || '',
       interactions: lead.contact.messages.map((m) => m.body).slice(0, 5),
-      businessType: org?.businessType?.toLowerCase() || 'gym',
+      businessType: pack.targetNiche,
     });
 
     // Update lead score
@@ -74,6 +77,7 @@ export class AiService {
     if (!contact) throw new Error('Contact not found');
 
     const org = await this.prisma.organization.findUnique({ where: { id: orgId } });
+    const pack = getVerticalPack(org?.businessType);
     const lastMessage = contact.messages[0];
     const daysSinceContact = lastMessage
       ? Math.floor((Date.now() - lastMessage.createdAt.getTime()) / 86400000)
@@ -81,7 +85,7 @@ export class AiService {
 
     return suggestNextAction({
       contactName: contact.name,
-      businessType: org?.businessType?.toLowerCase() || 'gym',
+      businessType: pack.targetNiche,
       memberStatus: contact.member?.status,
       lastContactDays: daysSinceContact,
       openTasks: contact.tasks.map((t) => t.title),
@@ -91,13 +95,14 @@ export class AiService {
 
   async generateCopy(orgId: string, params: { purpose: string; channel: string; audience?: string; tone?: string }) {
     const org = await this.prisma.organization.findUnique({ where: { id: orgId } });
+    const pack = getVerticalPack(org?.businessType);
 
     return generateCampaignCopy({
       purpose: params.purpose,
       businessName: org?.name || 'the business',
-      businessType: org?.businessType?.toLowerCase() || 'gym',
+      businessType: pack.targetNiche,
       channel: params.channel as 'WHATSAPP' | 'EMAIL',
-      audience: params.audience || 'existing members',
+      audience: params.audience || pack.campaignAudienceLabel,
       tone: (params.tone || 'friendly') as 'professional' | 'friendly' | 'urgent',
     });
   }
@@ -113,12 +118,13 @@ export class AiService {
     if (!contact) throw new Error('Contact not found');
 
     const org = await this.prisma.organization.findUnique({ where: { id: orgId } });
+    const pack = getVerticalPack(org?.businessType);
 
     return summarizeContactHistory({
       contactName: contact.name,
       notes: contact.notesList.map((n) => n.body),
       messages: contact.messages.map((m) => `[${m.direction}] ${m.body}`),
-      businessType: org?.businessType?.toLowerCase() || 'gym',
+      businessType: pack.targetNiche,
     });
   }
 }

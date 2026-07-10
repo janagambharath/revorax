@@ -7,7 +7,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaClient, UserRole } from '@revorax/database';
-import { slugify } from '@revorax/shared';
+import { getVerticalPack, slugify } from '@revorax/shared';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import { sendEmail, emailTemplates } from '@revorax/email';
@@ -33,6 +33,7 @@ export class AuthService {
     if (slugExists) slug = `${slug}-${Date.now().toString(36)}`;
 
     const passwordHash = await bcrypt.hash(data.password, 12);
+    const pack = getVerticalPack(data.businessType);
 
     // Create org + user in transaction
     const result = await this.prisma.$transaction(async (tx) => {
@@ -40,7 +41,17 @@ export class AuthService {
         data: {
           name: data.orgName,
           slug,
-          businessType: data.businessType as any,
+          businessType: pack.businessType as any,
+          settings: {
+            verticalPack: {
+              label: pack.label,
+              positioning: pack.positioning,
+              revenueGoal: pack.revenueGoal,
+              painPoint: pack.painPoint,
+              modules: pack.modules,
+              v1: pack.v1,
+            },
+          },
         },
       });
 
@@ -63,6 +74,29 @@ export class AuthService {
           currentPeriodStart: new Date(),
           currentPeriodEnd: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000), // 14 day trial
         },
+      });
+
+      await tx.template.createMany({
+        data: pack.templates.map((template) => ({
+          orgId: org.id,
+          name: template.name,
+          channel: template.channel as any,
+          category: template.category as any,
+          body: template.body,
+          variables: template.variables,
+          isActive: true,
+        })),
+      });
+
+      await tx.workflow.createMany({
+        data: pack.workflows.map((workflow) => ({
+          orgId: org.id,
+          name: workflow.label,
+          description: workflow.leak,
+          trigger: workflow.trigger as any,
+          steps: workflow.steps as any,
+          isActive: true,
+        })),
       });
 
       return { org, user };

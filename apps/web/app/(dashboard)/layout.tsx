@@ -6,26 +6,31 @@ import Link from 'next/link';
 import {
   LayoutDashboard, Users, UserCheck, Target, ListTodo,
   Megaphone, BarChart3, Sparkles, Settings, LogOut,
-  Bell, ChevronDown, Zap, Building2,
+  Bell, ChevronDown,
 } from 'lucide-react';
 import { useAuthStore } from '@/stores/auth.store';
 import { toast } from 'sonner';
+import { getVerticalPack } from '@revorax/shared';
 
-const navItems = [
-  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/dashboard/members', label: 'Members', icon: Users },
-  { href: '/dashboard/leads', label: 'Leads', icon: Target },
-  { href: '/dashboard/contacts', label: 'Contacts', icon: UserCheck },
-  { href: '/dashboard/tasks', label: 'Tasks', icon: ListTodo },
-  { href: '/dashboard/campaigns', label: 'Campaigns', icon: Megaphone },
-  { href: '/dashboard/analytics', label: 'Analytics', icon: BarChart3 },
-  { href: '/dashboard/ai-assistant', label: 'AI Assistant', icon: Sparkles },
-];
+function getNavItems(primaryNavLabel: string) {
+  return [
+    { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { href: '/dashboard/members', label: primaryNavLabel, icon: Users },
+    { href: '/dashboard/leads', label: 'Leads', icon: Target },
+    { href: '/dashboard/contacts', label: 'Contacts', icon: UserCheck },
+    { href: '/dashboard/tasks', label: 'Tasks', icon: ListTodo },
+    { href: '/dashboard/campaigns', label: 'Campaigns', icon: Megaphone },
+    { href: '/dashboard/analytics', label: 'Analytics', icon: BarChart3 },
+    { href: '/dashboard/ai-assistant', label: 'AI Assistant', icon: Sparkles },
+  ];
+}
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const { user, org, fetchMe, logout } = useAuthStore();
+  const pack = getVerticalPack(org?.businessType);
+  const navItems = getNavItems(pack.primaryNavLabel);
 
   useEffect(() => {
     if (!user) {
@@ -69,7 +74,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </div>
             <div className="flex-1 min-w-0">
               <div className="text-sm font-semibold text-zinc-100 truncate">{org?.name}</div>
-              <div className="text-xs text-zinc-500 capitalize">{org?.businessType?.toLowerCase() || 'business'}</div>
+              <div className="text-xs text-zinc-500">{pack.shortLabel} Revenue Pack</div>
             </div>
             <ChevronDown className="w-4 h-4 text-zinc-500" />
           </div>
@@ -113,7 +118,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               {navItems.find((i) => pathname === i.href || (i.href !== '/dashboard' && pathname.startsWith(i.href)))?.label || 'Dashboard'}
             </h2>
             <p className="text-xs text-zinc-500">
-              {org?.businessType === 'GYM' ? 'Gym Revenue OS' : 'Revenue OS'}
+              {pack.dashboardTitle}
             </p>
           </div>
           <div className="flex items-center gap-4">

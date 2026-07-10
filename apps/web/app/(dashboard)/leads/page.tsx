@@ -5,6 +5,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { leadsApi } from '@/lib/api';
 import { toast } from 'sonner';
 import { Plus, Search } from 'lucide-react';
+import { getVerticalPack } from '@revorax/shared';
+import { useAuthStore } from '@/stores/auth.store';
 
 const STAGES = [
   { id: 'NEW', label: 'New', color: 'border-blue-500/30 bg-blue-500/5' },
@@ -21,7 +23,12 @@ const SOURCE_LABELS: Record<string, string> = {
 
 export default function LeadsPage() {
   const qc = useQueryClient();
+  const { org } = useAuthStore();
+  const pack = getVerticalPack(org?.businessType);
   const [search, setSearch] = useState('');
+  const stages = STAGES.map((stage) =>
+    stage.id === 'TRIAL' ? { ...stage, label: pack.retentionObject.replace(/\b\w/g, (letter) => letter.toUpperCase()) } : stage,
+  );
 
   const { data: leadsData, isLoading } = useQuery({
     queryKey: ['leads', 'all'],
@@ -46,7 +53,7 @@ export default function LeadsPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-zinc-100">Lead Pipeline</h1>
-          <p className="text-zinc-500 text-sm mt-1">Track and convert leads to members</p>
+          <p className="text-zinc-500 text-sm mt-1">Track and convert {pack.leadLabel} records to {pack.customerPluralLabel}</p>
         </div>
         <div className="flex gap-3">
           <div className="relative">
@@ -54,12 +61,12 @@ export default function LeadsPage() {
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search leads..."
+              placeholder={`Search ${pack.leadLabel} records...`}
               className="input pl-10 w-64"
             />
           </div>
           <button className="btn-primary text-sm flex items-center gap-2">
-            <Plus className="w-4 h-4" /> Add Lead
+            <Plus className="w-4 h-4" /> Add {pack.leadLabel.replace(/\b\w/g, (letter) => letter.toUpperCase())}
           </button>
         </div>
       </div>
@@ -70,7 +77,7 @@ export default function LeadsPage() {
         </div>
       ) : (
         <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
-          {STAGES.map((stage) => {
+          {stages.map((stage) => {
             const stageLeads = getStageLeads(stage.id);
             return (
               <div key={stage.id} className={`flex-shrink-0 w-72 rounded-2xl border ${stage.color} p-4`}>
@@ -102,7 +109,7 @@ export default function LeadsPage() {
                       </div>
                       {/* Move to next stage buttons */}
                       <div className="flex gap-1 mt-3">
-                        {STAGES.filter((s) => s.id !== stage.id).slice(0, 2).map((s) => (
+                        {stages.filter((s) => s.id !== stage.id).slice(0, 2).map((s) => (
                           <button
                             key={s.id}
                             onClick={() => updateLead.mutate({ id: lead.id, status: s.id })}

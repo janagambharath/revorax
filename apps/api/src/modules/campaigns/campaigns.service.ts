@@ -48,7 +48,7 @@ export class CampaignsService {
         channel: data.channel as any,
         templateId: data.templateId,
         customBody: data.customBody,
-        audienceFilter: data.audienceFilter || {},
+        audienceFilter: (data.audienceFilter || {}) as any,
         scheduledAt: data.scheduledAt ? new Date(data.scheduledAt) : null,
         status: data.scheduledAt ? 'SCHEDULED' : 'DRAFT',
         recipientCount: recipients.length,

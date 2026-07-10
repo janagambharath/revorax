@@ -1,25 +1,30 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, Zap, TrendingUp, Users, MessageSquare, BarChart3, Shield, CheckCircle, Star } from 'lucide-react';
+import { BUSINESS_TYPE_ORDER, VERTICAL_PACKS } from '@revorax/shared';
 
 export const metadata: Metadata = {
   title: 'Revorax — AI Revenue OS for Growing Businesses',
-  description: 'Recover expired memberships, convert more leads, and automate follow-ups with Revorax. The AI Revenue OS built for gyms, clinics, and SMBs.',
+  description: 'Recover missed revenue, convert more leads, and automate follow-ups with Revorax. The AI Revenue OS built for gyms, clinics, salons, coaching centers, real estate teams, dental clinics, agencies, and SMBs.',
 };
+
+const nichePacks = BUSINESS_TYPE_ORDER
+  .filter((type) => type !== 'OTHER')
+  .map((type) => VERTICAL_PACKS[type]);
 
 const features = [
   {
     icon: TrendingUp,
     title: 'Renewal Recovery',
-    description: 'Automatically identify expiring memberships and send personalized WhatsApp reminders before revenue walks out the door.',
-    stat: '3.2x more renewals',
+    description: 'Automatically identify revenue at risk and send personalized WhatsApp reminders before customers go cold.',
+    stat: 'Less revenue leakage',
     color: 'text-emerald-400',
     bg: 'bg-emerald-500/10 border-emerald-500/20',
   },
   {
     icon: MessageSquare,
     title: 'AI Follow-Up Engine',
-    description: 'AI drafts personalized follow-up messages for every lead and member. Your team reviews and sends in one click.',
+    description: 'AI drafts personalized follow-up messages for every lead, customer, patient, client, student, prospect, or account.',
     stat: '67% faster response',
     color: 'text-violet-400',
     bg: 'bg-violet-500/10 border-violet-500/20',
@@ -27,7 +32,7 @@ const features = [
   {
     icon: Users,
     title: 'Smart CRM',
-    description: 'Track every lead, member, and deal in one place. Know who needs attention before revenue leaks.',
+    description: 'Track every contact, lead, customer, and deal in one place. Know who needs attention before revenue leaks.',
     stat: 'Zero missed follow-ups',
     color: 'text-blue-400',
     bg: 'bg-blue-500/10 border-blue-500/20',
@@ -43,7 +48,7 @@ const features = [
   {
     icon: Zap,
     title: 'WhatsApp Automation',
-    description: 'Send renewal reminders, payment notices, and follow-ups via WhatsApp automatically. Compliant, opt-in friendly.',
+    description: 'Send reminders, payment notices, reactivation messages, and follow-ups via WhatsApp. Compliant, opt-in friendly.',
     stat: '94% open rate',
     color: 'text-green-400',
     bg: 'bg-green-500/10 border-green-500/20',
@@ -59,8 +64,8 @@ const features = [
 ];
 
 const metrics = [
-  { value: '₹2.4L', label: 'Avg. revenue recovered per gym/month' },
-  { value: '83%', label: 'Renewal rate improvement' },
+  { value: '₹2.4L', label: 'Avg. recoverable revenue tracked per month' },
+  { value: '83%', label: 'Retention workflow improvement' },
   { value: '4.2x', label: 'More leads converted' },
   { value: '6 hrs', label: 'Staff time saved per week' },
 ];
@@ -70,8 +75,8 @@ const plans = [
     name: 'Starter',
     price: '₹2,999',
     period: '/month',
-    description: 'For small gyms getting started',
-    features: ['Up to 200 members', 'WhatsApp reminders', 'Basic CRM', 'Renewal tracking', 'Email support'],
+    description: 'For small businesses getting started',
+    features: ['Up to 200 records', 'WhatsApp reminders', 'Basic CRM', 'Retention tracking', 'Email support'],
     cta: 'Start Free Trial',
     highlighted: false,
   },
@@ -80,7 +85,7 @@ const plans = [
     price: '₹5,999',
     period: '/month',
     description: 'For growing businesses that need automation',
-    features: ['Up to 1,000 members', 'Full AI assistant', 'Campaign engine', 'Advanced analytics', 'Workflow automation', 'Priority support'],
+    features: ['Up to 1,000 records', 'Full AI assistant', 'Campaign engine', 'Advanced analytics', 'Workflow automation', 'Priority support'],
     cta: 'Start Free Trial',
     highlighted: true,
     badge: 'Most Popular',
@@ -90,16 +95,16 @@ const plans = [
     price: '₹9,999',
     period: '/month',
     description: 'For established businesses with high volume',
-    features: ['Unlimited members', 'Custom workflows', 'API access', 'Dedicated support', 'Custom reports', 'White-label option'],
+    features: ['Unlimited records', 'Custom workflows', 'API access', 'Dedicated support', 'Custom reports', 'White-label option'],
     cta: 'Contact Sales',
     highlighted: false,
   },
 ];
 
 const testimonials = [
-  { name: 'Vikram Singh', role: 'Owner, FitZone Mumbai', text: 'Revorax recovered ₹1.8L in expired memberships in the first month. My staff used to forget follow-ups. Now it just happens.', rating: 5 },
-  { name: 'Priya Mehta', role: 'Manager, PowerFit Pune', text: 'The WhatsApp reminders go out automatically. Members renew without us having to chase them. Game changer.', rating: 5 },
-  { name: 'Rahul Nair', role: 'Owner, IronCore Gym Bangalore', text: 'Setup took 30 minutes. Within a week, we had 12 expired members come back. ROI was immediate.', rating: 5 },
+  { name: 'Vikram Singh', role: 'Owner, FitZone Mumbai', text: 'Revorax helped us track expired memberships and follow up before revenue disappeared. My staff finally has a system.', rating: 5 },
+  { name: 'Priya Mehta', role: 'Clinic Manager, Pune', text: 'Appointment reminders and recall follow-ups are visible in one place. Fewer missed follow-ups, cleaner operations.', rating: 5 },
+  { name: 'Rahul Nair', role: 'Agency Founder, Bangalore', text: 'Proposal follow-ups and client renewals no longer sit in separate inboxes. The team knows exactly what needs action.', rating: 5 },
 ];
 
 export default function LandingPage() {
@@ -143,8 +148,8 @@ export default function LandingPage() {
           </h1>
 
           <p className="text-xl text-zinc-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-            Revorax automatically recovers expired memberships, converts more leads, and sends
-            WhatsApp reminders — so your team focuses on growth, not chasing people.
+            Revorax helps growing businesses recover missed revenue, convert more leads, and send
+            WhatsApp reminders, so your team focuses on growth, not chasing people.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
@@ -172,16 +177,16 @@ export default function LandingPage() {
       <section className="py-20 px-6">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-zinc-100 mb-6">
-            Your gym is losing money every single day
+            Your business is losing money every single day
           </h2>
           <p className="text-lg text-zinc-400 mb-12">
-            Most gyms lose 30–40% of potential revenue not because of bad products — but because of
-            poor follow-up, forgotten renewals, and missed leads.
+            Most businesses lose revenue not because of bad service, but because of
+            late replies, forgotten follow-ups, missed reminders, and weak retention systems.
           </p>
           <div className="grid md:grid-cols-3 gap-6">
             {[
               { emoji: '⏱️', title: 'Replied too late', desc: 'Leads go cold in 5 minutes. Your staff responds hours later.' },
-              { emoji: '💸', title: 'Forgotten renewals', desc: 'Members expire and leave because no one reminded them in time.' },
+              { emoji: '💸', title: 'Forgotten follow-ups', desc: 'Customers go cold because no one reminded, rebooked, recalled, or renewed them in time.' },
               { emoji: '📋', title: 'No follow-up system', desc: 'Tasks exist in someone\'s head. Not in a system. Not trackable.' },
             ].map((item) => (
               <div key={item.title} className="card p-6 text-left border-red-500/10 hover:border-red-500/30 transition-colors">
@@ -223,12 +228,44 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section id="testimonials" className="py-20 px-6 bg-surface-50/30">
+      {/* Niche Packs */}
+      <section className="py-20 px-6 bg-surface-50/30">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-black text-zinc-100 mb-4">
-              Gyms that switched to Revorax
+              One platform for every revenue-recovery niche
+            </h2>
+            <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
+              Same core CRM, AI, WhatsApp, campaigns, and analytics. Different workflows, labels, templates, and revenue goals.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {nichePacks.map((pack) => (
+              <div key={pack.businessType} className="card p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center text-xs font-black text-white" style={{ background: pack.accentColor }}>
+                    {pack.iconLabel}
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-zinc-100">{pack.shortLabel}</h3>
+                    <p className="text-xs text-zinc-500">{pack.retentionMetricLabel}</p>
+                  </div>
+                </div>
+                <p className="text-sm font-semibold text-zinc-200 mb-2">{pack.positioning}</p>
+                <p className="text-sm text-zinc-500 leading-relaxed">{pack.valueDelivered}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section id="testimonials" className="py-20 px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-black text-zinc-100 mb-4">
+              Businesses that switched to Revorax
             </h2>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
@@ -307,7 +344,7 @@ export default function LandingPage() {
               Ready to recover lost revenue?
             </h2>
             <p className="text-zinc-400 mb-8 text-lg">
-              Join gyms across India that use Revorax to stop leaking revenue and start growing.
+              Join growing businesses that use Revorax to stop leaking revenue and start growing.
             </p>
             <Link href="/signup" className="btn-primary text-base px-10 py-3.5 inline-flex items-center gap-2">
               Start Your Free Trial <ArrowRight className="w-5 h-5" />

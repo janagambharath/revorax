@@ -45,7 +45,7 @@ export const useAuthStore = create<AuthState>()(
       fetchMe: async () => {
         set({ isLoading: true });
         try {
-          const data = await authApi.me() as { user: User; org: Org };
+          const data = await authApi.me() as unknown as { user: User; org: Org };
           set({ user: data.user, org: data.org });
         } catch {
           set({ user: null, org: null });

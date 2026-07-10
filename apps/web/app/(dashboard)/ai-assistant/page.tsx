@@ -1,19 +1,18 @@
 'use client';
 
 import { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { aiApi, contactsApi } from '@/lib/api';
 import { toast } from 'sonner';
 import { Sparkles, Send, Copy, RefreshCw, MessageSquare, BarChart3, Zap, Search, User } from 'lucide-react';
+import { getVerticalPack } from '@revorax/shared';
+import { useAuthStore } from '@/stores/auth.store';
 
-const QUICK_PROMPTS = [
-  { label: 'Follow-up for expired member', icon: RefreshCw, context: 'Member has expired membership, need to reactivate' },
-  { label: 'Trial conversion message', icon: Zap, context: 'Member is on trial, encourage to convert to paid membership' },
-  { label: 'Renewal reminder', icon: MessageSquare, context: 'Membership expiring in 3 days, friendly reminder' },
-  { label: 'Payment overdue reminder', icon: BarChart3, context: 'Payment is overdue, polite but firm reminder' },
-];
+const PROMPT_ICONS = [RefreshCw, Zap, MessageSquare, BarChart3];
 
 export default function AIAssistantPage() {
+  const { org } = useAuthStore();
+  const pack = getVerticalPack(org?.businessType);
   const [contactSearch, setContactSearch] = useState('');
   const [selectedContact, setSelectedContact] = useState<any>(null);
   const [channel, setChannel] = useState<'WHATSAPP' | 'EMAIL'>('WHATSAPP');
@@ -27,6 +26,10 @@ export default function AIAssistantPage() {
     queryFn: () => contactsApi.list({ search: contactSearch, limit: 5 }) as any,
     enabled: contactSearch.length > 2,
   });
+  const quickPrompts = pack.aiQuickPrompts.map((prompt, index) => ({
+    ...prompt,
+    icon: PROMPT_ICONS[index % PROMPT_ICONS.length],
+  }));
 
   const generateFollowUp = async () => {
     if (!selectedContact) { toast.error('Select a contact first'); return; }
@@ -45,7 +48,7 @@ export default function AIAssistantPage() {
     setIsGenerating(true);
     setResult('');
     try {
-      const data = await aiApi.generateCopy({ purpose, channel, tone: 'friendly' }) as any;
+      const data = await aiApi.generateCopy({ purpose, channel, audience: pack.campaignAudienceLabel, tone: 'friendly' }) as any;
       setResult(data.body);
     } catch {
       toast.error('AI generation failed. Check API key configuration.');
@@ -72,7 +75,7 @@ export default function AIAssistantPage() {
           AI Revenue Assistant
         </h1>
         <p className="text-zinc-500 text-sm mt-1">
-          Draft follow-ups, generate campaign copy, and get AI-powered insights
+          Draft follow-ups, generate campaign copy, and protect {pack.retentionObject} revenue
         </p>
       </div>
 
@@ -83,7 +86,7 @@ export default function AIAssistantPage() {
           <div className="card p-5">
             <h3 className="text-sm font-semibold text-zinc-300 mb-3">Quick Generate</h3>
             <div className="grid grid-cols-2 gap-2">
-              {QUICK_PROMPTS.map((p) => (
+              {quickPrompts.map((p) => (
                 <button
                   key={p.label}
                   onClick={() => { setContext(p.context); generateCopy(p.context); }}
@@ -154,7 +157,7 @@ export default function AIAssistantPage() {
                       channel === ch ? 'border-brand-500 bg-brand-500/10 text-brand-300' : 'border-surface-300 text-zinc-500 hover:border-surface-400'
                     }`}
                   >
-                    {ch === 'WHATSAPP' ? '💬 WhatsApp' : '📧 Email'}
+                    {ch === 'WHATSAPP' ? 'WhatsApp' : 'Email'}
                   </button>
                 ))}
               </div>
@@ -166,7 +169,7 @@ export default function AIAssistantPage() {
               <textarea
                 value={context}
                 onChange={(e) => setContext(e.target.value)}
-                placeholder="e.g. Member hasn't renewed in 2 weeks, seems interested..."
+                placeholder={`e.g. ${pack.painPoint}`}
                 className="input resize-none h-20 text-sm"
               />
             </div>

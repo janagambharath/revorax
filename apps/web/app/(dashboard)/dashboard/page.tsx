@@ -2,15 +2,31 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { analyticsApi, membersApi } from '@/lib/api';
-import { formatCurrency, formatDate, daysUntil } from '@revorax/shared';
+import { daysUntil, formatCurrency, formatDate, getVerticalPack } from '@revorax/shared';
 import {
-  TrendingUp, TrendingDown, Users, AlertCircle, Calendar,
-  CheckCircle, Zap, ArrowRight, Clock, MessageSquare,
+  AlertCircle,
+  ArrowRight,
+  Calendar,
+  CheckCircle,
+  Clock,
+  MessageSquare,
+  TrendingDown,
+  TrendingUp,
+  Users,
+  Zap,
 } from 'lucide-react';
 import Link from 'next/link';
 import {
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, PieChart, Pie, Cell,
+  Area,
+  AreaChart as RechartsAreaChart,
+  CartesianGrid as RechartsCartesianGrid,
+  Cell as RechartsCell,
+  Pie as RechartsPie,
+  PieChart as RechartsPieChart,
+  ResponsiveContainer as RechartsResponsiveContainer,
+  Tooltip as RechartsTooltip,
+  XAxis as RechartsXAxis,
+  YAxis as RechartsYAxis,
 } from 'recharts';
 import { useAuthStore } from '@/stores/auth.store';
 
@@ -63,6 +79,7 @@ function StatCard({ label, value, sub, icon: Icon, trend, href }: {
       )}
     </div>
   );
+
   return href ? <Link href={href}>{card}</Link> : card;
 }
 
@@ -96,22 +113,19 @@ export default function DashboardPage() {
   });
 
   const m = metrics as any;
+  const recovery = m?.recovery || {};
+  const pack = getVerticalPack(org?.businessType);
 
   return (
     <div className="space-y-6 animate-fade-in">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-zinc-100">
-            Revenue Dashboard
-          </h1>
-          <p className="text-zinc-500 text-sm mt-1">
-            {org?.name || 'Your Business'} · {org?.businessType === 'GYM' ? 'Gym Revenue OS' : 'Revenue OS'}
-          </p>
+          <h1 className="text-2xl font-bold text-zinc-100">{pack.dashboardTitle}</h1>
+          <p className="text-zinc-500 text-sm mt-1">{org?.name || 'Your Business'} - {pack.positioning}</p>
         </div>
         <div className="flex gap-3">
           <Link href="/dashboard/members" className="btn-secondary text-sm flex items-center gap-2">
-            <Users className="w-4 h-4" /> Members
+            <Users className="w-4 h-4" /> {pack.primaryNavLabel}
           </Link>
           <Link href="/dashboard/campaigns" className="btn-primary text-sm flex items-center gap-2">
             <Zap className="w-4 h-4" /> New Campaign
@@ -119,104 +133,115 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Alert: Expiring soon */}
       {(m?.members?.expiringThisWeek > 0) && (
         <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 flex items-center gap-3">
           <AlertCircle className="w-5 h-5 text-amber-400 shrink-0" />
           <div className="flex-1">
             <p className="text-amber-300 font-medium text-sm">
-              {m.members.expiringThisWeek} membership{m.members.expiringThisWeek !== 1 ? 's' : ''} expiring this week
+              {m.members.expiringThisWeek} {pack.primaryEntityPlural} need action this week
             </p>
-            <p className="text-amber-400/70 text-xs">Send renewal reminders now to prevent revenue loss</p>
+            <p className="text-amber-400/70 text-xs">{pack.positioning}</p>
           </div>
-          <Link href="/dashboard/members?status=ACTIVE" className="btn-secondary text-xs py-1.5 px-3 shrink-0">
-            View Members →
+          <Link href="/dashboard/members" className="btn-secondary text-xs py-1.5 px-3 shrink-0">
+            View {pack.primaryNavLabel} {'>'}
           </Link>
         </div>
       )}
 
-      {/* Stats Grid */}
+      {(recovery.revenueAtRisk > 0) && (
+        <div className="grid md:grid-cols-[1fr_auto] gap-4 bg-red-500/10 border border-red-500/30 rounded-xl p-4">
+          <div>
+            <p className="text-red-300 font-semibold text-sm">
+              {formatCurrency(recovery.revenueAtRisk)} revenue at risk
+            </p>
+            <p className="text-red-400/70 text-xs mt-1">
+              {formatCurrency(recovery.overdueRevenue || 0)} overdue and {formatCurrency(recovery.expiringRevenue || 0)} in this week's action list
+            </p>
+          </div>
+          <Link href="/dashboard/members" className="btn-secondary text-xs py-1.5 px-3 flex items-center justify-center gap-2">
+            Open Recovery List <ArrowRight className="w-3 h-3" />
+          </Link>
+        </div>
+      )}
+
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
-          label="Active Members"
-          value={metricsLoading ? '—' : m?.members?.active || 0}
-          sub={`${m?.members?.trial || 0} on trial`}
+          label={pack.activeLabel}
+          value={metricsLoading ? '-' : m?.members?.active || 0}
+          sub={`${m?.members?.trial || 0} ${pack.trialLabel}`}
           icon={Users}
           trend={{ value: 'vs last month', up: true }}
           href="/dashboard/members?status=ACTIVE"
         />
         <StatCard
           label="Revenue This Month"
-          value={metricsLoading ? '—' : formatCurrency(m?.revenue?.thisMonth || 0)}
+          value={metricsLoading ? '-' : formatCurrency(m?.revenue?.thisMonth || 0)}
           icon={TrendingUp}
-          trend={{ value: `${m?.revenue?.renewalRate || 0}% renewal rate`, up: (m?.revenue?.renewalRate || 0) > 70 }}
+          trend={{ value: `${m?.revenue?.renewalRate || 0}% ${pack.retentionMetricLabel}`, up: (m?.revenue?.renewalRate || 0) > 70 }}
         />
         <StatCard
-          label="Expired / Overdue"
-          value={metricsLoading ? '—' : m?.members?.expired || 0}
-          sub="Need reactivation"
+          label="Revenue At Risk"
+          value={metricsLoading ? '-' : formatCurrency(recovery.revenueAtRisk || 0)}
+          sub={`${recovery.followUpsDue || 0} follow-ups due`}
           icon={AlertCircle}
-          href="/dashboard/members?status=EXPIRED"
+          href="/dashboard/members"
         />
         <StatCard
-          label="Expiring This Week"
-          value={metricsLoading ? '—' : m?.members?.expiringThisWeek || 0}
+          label={pack.expiringLabel}
+          value={metricsLoading ? '-' : m?.members?.expiringThisWeek || 0}
           sub="Action required"
           icon={Calendar}
           href="/dashboard/members"
         />
       </div>
 
-      {/* Charts Row */}
       <div className="grid lg:grid-cols-3 gap-6">
-        {/* Revenue Chart */}
         <div className="lg:col-span-2 card p-6">
           <h3 className="text-sm font-semibold text-zinc-300 mb-4">Monthly Revenue</h3>
           {revenueChart && (
-            <ResponsiveContainer width="100%" height={220}>
-              <AreaChart data={revenueChart} margin={{ top: 5, right: 5, bottom: 0, left: 0 }}>
+            <RechartsResponsiveContainer width="100%" height={220}>
+              <RechartsAreaChart data={revenueChart} margin={{ top: 5, right: 5, bottom: 0, left: 0 }}>
                 <defs>
                   <linearGradient id="revenueGrad" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3} />
                     <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#2d2d45" vertical={false} />
-                <XAxis dataKey="month" tick={{ fill: '#71717a', fontSize: 11 }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: '#71717a', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `₹${(v / 1000).toFixed(0)}k`} />
-                <Tooltip
+                <RechartsCartesianGrid strokeDasharray="3 3" stroke="#2d2d45" vertical={false} />
+                <RechartsXAxis dataKey="month" tick={{ fill: '#71717a', fontSize: 11 }} axisLine={false} tickLine={false} />
+                <RechartsYAxis tick={{ fill: '#71717a', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(value) => `Rs ${(Number(value) / 1000).toFixed(0)}k`} />
+                <RechartsTooltip
                   contentStyle={{ background: '#1a1a24', border: '1px solid #2d2d45', borderRadius: '12px', color: '#f4f4f5' }}
-                  formatter={(v: number) => [formatCurrency(v), 'Revenue']}
+                  formatter={(value: number) => [formatCurrency(value), 'Revenue']}
                 />
                 <Area type="monotone" dataKey="revenue" stroke="#8b5cf6" strokeWidth={2} fill="url(#revenueGrad)" />
-              </AreaChart>
-            </ResponsiveContainer>
+              </RechartsAreaChart>
+            </RechartsResponsiveContainer>
           )}
         </div>
 
-        {/* Member Status Pie */}
         <div className="card p-6">
-          <h3 className="text-sm font-semibold text-zinc-300 mb-4">Member Status</h3>
+          <h3 className="text-sm font-semibold text-zinc-300 mb-4">{pack.primaryNavLabel} Status</h3>
           {memberStatus && (
             <>
-              <ResponsiveContainer width="100%" height={160}>
-                <PieChart>
-                  <Pie data={memberStatus} cx="50%" cy="50%" innerRadius={50} outerRadius={70} dataKey="count" paddingAngle={3}>
+              <RechartsResponsiveContainer width="100%" height={160}>
+                <RechartsPieChart>
+                  <RechartsPie data={memberStatus} cx="50%" cy="50%" innerRadius={50} outerRadius={70} dataKey="count" paddingAngle={3}>
                     {(memberStatus as any[]).map((entry: any, index: number) => (
-                      <Cell key={index} fill={STATUS_COLORS[entry.status] || '#6b7280'} />
+                      <RechartsCell key={index} fill={STATUS_COLORS[entry.status] || '#6b7280'} />
                     ))}
-                  </Pie>
-                  <Tooltip contentStyle={{ background: '#1a1a24', border: '1px solid #2d2d45', borderRadius: '12px', color: '#f4f4f5' }} />
-                </PieChart>
-              </ResponsiveContainer>
+                  </RechartsPie>
+                  <RechartsTooltip contentStyle={{ background: '#1a1a24', border: '1px solid #2d2d45', borderRadius: '12px', color: '#f4f4f5' }} />
+                </RechartsPieChart>
+              </RechartsResponsiveContainer>
               <div className="space-y-2 mt-2">
-                {(memberStatus as any[]).map((s: any) => (
-                  <div key={s.status} className="flex items-center justify-between text-xs">
+                {(memberStatus as any[]).map((status: any) => (
+                  <div key={status.status} className="flex items-center justify-between text-xs">
                     <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full" style={{ background: STATUS_COLORS[s.status] || '#6b7280' }} />
-                      <span className="text-zinc-400">{MEMBER_STATUS_LABELS[s.status] || s.status}</span>
+                      <div className="w-2 h-2 rounded-full" style={{ background: STATUS_COLORS[status.status] || '#6b7280' }} />
+                      <span className="text-zinc-400">{MEMBER_STATUS_LABELS[status.status] || status.status}</span>
                     </div>
-                    <span className="text-zinc-300 font-medium">{s.count}</span>
+                    <span className="text-zinc-300 font-medium">{status.count}</span>
                   </div>
                 ))}
               </div>
@@ -225,37 +250,35 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Bottom Row: Expiring Soon + Activity */}
       <div className="grid lg:grid-cols-2 gap-6">
-        {/* Expiring Soon */}
         <div className="card p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-semibold text-zinc-300">Expiring This Week</h3>
-            <Link href="/dashboard/members" className="text-xs text-brand-400 hover:text-brand-300">View all →</Link>
+            <h3 className="text-sm font-semibold text-zinc-300">{pack.expiringLabel}</h3>
+            <Link href="/dashboard/members" className="text-xs text-brand-400 hover:text-brand-300">View all {'>'}</Link>
           </div>
           {!expiring || expiring.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-8 text-center">
               <CheckCircle className="w-10 h-10 text-emerald-400 mb-3" />
-              <p className="text-zinc-400 text-sm">No members expiring this week</p>
+              <p className="text-zinc-400 text-sm">No {pack.primaryEntityPlural} need action this week</p>
             </div>
           ) : (
             <div className="space-y-3">
-              {(expiring as any[]).slice(0, 5).map((m: any) => {
-                const days = daysUntil(m.renewalDate);
+              {(expiring as any[]).slice(0, 5).map((member: any) => {
+                const days = daysUntil(member.renewalDate);
                 return (
-                  <Link key={m.id} href={`/dashboard/members/${m.id}`} className="flex items-center gap-3 p-3 rounded-xl hover:bg-surface-100 transition-colors group">
+                  <Link key={member.id} href={`/dashboard/members/${member.id}`} className="flex items-center gap-3 p-3 rounded-xl hover:bg-surface-100 transition-colors group">
                     <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 text-xs font-bold">
-                      {m.contact.name[0]}
+                      {member.contact.name[0]}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-zinc-200 truncate">{m.contact.name}</p>
-                      <p className="text-xs text-zinc-500">{m.membershipType} · {formatCurrency(Number(m.amount))}</p>
+                      <p className="text-sm font-medium text-zinc-200 truncate">{member.contact.name}</p>
+                      <p className="text-xs text-zinc-500">{pack.retentionObject} - {formatCurrency(Number(member.amount))}</p>
                     </div>
                     <div className="text-right">
                       <p className={`text-xs font-bold ${days <= 3 ? 'text-red-400' : 'text-amber-400'}`}>
                         {days === 0 ? 'Today' : `${days}d`}
                       </p>
-                      <p className="text-xs text-zinc-600">{formatDate(m.renewalDate)}</p>
+                      <p className="text-xs text-zinc-600">{formatDate(member.renewalDate)}</p>
                     </div>
                   </Link>
                 );
@@ -264,7 +287,6 @@ export default function DashboardPage() {
           )}
         </div>
 
-        {/* Recent Activity */}
         <div className="card p-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-sm font-semibold text-zinc-300">Recent Activity</h3>
@@ -273,20 +295,20 @@ export default function DashboardPage() {
             {!activity || activity.length === 0 ? (
               <p className="text-zinc-500 text-sm text-center py-8">No recent activity</p>
             ) : (
-              (activity as any[]).slice(0, 8).map((a: any, i: number) => (
-                <div key={i} className="flex items-start gap-3">
+              (activity as any[]).slice(0, 8).map((item: any, index: number) => (
+                <div key={index} className="flex items-start gap-3">
                   <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5 ${
-                    a.type === 'message' ? 'bg-blue-500/20' : a.type === 'payment' ? 'bg-emerald-500/20' : 'bg-brand-500/20'
+                    item.type === 'message' ? 'bg-blue-500/20' : item.type === 'payment' ? 'bg-emerald-500/20' : 'bg-brand-500/20'
                   }`}>
-                    {a.type === 'message' ? <MessageSquare className="w-3 h-3 text-blue-400" /> :
-                     a.type === 'payment' ? <TrendingUp className="w-3 h-3 text-emerald-400" /> :
+                    {item.type === 'message' ? <MessageSquare className="w-3 h-3 text-blue-400" /> :
+                     item.type === 'payment' ? <TrendingUp className="w-3 h-3 text-emerald-400" /> :
                      <Users className="w-3 h-3 text-brand-400" />}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs text-zinc-300 truncate">{a.text}</p>
+                    <p className="text-xs text-zinc-300 truncate">{item.text}</p>
                     <p className="text-xs text-zinc-600 mt-0.5 flex items-center gap-1">
                       <Clock className="w-2.5 h-2.5" />
-                      {new Date(a.at).toLocaleString('en-IN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                      {new Date(item.at).toLocaleString('en-IN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                     </p>
                   </div>
                 </div>

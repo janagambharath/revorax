@@ -68,6 +68,7 @@ export class MessagesService {
         where: { id: message.id },
         data: { status: 'SENT', externalId: result.messageId, sentAt: new Date() },
       });
+      await this.touchMemberFollowUp(orgId, params.contactId);
       return { success: true, message };
     } catch (err) {
       await this.prisma.message.update({
@@ -110,6 +111,7 @@ export class MessagesService {
         where: { id: message.id },
         data: { status: 'SENT', externalId: result.id, sentAt: new Date() },
       });
+      await this.touchMemberFollowUp(orgId, params.contactId);
       return { success: true, message };
     } catch (err) {
       await this.prisma.message.update({
@@ -146,5 +148,12 @@ export class MessagesService {
     });
 
     return { contactId: contact.id };
+  }
+
+  private async touchMemberFollowUp(orgId: string, contactId: string) {
+    await this.prisma.member.updateMany({
+      where: { orgId, contactId, deletedAt: null },
+      data: { followUpStatus: 'DONE', lastContactedAt: new Date() },
+    });
   }
 }

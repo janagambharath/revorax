@@ -53,6 +53,7 @@ export const membersApi = {
   overdue: () => api.get('/members/overdue'),
   reactivation: () => api.get('/members/reactivation'),
   recordPayment: (data: Record<string, unknown>) => api.post('/members/payments', data),
+  markFollowUp: (id: string, status = 'DONE') => api.post(`/members/${id}/follow-up`, { status }),
 };
 
 // ─── Contacts ─────────────────────────────────────────────────────────────────

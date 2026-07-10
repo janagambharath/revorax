@@ -45,7 +45,7 @@ export class MembersController {
 
   @Post()
   @ApiOperation({ summary: 'Create new member' })
-  create(@OrgId() orgId: string, @Body() body: { contactId: string; membershipType: string; startDate: string; renewalDate: string; amount: number; notes?: string; goals?: string }) {
+  create(@OrgId() orgId: string, @Body() body: { contactId: string; membershipType: string; status?: string; startDate: string; renewalDate: string; amount: number; notes?: string; goals?: string }) {
     return this.membersService.create(orgId, body);
   }
 
@@ -59,6 +59,16 @@ export class MembersController {
   @ApiOperation({ summary: 'Record a payment for a member' })
   recordPayment(@OrgId() orgId: string, @Body() body: { memberId: string; amount: number; method: string; paidAt?: string; notes?: string }) {
     return this.membersService.recordPayment(orgId, body);
+  }
+
+  @Post(':id/follow-up')
+  @ApiOperation({ summary: 'Mark a member as followed up' })
+  markFollowUp(
+    @OrgId() orgId: string,
+    @Param('id') id: string,
+    @Body() body: { status?: string },
+  ) {
+    return this.membersService.markFollowUp(orgId, id, body?.status);
   }
 
   @Delete(':id')

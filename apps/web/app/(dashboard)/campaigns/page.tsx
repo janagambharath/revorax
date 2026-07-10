@@ -2,10 +2,11 @@
 
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { campaignsApi, templatesApi } from '@/lib/api';
-import { formatDate } from '@revorax/shared';
+import { campaignsApi } from '@/lib/api';
+import { formatDate, getVerticalPack } from '@revorax/shared';
 import { toast } from 'sonner';
-import { Plus, Send, Clock, CheckCircle, XCircle, Megaphone, Search, Users, Eye } from 'lucide-react';
+import { Plus, Send, Clock, CheckCircle, XCircle, Megaphone, Users } from 'lucide-react';
+import { useAuthStore } from '@/stores/auth.store';
 
 const STATUS_CONFIG: Record<string, { label: string; cls: string; icon: React.ElementType }> = {
   DRAFT: { label: 'Draft', cls: 'badge-gray', icon: Clock },
@@ -15,19 +16,20 @@ const STATUS_CONFIG: Record<string, { label: string; cls: string; icon: React.El
   FAILED: { label: 'Failed', cls: 'badge-red', icon: XCircle },
 };
 
+function titleCase(value: string) {
+  return value.replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
 export default function CampaignsPage() {
   const qc = useQueryClient();
+  const { org } = useAuthStore();
+  const pack = getVerticalPack(org?.businessType);
   const [showCreate, setShowCreate] = useState(false);
   const [form, setForm] = useState({ name: '', channel: 'WHATSAPP', customBody: '', audienceFilter: {} as Record<string, unknown> });
 
   const { data, isLoading } = useQuery({
     queryKey: ['campaigns'],
     queryFn: () => campaignsApi.list() as any,
-  });
-
-  const { data: templates } = useQuery({
-    queryKey: ['templates'],
-    queryFn: () => templatesApi.list() as any,
   });
 
   const createCampaign = useMutation({
@@ -43,6 +45,12 @@ export default function CampaignsPage() {
   });
 
   const campaigns: any[] = data?.data || [];
+  const audienceStatuses = [
+    { value: 'ACTIVE', label: pack.activeLabel },
+    { value: 'TRIAL', label: titleCase(pack.trialLabel) },
+    { value: 'EXPIRED', label: titleCase(pack.inactiveLabel) },
+    { value: 'FROZEN', label: 'Paused' },
+  ];
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -50,7 +58,7 @@ export default function CampaignsPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-zinc-100">Campaigns</h1>
-          <p className="text-zinc-500 text-sm mt-1">Bulk WhatsApp and email campaigns</p>
+          <p className="text-zinc-500 text-sm mt-1">WhatsApp and email campaigns for {pack.campaignAudienceLabel}</p>
         </div>
         <button onClick={() => setShowCreate(true)} className="btn-primary text-sm flex items-center gap-2">
           <Plus className="w-4 h-4" /> New Campaign
@@ -66,7 +74,24 @@ export default function CampaignsPage() {
             <div className="space-y-4">
               <div>
                 <label className="label">Campaign Name</label>
-                <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="e.g. January Renewal Reminders" className="input" />
+                <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder={`e.g. ${pack.recoveryListLabel}`} className="input" />
+              </div>
+
+              <div>
+                <label className="label">Starter Templates</label>
+                <div className="grid gap-2">
+                  {pack.templates.map((template) => (
+                    <button
+                      key={template.name}
+                      type="button"
+                      onClick={() => setForm({ ...form, channel: template.channel, name: form.name || template.name, customBody: template.body })}
+                      className="rounded-xl border border-surface-300 px-3 py-2 text-left text-xs text-zinc-400 hover:border-brand-500/40 hover:bg-brand-500/5"
+                    >
+                      <span className="font-semibold text-zinc-300">{template.name}</span>
+                      <span className="block mt-1 line-clamp-2">{template.body}</span>
+                    </button>
+                  ))}
+                </div>
               </div>
 
               <div>
@@ -74,7 +99,7 @@ export default function CampaignsPage() {
                 <div className="flex gap-2">
                   {(['WHATSAPP', 'EMAIL'] as const).map((ch) => (
                     <button key={ch} type="button" onClick={() => setForm({ ...form, channel: ch })} className={`flex-1 py-2.5 rounded-xl text-sm font-medium border transition-all ${form.channel === ch ? 'border-brand-500 bg-brand-500/10 text-brand-300' : 'border-surface-300 text-zinc-500'}`}>
-                      {ch === 'WHATSAPP' ? '💬 WhatsApp' : '📧 Email'}
+                      {ch === 'WHATSAPP' ? 'WhatsApp' : 'Email'}
                     </button>
                   ))}
                 </div>
@@ -83,15 +108,15 @@ export default function CampaignsPage() {
               <div>
                 <label className="label">Audience Filter</label>
                 <div className="flex gap-2 flex-wrap">
-                  {['ACTIVE', 'TRIAL', 'EXPIRED', 'FROZEN'].map((status) => {
+                  {audienceStatuses.map((status) => {
                     const sel = (form.audienceFilter.memberStatus as string[] || []);
-                    const isSelected = sel.includes(status);
+                    const isSelected = sel.includes(status.value);
                     return (
-                      <button key={status} type="button" onClick={() => {
-                        const next = isSelected ? sel.filter((s) => s !== status) : [...sel, status];
+                      <button key={status.value} type="button" onClick={() => {
+                        const next = isSelected ? sel.filter((s) => s !== status.value) : [...sel, status.value];
                         setForm({ ...form, audienceFilter: { ...form.audienceFilter, memberStatus: next } });
                       }} className={`px-3 py-1.5 rounded-xl text-xs font-medium border transition-all ${isSelected ? 'border-brand-500 bg-brand-500/10 text-brand-300' : 'border-surface-300 text-zinc-500'}`}>
-                        {status.charAt(0) + status.slice(1).toLowerCase()}
+                        {status.label}
                       </button>
                     );
                   })}
@@ -100,7 +125,7 @@ export default function CampaignsPage() {
 
               <div>
                 <label className="label">Message Body</label>
-                <textarea value={form.customBody} onChange={(e) => setForm({ ...form, customBody: e.target.value })} placeholder="Hi {{name}}, your membership at {{gym_name}}..." className="input resize-none h-28 text-sm" />
+                <textarea value={form.customBody} onChange={(e) => setForm({ ...form, customBody: e.target.value })} placeholder={pack.campaignPlaceholder} className="input resize-none h-28 text-sm" />
                 <p className="text-xs text-zinc-600 mt-1">Variables: {'{{name}}'}, {'{{phone}}'}, {'{{email}}'}</p>
               </div>
             </div>
@@ -125,7 +150,7 @@ export default function CampaignsPage() {
           <div className="flex flex-col items-center justify-center py-16 text-center">
             <Megaphone className="w-12 h-12 text-zinc-600 mb-4" />
             <p className="text-zinc-400 font-medium">No campaigns yet</p>
-            <p className="text-zinc-600 text-sm mt-1">Create your first campaign to reach members in bulk</p>
+            <p className="text-zinc-600 text-sm mt-1">Create your first campaign for {pack.campaignAudienceLabel}</p>
           </div>
         ) : (
           <table className="data-table">

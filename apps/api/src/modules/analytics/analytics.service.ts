@@ -24,6 +24,10 @@ export class AnalyticsService {
       monthlyRevenue,
       overdueMembersCount,
       totalRevenue,
+      overdueRevenue,
+      expiringRevenue,
+      reactivationRevenue,
+      followUpsDue,
     ] = await Promise.all([
       this.prisma.member.count({ where: { orgId, deletedAt: null } }),
       this.prisma.member.count({ where: { orgId, status: 'ACTIVE', deletedAt: null } }),
@@ -35,6 +39,30 @@ export class AnalyticsService {
       this.prisma.payment.aggregate({ where: { orgId, status: 'PAID', paidAt: { gte: startOfMonth } }, _sum: { amount: true } }),
       this.prisma.member.count({ where: { orgId, deletedAt: null, renewalDate: { lt: now }, status: { not: 'CANCELLED' } } }),
       this.prisma.payment.aggregate({ where: { orgId, status: 'PAID' }, _sum: { amount: true } }),
+      this.prisma.member.aggregate({
+        where: { orgId, deletedAt: null, renewalDate: { lt: now }, status: { not: 'CANCELLED' } },
+        _sum: { amount: true },
+      }),
+      this.prisma.member.aggregate({
+        where: { orgId, deletedAt: null, status: { in: ['ACTIVE', 'TRIAL'] }, renewalDate: { gte: now, lte: next7Days } },
+        _sum: { amount: true },
+      }),
+      this.prisma.member.aggregate({
+        where: { orgId, deletedAt: null, status: 'EXPIRED', renewalDate: { gte: last30Days } },
+        _sum: { amount: true },
+      }),
+      this.prisma.member.count({
+        where: {
+          orgId,
+          deletedAt: null,
+          status: { not: 'CANCELLED' },
+          followUpStatus: { not: 'DONE' },
+          OR: [
+            { renewalDate: { lt: now } },
+            { renewalDate: { gte: now, lte: next7Days } },
+          ],
+        },
+      }),
     ]);
 
     const renewalRate = totalMembers > 0
@@ -48,6 +76,13 @@ export class AnalyticsService {
         thisMonth: Number(monthlyRevenue._sum.amount || 0),
         total: Number(totalRevenue._sum.amount || 0),
         renewalRate,
+      },
+      recovery: {
+        overdueRevenue: Number(overdueRevenue._sum.amount || 0),
+        expiringRevenue: Number(expiringRevenue._sum.amount || 0),
+        reactivationRevenue: Number(reactivationRevenue._sum.amount || 0),
+        revenueAtRisk: Number(overdueRevenue._sum.amount || 0) + Number(expiringRevenue._sum.amount || 0),
+        followUpsDue,
       },
     };
   }

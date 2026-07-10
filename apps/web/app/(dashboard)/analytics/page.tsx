@@ -2,12 +2,13 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { analyticsApi } from '@/lib/api';
-import { formatCurrency } from '@revorax/shared';
+import { formatCurrency, getVerticalPack } from '@revorax/shared';
 import {
   AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid,
-  Tooltip, ResponsiveContainer, PieChart, Pie, Cell, FunnelChart, Funnel, LabelList,
+  Tooltip, ResponsiveContainer, Cell,
 } from 'recharts';
 import { TrendingUp, Users, Target, Megaphone } from 'lucide-react';
+import { useAuthStore } from '@/stores/auth.store';
 
 const STATUS_COLORS: Record<string, string> = {
   ACTIVE: '#10b981', TRIAL: '#3b82f6', EXPIRED: '#ef4444', FROZEN: '#f59e0b', CANCELLED: '#6b7280',
@@ -15,7 +16,13 @@ const STATUS_COLORS: Record<string, string> = {
 
 const FUNNEL_COLORS = ['#8b5cf6', '#7c3aed', '#6d28d9', '#5b21b6', '#10b981', '#ef4444'];
 
+function titleCase(value: string) {
+  return value.replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
 export default function AnalyticsPage() {
+  const { org } = useAuthStore();
+  const pack = getVerticalPack(org?.businessType);
   const { data: metrics } = useQuery({ queryKey: ['analytics', 'dashboard'], queryFn: () => analyticsApi.dashboard() as any });
   const { data: revenueChart } = useQuery({ queryKey: ['analytics', 'revenue-chart'], queryFn: () => analyticsApi.revenueChart(6) as any });
   const { data: memberStatus } = useQuery({ queryKey: ['analytics', 'member-status'], queryFn: () => analyticsApi.memberStatus() as any });
@@ -34,9 +41,9 @@ export default function AnalyticsPage() {
       {/* KPI Row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: 'Total Members', value: m?.members?.total || 0, icon: Users, color: 'text-brand-400' },
+          { label: `Total ${pack.primaryNavLabel}`, value: m?.members?.total || 0, icon: Users, color: 'text-brand-400' },
           { label: 'Monthly Revenue', value: formatCurrency(m?.revenue?.thisMonth || 0), icon: TrendingUp, color: 'text-emerald-400' },
-          { label: 'Renewal Rate', value: `${m?.revenue?.renewalRate || 0}%`, icon: Target, color: 'text-blue-400' },
+          { label: titleCase(pack.retentionMetricLabel), value: `${m?.revenue?.renewalRate || 0}%`, icon: Target, color: 'text-blue-400' },
           { label: 'Total Revenue', value: formatCurrency(m?.revenue?.total || 0), icon: Megaphone, color: 'text-amber-400' },
         ].map((kpi) => (
           <div key={kpi.label} className="stat-card">
@@ -68,10 +75,10 @@ export default function AnalyticsPage() {
         )}
       </div>
 
-      {/* Member Status + Lead Funnel */}
+      {/* Retention Status + Lead Funnel */}
       <div className="grid lg:grid-cols-2 gap-6">
         <div className="card p-6">
-          <h3 className="text-sm font-semibold text-zinc-300 mb-4">Member Status Distribution</h3>
+          <h3 className="text-sm font-semibold text-zinc-300 mb-4">{pack.primaryNavLabel} Status Distribution</h3>
           {memberStatus && (
             <ResponsiveContainer width="100%" height={220}>
               <BarChart data={memberStatus} layout="vertical" margin={{ left: 60 }}>

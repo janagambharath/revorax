@@ -71,6 +71,7 @@ export class MembersService {
   async create(orgId: string, data: {
     contactId: string;
     membershipType: string;
+    status?: string;
     startDate: string;
     renewalDate: string;
     amount: number;
@@ -82,7 +83,7 @@ export class MembersService {
         orgId,
         contactId: data.contactId,
         membershipType: data.membershipType as any,
-        status: 'TRIAL',
+        status: (data.status as any) || 'TRIAL',
         startDate: new Date(data.startDate),
         renewalDate: new Date(data.renewalDate),
         amount: data.amount,
@@ -95,13 +96,17 @@ export class MembersService {
 
   async update(orgId: string, id: string, data: Record<string, unknown>) {
     await this.findOne(orgId, id);
+    const updateData: Record<string, unknown> = { ...data };
+    if (typeof data.renewalDate === 'string') {
+      updateData.renewalDate = new Date(data.renewalDate);
+    }
+    if (typeof data.startDate === 'string') {
+      updateData.startDate = new Date(data.startDate);
+    }
+
     return this.prisma.member.update({
       where: { id },
-      data: {
-        ...data,
-        ...(data.renewalDate && { renewalDate: new Date(data.renewalDate as string) }),
-        ...(data.startDate && { startDate: new Date(data.startDate as string) }),
-      },
+      data: updateData as any,
       include: { contact: true },
     });
   }
@@ -121,7 +126,7 @@ export class MembersService {
     paidAt?: string;
     notes?: string;
   }) {
-    const member = await this.findOne(orgId, data.memberId);
+    await this.findOne(orgId, data.memberId);
 
     return this.prisma.$transaction(async (tx) => {
       const payment = await tx.payment.create({
@@ -142,10 +147,25 @@ export class MembersService {
         data: {
           paidAmount: { increment: data.amount },
           status: 'ACTIVE',
+          followUpStatus: 'DONE',
+          lastContactedAt: new Date(),
         },
       });
 
       return payment;
+    });
+  }
+
+  async markFollowUp(orgId: string, id: string, status = 'DONE') {
+    await this.findOne(orgId, id);
+
+    return this.prisma.member.update({
+      where: { id },
+      data: {
+        followUpStatus: status,
+        lastContactedAt: new Date(),
+      },
+      include: { contact: true },
     });
   }
 

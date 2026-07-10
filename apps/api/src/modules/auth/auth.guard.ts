@@ -8,8 +8,8 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { PrismaClient } from '@revorax/database';
-import { ROLES_KEY } from '../decorators/roles.decorator';
-import { PUBLIC_KEY } from '../decorators/public.decorator';
+import { ROLES_KEY } from './decorators/roles.decorator';
+import { PUBLIC_KEY } from './decorators/public.decorator';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
