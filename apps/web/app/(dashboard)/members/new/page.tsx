@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { contactsApi, membersApi, patientsApi, clientsApi } from '@/lib/api';
+import { contactsApi, membersApi } from '@/lib/api';
 import { addMonths, formatCurrency, getRetentionOptions, getVerticalPack } from '@revorax/shared';
 import { toast } from 'sonner';
 import { ArrowLeft, CheckCircle, Mail, Phone, Save, UserPlus, Wallet } from 'lucide-react';
@@ -85,31 +85,6 @@ export default function NewMemberPage() {
         city: form.city.trim() || undefined,
         source: 'WALK_IN',
       }) as any;
-
-      const businessType = org?.businessType || 'GYM';
-
-      if (businessType === 'CLINIC') {
-        const patient = await patientsApi.create({
-          contactId: contact.id,
-          status: form.status,
-          lastAppointmentDate: toIsoDate(form.startDate),
-          nextAppointmentDate: toIsoDate(form.renewalDate),
-          treatmentValue: amount,
-        }) as any;
-        return patient;
-      }
-
-      if (businessType === 'SALON') {
-        const client = await clientsApi.create({
-          contactId: contact.id,
-          status: form.status,
-          lastVisitDate: toIsoDate(form.startDate),
-          nextBookingDate: toIsoDate(form.renewalDate),
-          averageSpend: amount,
-          visitCount: 1,
-        }) as any;
-        return client;
-      }
 
       const member = await membersApi.create({
         contactId: contact.id,

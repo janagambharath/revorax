@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { analyticsApi, membersApi, patientsApi, clientsApi } from '@/lib/api';
+import { analyticsApi, membersApi } from '@/lib/api';
 import { daysUntil, formatCurrency, formatDate, getVerticalPack } from '@revorax/shared';
 import {
   AlertCircle,
@@ -283,15 +283,7 @@ export default function DashboardPage() {
 
   const { data: expiring } = useQuery({
     queryKey: ['members', 'expiring-soon'],
-    queryFn: () => {
-      if (org?.businessType === 'CLINIC') {
-        return patientsApi.scheduledReminders(7) as any;
-      }
-      if (org?.businessType === 'SALON') {
-        return clientsApi.scheduledReminders(7) as any;
-      }
-      return membersApi.expiringSoon(7) as any;
-    },
+    queryFn: () => membersApi.expiringSoon(7) as any,
   });
 
   const { data: activity } = useQuery({

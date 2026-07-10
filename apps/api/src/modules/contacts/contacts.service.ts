@@ -39,8 +39,6 @@ export class ContactsService {
         take: limit,
         include: {
           member: true,
-          patient: true,
-          client: true,
         },
         orderBy: { createdAt: 'desc' },
       }),
@@ -55,8 +53,6 @@ export class ContactsService {
       where: { id, orgId, deletedAt: null },
       include: {
         member: true,
-        patient: true,
-        client: true,
         messages: { orderBy: { createdAt: 'desc' }, take: 10 },
         notesList: { orderBy: { createdAt: 'desc' }, take: 10, include: { createdBy: true } },
       },

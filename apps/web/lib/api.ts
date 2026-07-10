@@ -59,29 +59,7 @@ export const membersApi = {
   markFollowUp: (id: string, status = 'DONE') => api.post(`/members/${id}/follow-up`, { status }),
 };
 
-// ─── Patients ─────────────────────────────────────────────────────────────────
-export const patientsApi = {
-  list: (params?: Record<string, unknown>) => api.get('/patients', { params }),
-  get: (id: string) => api.get(`/patients/${id}`),
-  create: (data: Record<string, unknown>) => api.post('/patients', data),
-  update: (id: string, data: Record<string, unknown>) => api.put(`/patients/${id}`, data),
-  delete: (id: string) => api.delete(`/patients/${id}`),
-  importCsv: (patients: any[]) => api.post('/patients/import', { patients }),
-  recalls: () => api.get('/patients/recalls'),
-  scheduledReminders: (days?: number) => api.get(`/patients/scheduled-reminders${days ? `?days=${days}` : ''}`),
-};
 
-// ─── Clients ──────────────────────────────────────────────────────────────────
-export const clientsApi = {
-  list: (params?: Record<string, unknown>) => api.get('/clients', { params }),
-  get: (id: string) => api.get(`/clients/${id}`),
-  create: (data: Record<string, unknown>) => api.post('/clients', data),
-  update: (id: string, data: Record<string, unknown>) => api.put(`/clients/${id}`, data),
-  delete: (id: string) => api.delete(`/clients/${id}`),
-  importCsv: (clients: any[]) => api.post('/clients/import', { clients }),
-  lapsed: () => api.get('/clients/lapsed'),
-  scheduledReminders: (days?: number) => api.get(`/clients/scheduled-reminders${days ? `?days=${days}` : ''}`),
-};
 
 // ─── Contacts ─────────────────────────────────────────────────────────────────
 export const contactsApi = {

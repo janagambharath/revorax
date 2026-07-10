@@ -3,6 +3,7 @@ import { Worker, Queue } from 'bullmq';
 import IORedis from 'ioredis';
 import { prisma } from '@revorax/database';
 import { WhatsAppClient } from '@revorax/whatsapp';
+import { decryptIfNeeded } from '@revorax/database';
 import { formatDate, formatCurrency } from '@revorax/shared';
 
 console.log('🚀 Revorax Worker starting...');
@@ -16,7 +17,7 @@ async function getWhatsAppClient(orgId: string) {
   if (org?.whatsappPhoneNumberId && org?.whatsappAccessToken) {
     return new WhatsAppClient({
       phoneNumberId: org.whatsappPhoneNumberId,
-      accessToken: org.whatsappAccessToken,
+      accessToken: decryptIfNeeded(org.whatsappAccessToken),
     });
   }
   return new WhatsAppClient();
@@ -261,37 +262,38 @@ async function checkClinicRecalls() {
   const thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(now.getDate() - 30);
 
-  const recallPatients = await prisma.patient.findMany({
+  const recallMembers = await prisma.member.findMany({
     where: {
       deletedAt: null,
-      status: 'RECALL',
-      lastAppointmentDate: { lte: thirtyDaysAgo },
+      status: 'EXPIRED',
+      renewalDate: { lte: thirtyDaysAgo },
+      org: { businessType: 'CLINIC' },
       OR: [
-        { lastRecallDate: null },
-        { lastRecallDate: { lte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) } }
+        { lastContactedAt: null },
+        { lastContactedAt: { lte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) } }
       ]
     },
     include: { contact: true, org: true },
   });
 
   const followUpQueue = new Queue(QUEUES.FOLLOW_UP, { connection });
-  for (const p of recallPatients) {
-    if (!p.contact.phone) continue;
+  for (const m of recallMembers) {
+    if (!m.contact.phone) continue;
     const template = await prisma.template.findFirst({
-      where: { orgId: p.orgId, name: 'Clinic Recall Follow-up', channel: 'WHATSAPP' },
+      where: { orgId: m.orgId, name: 'Clinic Recall Follow-up', channel: 'WHATSAPP' },
     });
     const body = template 
-      ? template.body.replace(/{{name}}/g, p.contact.name).replace(/{{business_name}}/g, p.org.name)
-      : `Hi ${p.contact.name}, you are due for a follow-up visit at ${p.org.name}. Reply BOOK to schedule.`;
+      ? template.body.replace(/{{name}}/g, m.contact.name).replace(/{{business_name}}/g, m.org.name)
+      : `Hi ${m.contact.name}, you are due for a follow-up visit at ${m.org.name}. Reply BOOK to schedule.`;
 
-    await followUpQueue.add('follow-up', { orgId: p.orgId, contactId: p.contactId, channel: 'WHATSAPP', body });
-    await prisma.patient.update({
-      where: { id: p.id },
-      data: { lastRecallDate: new Date() },
+    await followUpQueue.add('follow-up', { orgId: m.orgId, contactId: m.contactId, channel: 'WHATSAPP', body });
+    await prisma.member.update({
+      where: { id: m.id },
+      data: { lastContactedAt: new Date() },
     });
   }
 
-  console.log(`✅ [CLINIC] Queued ${recallPatients.length} patient recalls`);
+  console.log(`✅ [CLINIC] Queued ${recallMembers.length} patient recalls`);
 }
 
 // ─── Scheduled Check: SALON — Rebookings ─────────────────────────────────────
@@ -301,29 +303,30 @@ async function checkSalonRebookings() {
   const twentyOneDaysAgo = new Date();
   twentyOneDaysAgo.setDate(now.getDate() - 21);
 
-  const lapsedClients = await prisma.client.findMany({
+  const lapsedMembers = await prisma.member.findMany({
     where: {
       deletedAt: null,
-      status: 'LAPSED',
-      lastVisitDate: { lte: twentyOneDaysAgo },
+      status: 'EXPIRED',
+      renewalDate: { lte: twentyOneDaysAgo },
+      org: { businessType: 'SALON' }
     },
     include: { contact: true, org: true },
   });
 
   const followUpQueue = new Queue(QUEUES.FOLLOW_UP, { connection });
-  for (const c of lapsedClients) {
-    if (!c.contact.phone) continue;
+  for (const m of lapsedMembers) {
+    if (!m.contact.phone) continue;
     const template = await prisma.template.findFirst({
-      where: { orgId: c.orgId, name: 'Salon Rebooking Reminder', channel: 'WHATSAPP' },
+      where: { orgId: m.orgId, name: 'Salon Rebooking Reminder', channel: 'WHATSAPP' },
     });
     const body = template
-      ? template.body.replace(/{{name}}/g, c.contact.name).replace(/{{business_name}}/g, c.org.name)
-      : `Hi ${c.contact.name}, your next visit at ${c.org.name} is due. Reply BOOK to reserve a slot.`;
+      ? template.body.replace(/{{name}}/g, m.contact.name).replace(/{{business_name}}/g, m.org.name)
+      : `Hi ${m.contact.name}, your next visit at ${m.org.name} is due. Reply BOOK to reserve a slot.`;
 
-    await followUpQueue.add('follow-up', { orgId: c.orgId, contactId: c.contactId, channel: 'WHATSAPP', body });
+    await followUpQueue.add('follow-up', { orgId: m.orgId, contactId: m.contactId, channel: 'WHATSAPP', body });
   }
 
-  console.log(`✅ [SALON] Queued ${lapsedClients.length} rebookings`);
+  console.log(`✅ [SALON] Queued ${lapsedMembers.length} rebookings`);
 }
 
 // ─── Scheduled Check: COACHING — Overdue Fees ────────────────────────────────

@@ -1,5 +1,5 @@
 import { Injectable, Inject, NotFoundException } from '@nestjs/common';
-import { PrismaClient } from '@revorax/database';
+import { PrismaClient, encryptIfNeeded, decryptIfNeeded } from '@revorax/database';
 
 @Injectable()
 export class OrganizationsService {
@@ -21,6 +21,10 @@ export class OrganizationsService {
     });
 
     if (!org) throw new NotFoundException('Organization not found');
+
+    if (org.whatsappAccessToken) {
+      org.whatsappAccessToken = decryptIfNeeded(org.whatsappAccessToken);
+    }
     return org;
   }
 
@@ -31,18 +35,30 @@ export class OrganizationsService {
   }
 
   async updateOrgProfile(orgId: string, data: any) {
+    const updateData = { ...data };
+    if (updateData.whatsappAccessToken) {
+      updateData.whatsappAccessToken = encryptIfNeeded(updateData.whatsappAccessToken);
+    }
     return this.prisma.organization.update({
       where: { id: orgId },
-      data,
+      data: updateData,
     });
   }
 
   async findOne(orgId: string) {
-    return this.prisma.organization.findUnique({ where: { id: orgId } });
+    const org = await this.prisma.organization.findUnique({ where: { id: orgId } });
+    if (org?.whatsappAccessToken) {
+      org.whatsappAccessToken = decryptIfNeeded(org.whatsappAccessToken);
+    }
+    return org;
   }
 
   async update(orgId: string, data: Record<string, unknown>) {
-    return this.prisma.organization.update({ where: { id: orgId }, data: data as any });
+    const updateData = { ...data };
+    if (typeof updateData.whatsappAccessToken === 'string') {
+      updateData.whatsappAccessToken = encryptIfNeeded(updateData.whatsappAccessToken);
+    }
+    return this.prisma.organization.update({ where: { id: orgId }, data: updateData as any });
   }
 
   async getMembers(orgId: string) {

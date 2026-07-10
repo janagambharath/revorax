@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { PrismaClient } from '@revorax/database';
+import { PrismaClient, decryptIfNeeded } from '@revorax/database';
 import { WhatsAppClient } from '@revorax/whatsapp';
 import { sendEmail, emailTemplates } from '@revorax/email';
 import { paginate, interpolateTemplate } from '@revorax/shared';
@@ -15,7 +15,7 @@ export class MessagesService {
     if (org.whatsappPhoneNumberId && org.whatsappAccessToken) {
       return new WhatsAppClient({
         phoneNumberId: org.whatsappPhoneNumberId,
-        accessToken: org.whatsappAccessToken,
+        accessToken: decryptIfNeeded(org.whatsappAccessToken),
       });
     }
     // Fallback to global config (useful for testing or single-tenant mode)

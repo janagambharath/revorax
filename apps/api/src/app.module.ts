@@ -18,8 +18,6 @@ import { AnalyticsModule } from './modules/analytics/analytics.module';
 import { BillingModule } from './modules/billing/billing.module';
 import { WebhooksModule } from './modules/webhooks/webhooks.module';
 import { AuditModule } from './modules/audit/audit.module';
-import { PatientsModule } from './modules/patients/patients.module';
-import { ClientsModule } from './modules/clients/clients.module';
 
 import { AppController } from './app.controller';
 import { APP_INTERCEPTOR } from '@nestjs/core';
@@ -36,8 +34,6 @@ import { TenantInterceptor } from './common/interceptors/tenant.interceptor';
     ContactsModule,
     LeadsModule,
     MembersModule,
-    PatientsModule,
-    ClientsModule,
     TasksModule,
     NotesModule,
     MessagesModule,

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { membersApi, patientsApi, clientsApi } from '@/lib/api';
+import { membersApi } from '@/lib/api';
 import { formatCurrency, formatDate, daysUntil, getRetentionOptions, getVerticalPack } from '@revorax/shared';
 import Link from 'next/link';
 import {
@@ -36,56 +36,26 @@ export default function MembersPage() {
   const [statusFilter, setStatusFilter] = useState('');
   const [activeTab, setActiveTab] = useState<'all' | 'expiring' | 'overdue' | 'reactivation'>('all');
 
-  const api = businessType === 'CLINIC'
-    ? patientsApi
-    : businessType === 'SALON'
-    ? clientsApi
-    : membersApi;
-
   const listQuery = useQuery({
     queryKey: ['members', 'list', search, statusFilter],
-    queryFn: () => api.list({ search: search || undefined, status: statusFilter || undefined }) as any,
+    queryFn: () => membersApi.list({ search: search || undefined, status: statusFilter || undefined }) as any,
   });
 
   const expiringQuery = useQuery({
     queryKey: ['members', 'expiring'],
-    queryFn: () => {
-      if (businessType === 'CLINIC') {
-        return patientsApi.scheduledReminders(7) as any;
-      }
-      if (businessType === 'SALON') {
-        return clientsApi.scheduledReminders(7) as any;
-      }
-      return membersApi.expiringSoon(7) as any;
-    },
+    queryFn: () => membersApi.expiringSoon(7) as any,
     enabled: activeTab === 'expiring',
   });
 
   const overdueQuery = useQuery({
     queryKey: ['members', 'overdue'],
-    queryFn: () => {
-      if (businessType === 'CLINIC') {
-        return patientsApi.recalls() as any;
-      }
-      if (businessType === 'SALON') {
-        return clientsApi.lapsed() as any;
-      }
-      return membersApi.overdue() as any;
-    },
+    queryFn: () => membersApi.overdue() as any,
     enabled: activeTab === 'overdue',
   });
 
   const reactivationQuery = useQuery({
     queryKey: ['members', 'reactivation'],
-    queryFn: () => {
-      if (businessType === 'CLINIC') {
-        return patientsApi.recalls() as any;
-      }
-      if (businessType === 'SALON') {
-        return clientsApi.lapsed() as any;
-      }
-      return membersApi.reactivation() as any;
-    },
+    queryFn: () => membersApi.reactivation() as any,
     enabled: activeTab === 'reactivation',
   });
 
@@ -177,13 +147,7 @@ export default function MembersPage() {
                       };
                     }).filter(Boolean);
 
-                    const res = await (
-                      businessType === 'CLINIC'
-                        ? patientsApi.importCsv(payload)
-                        : businessType === 'SALON'
-                        ? clientsApi.importCsv(payload)
-                        : membersApi.importCsv(payload)
-                    ) as any;
+                    const res = await membersApi.importCsv(payload) as any;
                     toast.success(`Imported ${res.count} ${pack.primaryEntityPlural} successfully`);
                     qc.invalidateQueries({ queryKey: ['members'] });
                   } catch (err: any) {

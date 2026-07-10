@@ -29,16 +29,16 @@ export class AnalyticsService {
         totalTreatmentValAgg,
         missedAppointments,
       ] = await Promise.all([
-        this.prisma.patient.count({ where: { orgId, deletedAt: null } }),
-        this.prisma.patient.count({ where: { orgId, status: 'ACTIVE', deletedAt: null } }),
-        this.prisma.patient.count({ where: { orgId, status: 'RECALL', deletedAt: null } }),
+        this.prisma.member.count({ where: { orgId, deletedAt: null } }),
+        this.prisma.member.count({ where: { orgId, status: 'ACTIVE', deletedAt: null } }),
+        this.prisma.member.count({ where: { orgId, status: 'EXPIRED', deletedAt: null } }),
         this.prisma.lead.count({ where: { orgId, deletedAt: null, createdAt: { gte: last30Days } } }),
         this.prisma.lead.count({ where: { orgId, deletedAt: null } }),
-        this.prisma.patient.aggregate({ where: { orgId, deletedAt: null }, _sum: { treatmentValue: true } }),
-        this.prisma.patient.count({ where: { orgId, missedAppointmentCount: { gt: 0 }, deletedAt: null } }),
+        this.prisma.member.aggregate({ where: { orgId, deletedAt: null }, _sum: { amount: true } }),
+        this.prisma.member.count({ where: { orgId, missedCount: { gt: 0 }, deletedAt: null } }),
       ]);
 
-      const totalTreatmentVal = Number(totalTreatmentValAgg._sum.treatmentValue || 0);
+      const totalTreatmentVal = Number(totalTreatmentValAgg._sum.amount || 0);
       const monthlyRevenue = totalTreatmentVal * 0.15;
       const recoveredRevenue = totalTreatmentVal * 0.05;
 
@@ -78,16 +78,16 @@ export class AnalyticsService {
         totalSpendAgg,
         lapsedCount,
       ] = await Promise.all([
-        this.prisma.client.count({ where: { orgId, deletedAt: null } }),
-        this.prisma.client.count({ where: { orgId, status: 'ACTIVE', deletedAt: null } }),
-        this.prisma.client.count({ where: { orgId, status: 'LAPSED', deletedAt: null } }),
+        this.prisma.member.count({ where: { orgId, deletedAt: null } }),
+        this.prisma.member.count({ where: { orgId, status: 'ACTIVE', deletedAt: null } }),
+        this.prisma.member.count({ where: { orgId, status: 'EXPIRED', deletedAt: null } }),
         this.prisma.lead.count({ where: { orgId, deletedAt: null, createdAt: { gte: last30Days } } }),
         this.prisma.lead.count({ where: { orgId, deletedAt: null } }),
-        this.prisma.client.aggregate({ where: { orgId, deletedAt: null }, _sum: { averageSpend: true } }),
-        this.prisma.client.count({ where: { orgId, status: 'LAPSED', deletedAt: null } }),
+        this.prisma.member.aggregate({ where: { orgId, deletedAt: null }, _sum: { amount: true } }),
+        this.prisma.member.count({ where: { orgId, status: 'EXPIRED', deletedAt: null } }),
       ]);
 
-      const totalSpend = Number(totalSpendAgg._sum.averageSpend || 0);
+      const totalSpend = Number(totalSpendAgg._sum.amount || 0);
       const monthlyRevenue = totalSpend * 1.2;
       const recoveredRevenue = totalSpend * 0.15;
 
@@ -208,13 +208,13 @@ export class AnalyticsService {
       for (let i = months - 1; i >= 0; i--) {
         const start = new Date(now.getFullYear(), now.getMonth() - i, 1);
         const end = new Date(now.getFullYear(), now.getMonth() - i + 1, 0, 23, 59, 59);
-        const agg = await this.prisma.patient.aggregate({
+        const agg = await this.prisma.member.aggregate({
           where: { orgId, createdAt: { gte: start, lte: end }, deletedAt: null },
-          _sum: { treatmentValue: true },
+          _sum: { amount: true },
         });
         results.push({
           month: start.toLocaleString('en-IN', { month: 'short', year: '2-digit' }),
-          revenue: Number(agg._sum.treatmentValue || 0),
+          revenue: Number(agg._sum.amount || 0),
           newMembers: 0,
         });
       }
@@ -225,13 +225,13 @@ export class AnalyticsService {
       for (let i = months - 1; i >= 0; i--) {
         const start = new Date(now.getFullYear(), now.getMonth() - i, 1);
         const end = new Date(now.getFullYear(), now.getMonth() - i + 1, 0, 23, 59, 59);
-        const agg = await this.prisma.client.aggregate({
+        const agg = await this.prisma.member.aggregate({
           where: { orgId, createdAt: { gte: start, lte: end }, deletedAt: null },
-          _sum: { averageSpend: true },
+          _sum: { amount: true },
         });
         results.push({
           month: start.toLocaleString('en-IN', { month: 'short', year: '2-digit' }),
-          revenue: Number(agg._sum.averageSpend || 0) * 5,
+          revenue: Number(agg._sum.amount || 0) * 5,
           newMembers: 0,
         });
       }
@@ -269,22 +269,22 @@ export class AnalyticsService {
     const businessType = org?.businessType || 'GYM';
 
     if (businessType === 'CLINIC') {
-      const statuses = ['ACTIVE', 'INACTIVE', 'RECALL'];
+      const statuses = ['ACTIVE', 'INACTIVE', 'EXPIRED'];
       const counts = await Promise.all(
         statuses.map(async (status) => ({
           status,
-          count: await this.prisma.patient.count({ where: { orgId, status, deletedAt: null } }),
+          count: await this.prisma.member.count({ where: { orgId, status: status as any, deletedAt: null } }),
         })),
       );
       return counts.filter((c) => c.count > 0);
     }
 
     if (businessType === 'SALON') {
-      const statuses = ['ACTIVE', 'INACTIVE', 'LAPSED'];
+      const statuses = ['ACTIVE', 'INACTIVE', 'EXPIRED'];
       const counts = await Promise.all(
         statuses.map(async (status) => ({
           status,
-          count: await this.prisma.client.count({ where: { orgId, status, deletedAt: null } }),
+          count: await this.prisma.member.count({ where: { orgId, status: status as any, deletedAt: null } }),
         })),
       );
       return counts.filter((c) => c.count > 0);
@@ -353,13 +353,13 @@ export class AnalyticsService {
         orderBy: { createdAt: 'desc' },
         take: 5,
       }) : Promise.resolve([]),
-      businessType === 'CLINIC' ? this.prisma.patient.findMany({
+      businessType === 'CLINIC' ? this.prisma.member.findMany({
         where: { orgId, deletedAt: null },
         include: { contact: true },
         orderBy: { createdAt: 'desc' },
         take: 5,
       }) : Promise.resolve([]),
-      businessType === 'SALON' ? this.prisma.client.findMany({
+      businessType === 'SALON' ? this.prisma.member.findMany({
         where: { orgId, deletedAt: null },
         include: { contact: true },
         orderBy: { createdAt: 'desc' },
@@ -368,11 +368,11 @@ export class AnalyticsService {
     ]);
 
     const activities = [
-      ...recentMessages.map((m) => ({ type: 'message', text: `Message sent to ${m.contact.name}`, at: m.createdAt })),
-      ...recentPayments.map((p) => ({ type: 'payment', text: `Payment ₹${p.amount} from ${p.member.contact.name}`, at: p.paidAt || p.createdAt })),
-      ...recentGymMembers.map((m) => ({ type: 'member', text: `New member: ${m.contact.name}`, at: m.createdAt })),
-      ...recentPatients.map((p) => ({ type: 'member', text: `New patient: ${p.contact.name}`, at: p.createdAt })),
-      ...recentClients.map((c) => ({ type: 'member', text: `New client: ${c.contact.name}`, at: c.createdAt })),
+      ...recentMessages.map((m: any) => ({ type: 'message', text: `Message sent to ${m.contact.name}`, at: m.createdAt })),
+      ...recentPayments.map((p: any) => ({ type: 'payment', text: `Payment ₹${p.amount} from ${p.member.contact.name}`, at: p.paidAt || p.createdAt })),
+      ...recentGymMembers.map((m: any) => ({ type: 'member', text: `New member: ${m.contact.name}`, at: m.createdAt })),
+      ...recentPatients.map((p: any) => ({ type: 'member', text: `New patient: ${p.contact.name}`, at: p.createdAt })),
+      ...recentClients.map((c: any) => ({ type: 'member', text: `New client: ${c.contact.name}`, at: c.createdAt })),
     ];
 
     return activities.sort((a, b) => b.at.getTime() - a.at.getTime()).slice(0, 15);
