@@ -132,7 +132,7 @@ export default function NewMemberPage() {
 
       return member;
     },
-    onSuccess: (entity: any) => {
+    onSuccess: () => {
       toast.success(`${titleCase(pack.primaryEntity)} added`);
       qc.invalidateQueries({ queryKey: ['members'] });
       qc.invalidateQueries({ queryKey: ['analytics'] });
