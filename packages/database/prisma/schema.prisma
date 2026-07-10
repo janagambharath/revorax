@@ -304,6 +304,7 @@ model Contact {
   customFields Json     @default("{}")
   isActive    Boolean   @default(true)
   whatsappOptIn Boolean @default(true)
+  unsubscribedAt DateTime?  // DND/opt-out compliance
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
@@ -457,10 +458,16 @@ model Member {
   followUpStatus String         @default("PENDING") // PENDING | DONE | SCHEDULED
   lastContactedAt DateTime?
   reactivationAttempts Int      @default(0)
-  goals          String?
-  healthNotes    String?
+  churnScore     Int?           // 0-100, AI-calculated churn risk
+  goals          String?        // GYM: fitness goals
+  healthNotes    String?        // GYM/CLINIC/DENTAL: health info
+  missedCount    Int            @default(0) // CLINIC/DENTAL: missed appointments
+  visitCount     Int            @default(0) // SALON: total visits
+  averageSpend   Decimal?       @db.Decimal(10, 2) // SALON/AGENCY: avg spend
+  dealValue      Decimal?       @db.Decimal(12, 2) // REAL_ESTATE/AGENCY: deal size
   assignedStaffId String?
   notes          String?
+  metadata       Json           @default("{}") // Niche-specific extra fields
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
   deletedAt      DateTime?

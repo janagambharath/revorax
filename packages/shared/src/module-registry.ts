@@ -155,13 +155,21 @@ const SECTION_LABELS: Record<string, string> = {
 // 'dashboard' is always visible and is not listed here.
 
 const VISIBLE_MODULES: Record<BusinessType, string[]> = {
-  GYM: ['members', 'contacts', 'leads', 'tasks', 'messages', 'campaigns', 'templates', 'workflows', 'analytics', 'ai'],
-  CLINIC: ['members', 'contacts', 'leads', 'tasks', 'messages', 'campaigns', 'templates', 'workflows', 'analytics', 'ai'],
-  SALON: ['members', 'contacts', 'tasks', 'messages', 'campaigns', 'templates', 'workflows', 'analytics', 'ai'],
-  COACHING: ['members', 'contacts', 'leads', 'tasks', 'messages', 'campaigns', 'templates', 'workflows', 'analytics', 'ai'],
+  // GYM: Members + Leads (trial conversion), no tasks (workflows handle automation)
+  GYM: ['members', 'contacts', 'leads', 'messages', 'campaigns', 'templates', 'workflows', 'analytics', 'ai'],
+  // CLINIC: Patients, no leads/tasks — appointment & recall focused
+  CLINIC: ['members', 'contacts', 'messages', 'campaigns', 'templates', 'workflows', 'analytics', 'ai'],
+  // SALON: Clients, no leads/tasks — rebooking & package focused
+  SALON: ['members', 'contacts', 'messages', 'campaigns', 'templates', 'workflows', 'analytics', 'ai'],
+  // COACHING: Students + Admissions (leads), no tasks
+  COACHING: ['members', 'contacts', 'leads', 'messages', 'campaigns', 'templates', 'workflows', 'analytics', 'ai'],
+  // REAL_ESTATE: Prospects + Leads + Tasks (deal pipeline needs task tracking)
   REAL_ESTATE: ['members', 'contacts', 'leads', 'tasks', 'messages', 'campaigns', 'templates', 'workflows', 'analytics', 'ai'],
-  DENTAL: ['members', 'contacts', 'leads', 'tasks', 'messages', 'campaigns', 'templates', 'workflows', 'analytics', 'ai'],
+  // DENTAL: Patients, no leads/tasks — recall & treatment focused
+  DENTAL: ['members', 'contacts', 'messages', 'campaigns', 'templates', 'workflows', 'analytics', 'ai'],
+  // AGENCY: Clients + Proposals (leads) + Tasks (project tracking)
   AGENCY: ['members', 'contacts', 'leads', 'tasks', 'messages', 'campaigns', 'templates', 'workflows', 'analytics', 'ai'],
+  // OTHER: Full module set for generic businesses
   OTHER: ['members', 'contacts', 'leads', 'tasks', 'messages', 'campaigns', 'templates', 'workflows', 'analytics', 'ai'],
 };
 
