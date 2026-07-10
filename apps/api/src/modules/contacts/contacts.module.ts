@@ -2,7 +2,7 @@
 import { Module } from '@nestjs/common';
 import { Controller, Get, Post, Put, Delete, Param, Body, Query, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
-import { ContactsService } from '../crm/crm.service';
+import { ContactsService } from './contacts.service';
 import { AuthGuard } from '../auth/auth.guard';
 import { OrgId } from '../auth/decorators/current-user.decorator';
 

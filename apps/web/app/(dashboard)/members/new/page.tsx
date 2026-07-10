@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { contactsApi, membersApi } from '@/lib/api';
+import { contactsApi, membersApi, patientsApi, clientsApi } from '@/lib/api';
 import { addMonths, formatCurrency, getRetentionOptions, getVerticalPack } from '@revorax/shared';
 import { toast } from 'sonner';
 import { ArrowLeft, CheckCircle, Mail, Phone, Save, UserPlus, Wallet } from 'lucide-react';
@@ -86,6 +86,31 @@ export default function NewMemberPage() {
         source: 'WALK_IN',
       }) as any;
 
+      const businessType = org?.businessType || 'GYM';
+
+      if (businessType === 'CLINIC') {
+        const patient = await patientsApi.create({
+          contactId: contact.id,
+          status: form.status,
+          lastAppointmentDate: toIsoDate(form.startDate),
+          nextAppointmentDate: toIsoDate(form.renewalDate),
+          treatmentValue: amount,
+        }) as any;
+        return patient;
+      }
+
+      if (businessType === 'SALON') {
+        const client = await clientsApi.create({
+          contactId: contact.id,
+          status: form.status,
+          lastVisitDate: toIsoDate(form.startDate),
+          nextBookingDate: toIsoDate(form.renewalDate),
+          averageSpend: amount,
+          visitCount: 1,
+        }) as any;
+        return client;
+      }
+
       const member = await membersApi.create({
         contactId: contact.id,
         membershipType: form.membershipType,
@@ -107,13 +132,14 @@ export default function NewMemberPage() {
 
       return member;
     },
-    onSuccess: (member: any) => {
+    onSuccess: (entity: any) => {
       toast.success(`${titleCase(pack.primaryEntity)} added`);
       qc.invalidateQueries({ queryKey: ['members'] });
       qc.invalidateQueries({ queryKey: ['analytics'] });
-      router.push(`/dashboard/members/${member.id}`);
+      // Redirect to the list because detail workspace is specialized for members in V1
+      router.push(`/dashboard/members`);
     },
-    onError: () => toast.error('Could not add member'),
+    onError: () => toast.error(`Could not add ${pack.primaryEntity}`),
   });
 
   const canSubmit = form.name.trim().length > 1 && amount > 0 && Boolean(form.startDate) && Boolean(form.renewalDate);
@@ -201,18 +227,22 @@ export default function NewMemberPage() {
                 <label className="label">{titleCase(pack.amountLabel)}</label>
                 <input value={form.amount} onChange={(event) => updateForm({ amount: event.target.value })} type="number" min="0" className="input" placeholder="2500" />
               </div>
-              <div>
-                <label className="label">Paid Now</label>
-                <input value={form.paidAmount} onChange={(event) => updateForm({ paidAmount: event.target.value })} type="number" min="0" className="input" placeholder="0" />
-              </div>
-              <div>
-                <label className="label">Payment Method</label>
-                <select value={form.paymentMethod} onChange={(event) => updateForm({ paymentMethod: event.target.value })} className="select">
-                  {PAYMENT_METHODS.map((method) => (
-                    <option key={method} value={method}>{method.replace('_', ' ')}</option>
-                  ))}
-                </select>
-              </div>
+              {org?.businessType === 'GYM' && (
+                <>
+                  <div>
+                    <label className="label">Paid Now</label>
+                    <input value={form.paidAmount} onChange={(event) => updateForm({ paidAmount: event.target.value })} type="number" min="0" className="input" placeholder="0" />
+                  </div>
+                  <div>
+                    <label className="label">Payment Method</label>
+                    <select value={form.paymentMethod} onChange={(event) => updateForm({ paymentMethod: event.target.value })} className="select">
+                      {PAYMENT_METHODS.map((method) => (
+                        <option key={method} value={method}>{method.replace('_', ' ')}</option>
+                      ))}
+                    </select>
+                  </div>
+                </>
+              )}
             </div>
           </div>
 
@@ -232,25 +262,27 @@ export default function NewMemberPage() {
         </div>
 
         <div className="space-y-6">
-          <div className="card p-6 space-y-4">
-            <h2 className="text-sm font-semibold text-zinc-200">Revenue Summary</h2>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-zinc-500">{titleCase(pack.retentionObject)} value</span>
-                <span className="text-sm font-semibold text-zinc-200">{formatCurrency(amount || 0)}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-zinc-500">Paid now</span>
-                <span className="text-sm font-semibold text-emerald-400">{formatCurrency(paidAmount || 0)}</span>
-              </div>
-              <div className="flex items-center justify-between border-t border-surface-200 pt-4">
-                <span className="text-sm text-zinc-500">Remaining</span>
-                <span className={balance > 0 ? 'text-sm font-semibold text-amber-400' : 'text-sm font-semibold text-emerald-400'}>
-                  {formatCurrency(balance)}
-                </span>
+          {org?.businessType === 'GYM' && (
+            <div className="card p-6 space-y-4">
+              <h2 className="text-sm font-semibold text-zinc-200">Revenue Summary</h2>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-zinc-500">{titleCase(pack.retentionObject)} value</span>
+                  <span className="text-sm font-semibold text-zinc-200">{formatCurrency(amount || 0)}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-zinc-500">Paid now</span>
+                  <span className="text-sm font-semibold text-emerald-400">{formatCurrency(paidAmount || 0)}</span>
+                </div>
+                <div className="flex items-center justify-between border-t border-surface-200 pt-4">
+                  <span className="text-sm text-zinc-500">Remaining</span>
+                  <span className={balance > 0 ? 'text-sm font-semibold text-amber-400' : 'text-sm font-semibold text-emerald-400'}>
+                    {formatCurrency(balance)}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           <div className="card p-6 space-y-4">
             <h2 className="text-sm font-semibold text-zinc-200">Readiness</h2>

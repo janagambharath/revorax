@@ -203,6 +203,8 @@ model Organization {
   notes         Note[]
   messages      Message[]
   members       Member[]
+  patients      Patient[]
+  clients       Client[]
   payments      Payment[]
   campaigns     Campaign[]
   templates     Template[]
@@ -310,6 +312,8 @@ model Contact {
   notesList    Note[]
   messages     Message[]
   member       Member?
+  patient      Patient?
+  client       Client?
   campaignRecipients CampaignRecipient[]
 
   @@index([orgId])
@@ -466,6 +470,56 @@ model Payment {
   @@index([status])
   @@index([dueDate])
   @@map("payments")
+}
+
+// ─── Clinic Vertical: Patients ───────────────────────────────────────────────
+
+model Patient {
+  id                    String        @id @default(cuid())
+  orgId                 String
+  contactId             String        @unique
+  patientCode           String?
+  status                String        @default("ACTIVE") // ACTIVE | INACTIVE | RECALL
+  lastAppointmentDate   DateTime
+  nextAppointmentDate   DateTime?
+  missedAppointmentCount Int          @default(0)
+  treatmentValue        Decimal       @db.Decimal(10, 2)
+  lastRecallDate        DateTime?
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+  deletedAt             DateTime?
+
+  org                   Organization  @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  contact               Contact       @relation(fields: [contactId], references: [id])
+
+  @@index([orgId])
+  @@index([status])
+  @@index([deletedAt])
+  @@map("patients")
+}
+
+// ─── Salon Vertical: Clients ─────────────────────────────────────────────────
+
+model Client {
+  id              String        @id @default(cuid())
+  orgId           String
+  contactId       String        @unique
+  status          String        @default("ACTIVE") // ACTIVE | INACTIVE | LAPSED
+  lastVisitDate   DateTime
+  nextBookingDate DateTime?
+  averageSpend    Decimal       @db.Decimal(10, 2)
+  visitCount      Int           @default(0)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  deletedAt       DateTime?
+
+  org             Organization  @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  contact         Contact       @relation(fields: [contactId], references: [id])
+
+  @@index([orgId])
+  @@index([status])
+  @@index([deletedAt])
+  @@map("clients")
 }
 
 // ─── Templates ───────────────────────────────────────────────────────────────

@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { membersApi } from '@/lib/api';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { membersApi, patientsApi, clientsApi } from '@/lib/api';
 import { formatCurrency, formatDate, daysUntil, getRetentionOptions, getVerticalPack } from '@revorax/shared';
 import Link from 'next/link';
 import {
@@ -25,6 +25,8 @@ function titleCase(value: string) {
 
 export default function MembersPage() {
   const { org } = useAuthStore();
+  const qc = useQueryClient();
+  const businessType = org?.businessType || 'GYM';
   const pack = getVerticalPack(org?.businessType);
   const retentionLabels = Object.fromEntries(
     getRetentionOptions(org?.businessType).map((option) => [option.value, option.label]),
@@ -33,26 +35,53 @@ export default function MembersPage() {
   const [statusFilter, setStatusFilter] = useState('');
   const [activeTab, setActiveTab] = useState<'all' | 'expiring' | 'overdue' | 'reactivation'>('all');
 
+  const api = businessType === 'CLINIC'
+    ? patientsApi
+    : businessType === 'SALON'
+    ? clientsApi
+    : membersApi;
+
   const listQuery = useQuery({
     queryKey: ['members', 'list', search, statusFilter],
-    queryFn: () => membersApi.list({ search: search || undefined, status: statusFilter || undefined }) as any,
+    queryFn: () => api.list({ search: search || undefined, status: statusFilter || undefined }) as any,
   });
 
   const expiringQuery = useQuery({
     queryKey: ['members', 'expiring'],
-    queryFn: () => membersApi.expiringSoon(7) as any,
+    queryFn: () => {
+      if (businessType === 'CLINIC' || businessType === 'SALON') {
+        return api.scheduledReminders(7) as any;
+      }
+      return membersApi.expiringSoon(7) as any;
+    },
     enabled: activeTab === 'expiring',
   });
 
   const overdueQuery = useQuery({
     queryKey: ['members', 'overdue'],
-    queryFn: () => membersApi.overdue() as any,
+    queryFn: () => {
+      if (businessType === 'CLINIC') {
+        return patientsApi.recalls() as any;
+      }
+      if (businessType === 'SALON') {
+        return clientsApi.lapsed() as any;
+      }
+      return membersApi.overdue() as any;
+    },
     enabled: activeTab === 'overdue',
   });
 
   const reactivationQuery = useQuery({
     queryKey: ['members', 'reactivation'],
-    queryFn: () => membersApi.reactivation() as any,
+    queryFn: () => {
+      if (businessType === 'CLINIC') {
+        return patientsApi.recalls() as any;
+      }
+      if (businessType === 'SALON') {
+        return clientsApi.lapsed() as any;
+      }
+      return membersApi.reactivation() as any;
+    },
     enabled: activeTab === 'reactivation',
   });
 
@@ -104,16 +133,36 @@ export default function MembersPage() {
                     const nameIdx = headers.findIndex(h => h.includes('name'));
                     const phoneIdx = headers.findIndex(h => h.includes('phone'));
                     const emailIdx = headers.findIndex(h => h.includes('email'));
-                    const amountIdx = headers.findIndex(h => h.includes('amount'));
-                    const renewalIdx = headers.findIndex(h => h.includes('renewal'));
+                    const amountIdx = headers.findIndex(h => h.includes('amount') || h.includes('spend') || h.includes('value'));
+                    const renewalIdx = headers.findIndex(h => h.includes('renewal') || h.includes('appointment') || h.includes('visit') || h.includes('date'));
                     
                     if (nameIdx === -1 || phoneIdx === -1) {
                       throw new Error('CSV must contain Name and Phone columns');
                     }
 
-                    const members = lines.slice(1).map(line => {
+                    const payload = lines.slice(1).map(line => {
                       const values = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.trim().replace(/^"|"$/g, ''));
                       if (!values[nameIdx] || !values[phoneIdx]) return null;
+                      
+                      if (businessType === 'CLINIC') {
+                        return {
+                          name: values[nameIdx],
+                          phone: values[phoneIdx],
+                          email: emailIdx !== -1 ? values[emailIdx] : undefined,
+                          lastAppointmentDate: renewalIdx !== -1 ? values[renewalIdx] : new Date().toISOString(),
+                          treatmentValue: amountIdx !== -1 ? parseFloat(values[amountIdx]) : 0,
+                        };
+                      }
+                      if (businessType === 'SALON') {
+                        return {
+                          name: values[nameIdx],
+                          phone: values[phoneIdx],
+                          email: emailIdx !== -1 ? values[emailIdx] : undefined,
+                          lastVisitDate: renewalIdx !== -1 ? values[renewalIdx] : new Date().toISOString(),
+                          averageSpend: amountIdx !== -1 ? parseFloat(values[amountIdx]) : 0,
+                          visitCount: 1,
+                        };
+                      }
                       return {
                         name: values[nameIdx],
                         phone: values[phoneIdx],
@@ -124,8 +173,14 @@ export default function MembersPage() {
                       };
                     }).filter(Boolean);
 
-                    const res = await membersApi.importCsv(members) as any;
-                    toast.success(`Imported ${res.count} members successfully`);
+                    const res = await (
+                      businessType === 'CLINIC'
+                        ? patientsApi.importCsv(payload)
+                        : businessType === 'SALON'
+                        ? clientsApi.importCsv(payload)
+                        : membersApi.importCsv(payload)
+                    ) as any;
+                    toast.success(`Imported ${res.count} ${pack.primaryEntityPlural} successfully`);
                     qc.invalidateQueries({ queryKey: ['members'] });
                   } catch (err: any) {
                     toast.error(err?.message || 'Failed to parse CSV');
@@ -222,7 +277,25 @@ export default function MembersPage() {
             </thead>
             <tbody>
               {members.map((m: any) => {
-                const days = daysUntil(m.renewalDate);
+                const dateVal = businessType === 'CLINIC'
+                  ? m.nextAppointmentDate || m.lastAppointmentDate
+                  : businessType === 'SALON'
+                  ? m.nextBookingDate || m.lastVisitDate
+                  : m.renewalDate;
+
+                const amountVal = businessType === 'CLINIC'
+                  ? m.treatmentValue
+                  : businessType === 'SALON'
+                  ? m.averageSpend
+                  : m.amount;
+
+                const retentionText = businessType === 'CLINIC'
+                  ? (m.nextAppointmentDate ? 'Appointment' : 'Recall Due')
+                  : businessType === 'SALON'
+                  ? `Average Spend`
+                  : (retentionLabels[m.membershipType] || m.membershipType);
+
+                const days = dateVal ? daysUntil(dateVal) : 0;
                 const statusConfig = STATUS_CONFIG[m.status] || STATUS_CONFIG.ACTIVE;
                 return (
                   <tr key={m.id} className="cursor-pointer">
@@ -241,12 +314,12 @@ export default function MembersPage() {
                       </div>
                     </td>
                     <td>
-                      <span className="text-sm text-zinc-300">{retentionLabels[m.membershipType] || m.membershipType}</span>
+                      <span className="text-sm text-zinc-300">{retentionText}</span>
                     </td>
                     <td>
                       <div>
-                        <p className="text-sm text-zinc-300">{formatDate(m.renewalDate)}</p>
-                        {m.status !== 'CANCELLED' && (
+                        <p className="text-sm text-zinc-300">{dateVal ? formatDate(dateVal) : '-'}</p>
+                        {m.status !== 'CANCELLED' && dateVal && (
                           <p className={`text-xs font-medium ${
                             days < 0 ? 'text-red-400' :
                             days <= 3 ? 'text-amber-400' :
@@ -260,7 +333,7 @@ export default function MembersPage() {
                       </div>
                     </td>
                     <td>
-                      <span className="text-sm font-medium text-zinc-200">{formatCurrency(Number(m.amount))}</span>
+                      <span className="text-sm font-medium text-zinc-200">{formatCurrency(Number(amountVal || 0))}</span>
                     </td>
                     <td>
                       <span className={statusConfig.cls}>{statusConfig.label}</span>

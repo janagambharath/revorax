@@ -199,6 +199,76 @@ async function checkExpiringMembers() {
   console.log(`✅ Queued ${members7Days.length + members3Days.length} renewal reminders`);
 }
 
+async function checkClinicRecalls() {
+  console.log('🔍 Checking clinic recalls...');
+  const now = new Date();
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(now.getDate() - 30);
+
+  const recallPatients = await prisma.patient.findMany({
+    where: {
+      deletedAt: null,
+      status: 'RECALL',
+      lastAppointmentDate: { lte: thirtyDaysAgo },
+      OR: [
+        { lastRecallDate: null },
+        { lastRecallDate: { lte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) } } // not recalled in last 7 days
+      ]
+    },
+    include: { contact: true, org: true },
+  });
+
+  const followUpQueue = new Queue(QUEUES.FOLLOW_UP, { connection });
+  for (const p of recallPatients) {
+    if (!p.contact.phone) continue;
+    const template = await prisma.template.findFirst({
+      where: { orgId: p.orgId, name: 'Clinic Recall Follow-up', channel: 'WHATSAPP' },
+    });
+    const body = template 
+      ? template.body.replace(/{{name}}/g, p.contact.name).replace(/{{business_name}}/g, p.org.name)
+      : `Hi ${p.contact.name}, you are due for a follow-up visit at ${p.org.name}. Reply BOOK to schedule.`;
+
+    await followUpQueue.add('follow-up', { orgId: p.orgId, contactId: p.contactId, channel: 'WHATSAPP', body });
+    await prisma.patient.update({
+      where: { id: p.id },
+      data: { lastRecallDate: new Date() },
+    });
+  }
+
+  console.log(`✅ Queued ${recallPatients.length} clinic recalls`);
+}
+
+async function checkSalonRebookings() {
+  console.log('🔍 Checking salon rebookings...');
+  const now = new Date();
+  const twentyOneDaysAgo = new Date();
+  twentyOneDaysAgo.setDate(now.getDate() - 21);
+
+  const lapsedClients = await prisma.client.findMany({
+    where: {
+      deletedAt: null,
+      status: 'LAPSED',
+      lastVisitDate: { lte: twentyOneDaysAgo },
+    },
+    include: { contact: true, org: true },
+  });
+
+  const followUpQueue = new Queue(QUEUES.FOLLOW_UP, { connection });
+  for (const c of lapsedClients) {
+    if (!c.contact.phone) continue;
+    const template = await prisma.template.findFirst({
+      where: { orgId: c.orgId, name: 'Salon Rebooking Reminder', channel: 'WHATSAPP' },
+    });
+    const body = template
+      ? template.body.replace(/{{name}}/g, c.contact.name).replace(/{{business_name}}/g, c.org.name)
+      : `Hi ${c.contact.name}, your next visit at ${c.org.name} is due. Reply BOOK to reserve a slot.`;
+
+    await followUpQueue.add('follow-up', { orgId: c.orgId, contactId: c.contactId, channel: 'WHATSAPP', body });
+  }
+
+  console.log(`✅ Queued ${lapsedClients.length} salon rebookings`);
+}
+
 // ─── Error handlers ───────────────────────────────────────────────────────────
 [renewalWorker, followUpWorker, paymentWorker].forEach((worker) => {
   worker.on('failed', (job, err) => {
@@ -210,20 +280,32 @@ async function checkExpiringMembers() {
 });
 
 // ─── Run scheduler on startup and then via BullMQ repeatable job ──────────────
-checkExpiringMembers().catch(console.error);
+const runAllSchedulers = async () => {
+  try {
+    await Promise.all([
+      checkExpiringMembers(),
+      checkClinicRecalls(),
+      checkSalonRebookings(),
+    ]);
+  } catch (err) {
+    console.error('Failed running schedulers:', err);
+  }
+};
+
+runAllSchedulers();
 
 const schedulerQueue = new Queue('scheduler', { connection });
 schedulerQueue.add('check-expiring', {}, {
   repeat: { pattern: '0 6 * * *' }, // 6 AM daily
 }).catch(console.error);
 
-const schedulerWorker = new Worker('scheduler', async (job) => {
-  if (job.name === 'check-expiring') {
-    await checkExpiringMembers();
+const schedulerWorker = new Worker('scheduler', async (_job) => {
+  if (_job.name === 'check-expiring') {
+    await runAllSchedulers();
   }
 }, { connection });
 
-schedulerWorker.on('failed', (job, err) => {
+schedulerWorker.on('failed', (_job, err) => {
   console.error(`❌ [Scheduler] Job failed:`, err.message);
 });
 
