@@ -6,10 +6,12 @@ import { orgApi, membersApi } from '@/lib/api';
 import { toast } from 'sonner';
 import { useQueryClient } from '@tanstack/react-query';
 import { Building2, Users, MessageSquare, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { getVerticalPack } from '@revorax/shared';
 
 export function OnboardingWizard() {
   const { org, setOrg } = useAuthStore();
   const qc = useQueryClient();
+  const pack = getVerticalPack(org?.businessType);
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -96,7 +98,7 @@ export function OnboardingWizard() {
         <div className="flex border-b border-surface-200">
           {[
             { num: 1, icon: Building2, label: 'Business' },
-            { num: 2, icon: Users, label: 'Members' },
+            { num: 2, icon: Users, label: pack.primaryNavLabel },
             { num: 3, icon: MessageSquare, label: 'WhatsApp' },
           ].map((s) => (
             <div key={s.num} className={`flex-1 p-4 text-center border-b-2 transition-colors ${step >= s.num ? 'border-brand-500 text-brand-400' : 'border-transparent text-zinc-600'}`}>
@@ -129,8 +131,8 @@ export function OnboardingWizard() {
           {step === 2 && (
             <div className="space-y-6 animate-in slide-in-from-right-4">
               <div className="text-center">
-                <h2 className="text-2xl font-bold text-zinc-100">Import Members</h2>
-                <p className="text-zinc-500 mt-2">Upload your existing members via CSV to instantly start recovering revenue.</p>
+                <h2 className="text-2xl font-bold text-zinc-100">Import {pack.primaryNavLabel}</h2>
+                <p className="text-zinc-500 mt-2">Upload your existing {pack.customerPluralLabel} via CSV to instantly start recovering revenue.</p>
               </div>
               
               <div className="border-2 border-dashed border-surface-200 rounded-xl p-8 text-center hover:border-brand-500/50 transition-colors">
@@ -154,7 +156,7 @@ export function OnboardingWizard() {
             <div className="space-y-6 animate-in slide-in-from-right-4">
               <div className="text-center">
                 <h2 className="text-2xl font-bold text-zinc-100">Connect WhatsApp</h2>
-                <p className="text-zinc-500 mt-2">Revorax automates renewals & follow-ups via WhatsApp.</p>
+                <p className="text-zinc-500 mt-2">Revorax automates {pack.retentionObject} reminders & follow-ups via WhatsApp.</p>
               </div>
               
               <div className="space-y-4">

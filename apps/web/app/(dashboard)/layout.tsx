@@ -5,20 +5,34 @@ import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import {
   LayoutDashboard, Users, Settings, LogOut,
-  Bell, ChevronDown, MessageSquare
+  Bell, ChevronDown, MessageSquare, Contact,
+  Target, CheckSquare, Megaphone, FileText,
+  Workflow, BarChart3, Sparkles,
 } from 'lucide-react';
 import { useAuthStore } from '@/stores/auth.store';
 import { toast } from 'sonner';
-import { getVerticalPack } from '@revorax/shared';
+import { getVerticalPack, getDashboardSections } from '@revorax/shared';
+import type { DashboardModule } from '@revorax/shared';
 
 import { OnboardingWizard } from '@/components/OnboardingWizard';
 
-function getNavItems(primaryNavLabel: string) {
-  return [
-    { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { href: '/dashboard/members', label: primaryNavLabel, icon: Users },
-    { href: '/dashboard/messages', label: 'Messages', icon: MessageSquare },
-  ];
+// Icon mapping from string names to Lucide components
+const ICON_MAP: Record<string, React.ElementType> = {
+  LayoutDashboard,
+  Users,
+  Contact,
+  Target,
+  CheckSquare,
+  MessageSquare,
+  Megaphone,
+  FileText,
+  Workflow,
+  BarChart3,
+  Sparkles,
+};
+
+function getIcon(iconName: string): React.ElementType {
+  return ICON_MAP[iconName] || LayoutDashboard;
 }
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -26,7 +40,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const pathname = usePathname();
   const { user, org, fetchMe, logout } = useAuthStore();
   const pack = getVerticalPack(org?.businessType);
-  const navItems = getNavItems(pack.primaryNavLabel);
+  const sections = getDashboardSections(org?.businessType);
 
   useEffect(() => {
     if (!user) {
@@ -53,6 +67,19 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     toast.success('Logged out');
   };
 
+  function isActive(mod: DashboardModule) {
+    if (mod.href === '/dashboard') return pathname === '/dashboard';
+    return pathname.startsWith(mod.href);
+  }
+
+  // Section labels
+  const sectionLabels: Record<string, string> = {
+    revenue: 'Revenue',
+    crm: 'CRM',
+    engage: 'Engage',
+    intelligence: 'Intelligence',
+  };
+
   return (
     <div className="flex h-screen bg-surface overflow-hidden">
       <OnboardingWizard />
@@ -77,20 +104,36 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
         </div>
 
-        {/* Navigation */}
-        <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto scrollbar-hide">
-          {navItems.map((item) => {
-            const isActive = pathname === item.href || (item.href !== '/dashboard' && pathname.startsWith(item.href));
-            return (
-              <Link key={item.href} href={item.href} className={isActive ? 'sidebar-item-active' : 'sidebar-item'}>
-                <item.icon className="w-4 h-4 shrink-0" />
-                {item.label}
-                {item.label === 'AI Assistant' && (
-                  <span className="ml-auto badge-purple text-[10px] px-1.5 py-0.5">AI</span>
-                )}
-              </Link>
-            );
-          })}
+        {/* Navigation — sectioned */}
+        <nav className="flex-1 px-3 py-3 overflow-y-auto scrollbar-hide space-y-4">
+          {sections.map((section) => (
+            <div key={section.key}>
+              <div className="px-3 mb-1.5">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-600">
+                  {sectionLabels[section.key] || section.label}
+                </span>
+              </div>
+              <div className="space-y-0.5">
+                {section.modules.map((mod) => {
+                  const Icon = getIcon(mod.icon);
+                  const active = isActive(mod);
+                  return (
+                    <Link
+                      key={mod.key}
+                      href={mod.href}
+                      className={active ? 'sidebar-item-active' : 'sidebar-item'}
+                    >
+                      <Icon className="w-4 h-4 shrink-0" />
+                      {mod.label}
+                      {mod.key === 'ai' && (
+                        <span className="ml-auto badge-purple text-[10px] px-1.5 py-0.5">AI</span>
+                      )}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </nav>
 
         {/* Bottom section */}
@@ -112,7 +155,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <header className="h-16 bg-surface-50 border-b border-surface-200 flex items-center justify-between px-6">
           <div>
             <h2 className="text-sm font-semibold text-zinc-100">
-              {navItems.find((i) => pathname === i.href || (i.href !== '/dashboard' && pathname.startsWith(i.href)))?.label || 'Dashboard'}
+              {(() => {
+                for (const section of sections) {
+                  const found = section.modules.find((m) => isActive(m));
+                  if (found) return found.label;
+                }
+                return 'Dashboard';
+              })()}
             </h2>
             <p className="text-xs text-zinc-500">
               {pack.dashboardTitle}

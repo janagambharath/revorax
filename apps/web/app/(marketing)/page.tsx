@@ -241,21 +241,27 @@ export default function LandingPage() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {nichePacks.map((pack) => (
-              <div key={pack.businessType} className="card p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center text-xs font-black text-white" style={{ background: pack.accentColor }}>
-                    {pack.iconLabel}
+            {nichePacks.map((pack) => {
+              const route = pack.businessType === 'REAL_ESTATE' ? 'real-estate' : pack.shortLabel.toLowerCase();
+              return (
+                <Link key={pack.businessType} href={`/${route}`} className="card p-6 hover:border-brand-500/20 transition-all group">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center text-xs font-black text-white" style={{ background: pack.accentColor }}>
+                      {pack.iconLabel}
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-zinc-100">{pack.shortLabel}</h3>
+                      <p className="text-xs text-zinc-500">{pack.retentionMetricLabel}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-bold text-zinc-100">{pack.shortLabel}</h3>
-                    <p className="text-xs text-zinc-500">{pack.retentionMetricLabel}</p>
+                  <p className="text-sm font-semibold text-zinc-200 mb-2">{pack.positioning}</p>
+                  <p className="text-sm text-zinc-500 leading-relaxed">{pack.valueDelivered}</p>
+                  <div className="mt-3 text-xs font-medium group-hover:text-brand-400 text-zinc-600 transition-colors flex items-center gap-1">
+                    Learn more <ArrowRight className="w-3 h-3" />
                   </div>
-                </div>
-                <p className="text-sm font-semibold text-zinc-200 mb-2">{pack.positioning}</p>
-                <p className="text-sm text-zinc-500 leading-relaxed">{pack.valueDelivered}</p>
-              </div>
-            ))}
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>
