@@ -6,7 +6,7 @@ import { orgApi, authApi, billingApi } from '@/lib/api';
 import { toast } from 'sonner';
 import { useAuthStore } from '@/stores/auth.store';
 import {
-  Building2, Users, CreditCard, UserPlus, AlertCircle,
+  Building2, Users, CreditCard, UserPlus, AlertCircle, Settings,
 } from 'lucide-react';
 
 type Tab = 'general' | 'integrations' | 'team' | 'billing';
@@ -39,7 +39,7 @@ export default function SettingsPage() {
 
   const tabs = [
     { id: 'general', label: 'Organization', icon: Building2 },
-    { id: 'integrations', label: 'Integrations', icon: SettingsIcon },
+    { id: 'integrations', label: 'Integrations', icon: Settings },
     { id: 'team', label: 'Team Members', icon: Users },
     { id: 'billing', label: 'Billing & Plan', icon: CreditCard },
   ];
