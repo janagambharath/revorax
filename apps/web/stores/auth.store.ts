@@ -20,6 +20,10 @@ interface Org {
   slug: string;
   plan: string;
   logoUrl?: string;
+  phone?: string;
+  whatsappPhoneNumberId?: string;
+  whatsappAccessToken?: string;
+  settings?: any;
 }
 
 interface AuthState {
