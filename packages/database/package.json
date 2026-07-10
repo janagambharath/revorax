@@ -10,7 +10,7 @@
     "db:push": "prisma db push",
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts",
     "studio": "prisma studio",
-    "build": "tsc",
+    "build": "prisma generate && tsc",
     "lint": "tsc --noEmit"
   },
   "exports": {
