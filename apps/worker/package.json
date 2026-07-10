@@ -1,0 +1,26 @@
+{
+  "name": "@revorax/worker",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "ts-node --transpile-only src/main.ts",
+    "build": "tsc",
+    "start": "node dist/main.js",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@revorax/ai": "workspace:*",
+    "@revorax/database": "workspace:*",
+    "@revorax/email": "workspace:*",
+    "@revorax/shared": "workspace:*",
+    "@revorax/whatsapp": "workspace:*",
+    "bullmq": "^5.34.8",
+    "dotenv": "^16.4.7",
+    "ioredis": "^5.4.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
+  }
+}
