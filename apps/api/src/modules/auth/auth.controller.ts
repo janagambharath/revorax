@@ -79,4 +79,18 @@ export class AuthController {
     res.cookie('revorax.session_token', result.sessionToken, COOKIE_OPTIONS);
     return { success: true, user: result.user, org: result.org };
   }
+
+  @Post('forgot-password')
+  @Public()
+  @ApiOperation({ summary: 'Send password reset link' })
+  async forgotPassword(@Body() body: { email: string }) {
+    return this.authService.forgotPassword(body.email);
+  }
+
+  @Post('reset-password')
+  @Public()
+  @ApiOperation({ summary: 'Reset password using token' })
+  async resetPassword(@Body() body: { token: string; password: string }) {
+    return this.authService.resetPassword(body.token, body.password);
+  }
 }

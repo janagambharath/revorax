@@ -40,7 +40,7 @@ export async function sendEmail(params: SendEmailParams): Promise<SendEmailResul
 
 // ─── HTML Email Templates ─────────────────────────────────────────────────────
 
-const baseTemplate = (content: string, businessName: string) => `
+export const baseEmailTemplate = (content: string, businessName: string) => `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -79,7 +79,7 @@ const baseTemplate = (content: string, businessName: string) => `
 export const emailTemplates = {
   welcome: (params: { name: string; orgName: string; loginUrl: string }) => ({
     subject: `Welcome to Revorax, ${params.name}! 🚀`,
-    html: baseTemplate(
+    html: baseEmailTemplate(
       `<h1>Welcome, ${params.name}!</h1>
       <p>Your Revorax account for <span class="highlight">${params.orgName}</span> is ready. Start recovering revenue, managing members, and automating follow-ups today.</p>
       <a href="${params.loginUrl}" class="btn">Go to Dashboard →</a>
@@ -96,7 +96,7 @@ export const emailTemplates = {
     renewUrl?: string;
   }) => ({
     subject: `Your membership expires on ${params.renewalDate} — Renew now`,
-    html: baseTemplate(
+    html: baseEmailTemplate(
       `<h1>Time to renew, ${params.memberName}!</h1>
       <p>Your membership at <span class="highlight">${params.gymName}</span> expires on <span class="highlight">${params.renewalDate}</span>.</p>
       <p>Renewal amount: <span class="highlight">${params.amount}</span></p>
@@ -114,7 +114,7 @@ export const emailTemplates = {
     contactPhone?: string;
   }) => ({
     subject: `Action required: Payment of ${params.amount} overdue`,
-    html: baseTemplate(
+    html: baseEmailTemplate(
       `<h1>Payment reminder, ${params.memberName}</h1>
       <p>Your payment of <span class="highlight">${params.amount}</span> to <span class="highlight">${params.gymName}</span> was due on ${params.dueDate}.</p>
       <p>Please clear this to avoid membership suspension.</p>
@@ -131,7 +131,7 @@ export const emailTemplates = {
     acceptUrl: string;
   }) => ({
     subject: `You've been invited to join ${params.orgName} on Revorax`,
-    html: baseTemplate(
+    html: baseEmailTemplate(
       `<h1>You're invited!</h1>
       <p><span class="highlight">${params.inviterName}</span> has invited you to join <span class="highlight">${params.orgName}</span> as a <span class="highlight">${params.role}</span>.</p>
       <a href="${params.acceptUrl}" class="btn">Accept Invitation →</a>
@@ -148,7 +148,7 @@ export const emailTemplates = {
     contactPhone?: string;
   }) => ({
     subject: `How's your trial going, ${params.memberName}?`,
-    html: baseTemplate(
+    html: baseEmailTemplate(
       `<h1>Loving your trial, ${params.memberName}?</h1>
       <p>Your trial at <span class="highlight">${params.gymName}</span> ends on <span class="highlight">${params.trialEndDate}</span>.</p>
       <p>Convert to a full membership for just <span class="highlight">${params.price}/month</span> and keep your momentum!</p>

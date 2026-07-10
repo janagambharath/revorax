@@ -28,6 +28,7 @@ export class AnalyticsService {
       expiringRevenue,
       reactivationRevenue,
       followUpsDue,
+      recoveredRevenue,
     ] = await Promise.all([
       this.prisma.member.count({ where: { orgId, deletedAt: null } }),
       this.prisma.member.count({ where: { orgId, status: 'ACTIVE', deletedAt: null } }),
@@ -63,6 +64,7 @@ export class AnalyticsService {
           ],
         },
       }),
+      this.prisma.payment.aggregate({ where: { orgId, status: 'PAID', paidAt: { gte: startOfMonth }, member: { createdAt: { lt: startOfMonth } } }, _sum: { amount: true } }),
     ]);
 
     const renewalRate = totalMembers > 0
@@ -75,6 +77,7 @@ export class AnalyticsService {
       revenue: {
         thisMonth: Number(monthlyRevenue._sum.amount || 0),
         total: Number(totalRevenue._sum.amount || 0),
+        recovered: Number(recoveredRevenue._sum.amount || 0),
         renewalRate,
       },
       recovery: {

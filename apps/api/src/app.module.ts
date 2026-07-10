@@ -19,6 +19,8 @@ import { BillingModule } from './modules/billing/billing.module';
 import { WebhooksModule } from './modules/webhooks/webhooks.module';
 import { AuditModule } from './modules/audit/audit.module';
 
+import { AppController } from './app.controller';
+
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -41,5 +43,6 @@ import { AuditModule } from './modules/audit/audit.module';
     WebhooksModule,
     AuditModule,
   ],
+  controllers: [AppController],
 })
 export class AppModule {}

@@ -11,7 +11,16 @@ const connection = new IORedis(process.env.REDIS_URL || 'redis://localhost:6379'
   maxRetriesPerRequest: null,
 }) as any;
 
-const whatsapp = new WhatsAppClient();
+async function getWhatsAppClient(orgId: string) {
+  const org = await prisma.organization.findUnique({ where: { id: orgId } });
+  if (org?.whatsappPhoneNumberId && org?.whatsappAccessToken) {
+    return new WhatsAppClient({
+      phoneNumberId: org.whatsappPhoneNumberId,
+      accessToken: org.whatsappAccessToken,
+    });
+  }
+  return new WhatsAppClient();
+}
 
 // ─── Queue Names ─────────────────────────────────────────────────────────────
 export const QUEUES = {
@@ -60,6 +69,7 @@ const renewalWorker = new Worker(
     const body = template.body.replace(/{{(\w+)}}/g, (_, key) => variables[key] || `{{${key}}}`);
 
     if (channel === 'WHATSAPP') {
+      const whatsapp = await getWhatsAppClient(orgId);
       const result = await whatsapp.sendTextMessage({ to: member.contact.phone, body });
       await prisma.message.create({
         data: {
@@ -96,9 +106,18 @@ const followUpWorker = new Worker(
     if (!contact) return;
 
     if (channel === 'WHATSAPP' && contact.phone) {
+      const whatsapp = await getWhatsAppClient(orgId);
       await whatsapp.sendTextMessage({ to: contact.phone, body });
       await prisma.message.create({
-        data: { orgId, contactId, channel: 'WHATSAPP', direction: 'OUTBOUND', body, status: 'SENT', sentAt: new Date() },
+        data: {
+          orgId,
+          contactId,
+          channel: 'WHATSAPP',
+          direction: 'OUTBOUND',
+          body,
+          status: 'SENT',
+          sentAt: new Date(),
+        },
       });
     }
 
@@ -122,6 +141,7 @@ const paymentWorker = new Worker(
 
     const body = `Hi ${member.contact.name}, your payment of ${formatCurrency(Number(member.amount))} to ${member.org.name} is pending. Please clear it to avoid membership suspension. Contact us at ${member.org.phone || 'the gym'}.`;
 
+    const whatsapp = await getWhatsAppClient(orgId);
     await whatsapp.sendTextMessage({ to: member.contact.phone, body });
     await prisma.message.create({
       data: { orgId, contactId: member.contactId, channel: 'WHATSAPP', direction: 'OUTBOUND', body, status: 'SENT', sentAt: new Date() },
@@ -189,11 +209,26 @@ async function checkExpiringMembers() {
   });
 });
 
-// ─── Run scheduler on startup and then every 24 hours ─────────────────────────
+// ─── Run scheduler on startup and then via BullMQ repeatable job ──────────────
 checkExpiringMembers().catch(console.error);
-setInterval(() => checkExpiringMembers().catch(console.error), 24 * 60 * 60 * 1000);
+
+const schedulerQueue = new Queue('scheduler', { connection });
+schedulerQueue.add('check-expiring', {}, {
+  repeat: { pattern: '0 6 * * *' }, // 6 AM daily
+}).catch(console.error);
+
+const schedulerWorker = new Worker('scheduler', async (job) => {
+  if (job.name === 'check-expiring') {
+    await checkExpiringMembers();
+  }
+}, { connection });
+
+schedulerWorker.on('failed', (job, err) => {
+  console.error(`❌ [Scheduler] Job failed:`, err.message);
+});
 
 console.log('✅ All workers started');
 console.log(`  - ${QUEUES.RENEWAL_REMINDER}`);
 console.log(`  - ${QUEUES.FOLLOW_UP}`);
 console.log(`  - ${QUEUES.PAYMENT_REMINDER}`);
+console.log(`  - scheduler`);

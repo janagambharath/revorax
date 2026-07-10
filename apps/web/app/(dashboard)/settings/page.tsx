@@ -9,7 +9,7 @@ import {
   Building2, Users, CreditCard, UserPlus, AlertCircle,
 } from 'lucide-react';
 
-type Tab = 'general' | 'team' | 'billing';
+type Tab = 'general' | 'integrations' | 'team' | 'billing';
 
 export default function SettingsPage() {
   const qc = useQueryClient();
@@ -39,6 +39,7 @@ export default function SettingsPage() {
 
   const tabs = [
     { id: 'general', label: 'Organization', icon: Building2 },
+    { id: 'integrations', label: 'Integrations', icon: SettingsIcon },
     { id: 'team', label: 'Team Members', icon: Users },
     { id: 'billing', label: 'Billing & Plan', icon: CreditCard },
   ];
@@ -105,6 +106,53 @@ export default function SettingsPage() {
               <label className="label">Address</label>
               <input defaultValue={orgInfo?.address || ''} placeholder="123 Street, City, State" className="input" onBlur={(e) => updateOrg.mutate({ address: e.target.value })} />
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Integrations Tab */}
+      {tab === 'integrations' && (
+        <div className="space-y-6">
+          <div className="card p-6">
+            <h3 className="text-sm font-semibold text-zinc-300 mb-4">WhatsApp Business API</h3>
+            <p className="text-sm text-zinc-500 mb-6">Connect your own WhatsApp Business account to send automated messages directly from your number.</p>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="label">Phone Number ID</label>
+                <input 
+                  defaultValue={orgInfo?.whatsappPhoneNumberId || ''} 
+                  placeholder="e.g. 123456789012345" 
+                  className="input" 
+                  onBlur={(e) => updateOrg.mutate({ whatsappPhoneNumberId: e.target.value })} 
+                />
+              </div>
+              <div>
+                <label className="label">WhatsApp Business Account ID</label>
+                <input 
+                  defaultValue={orgInfo?.whatsappBusinessId || ''} 
+                  placeholder="e.g. 123456789012345" 
+                  className="input" 
+                  onBlur={(e) => updateOrg.mutate({ whatsappBusinessId: e.target.value })} 
+                />
+              </div>
+              <div>
+                <label className="label">Permanent Access Token</label>
+                <input 
+                  type="password"
+                  defaultValue={orgInfo?.whatsappAccessToken || ''} 
+                  placeholder="EAAGm0..." 
+                  className="input" 
+                  onBlur={(e) => updateOrg.mutate({ whatsappAccessToken: e.target.value })} 
+                />
+              </div>
+            </div>
+            
+            {orgInfo?.whatsappPhoneNumberId && orgInfo?.whatsappAccessToken && (
+              <div className="mt-6 flex items-center gap-2 p-3 bg-green-500/10 border border-green-500/20 rounded-lg text-green-400 text-sm font-medium">
+                <Shield className="w-4 h-4" /> WhatsApp configured successfully
+              </div>
+            )}
           </div>
         </div>
       )}

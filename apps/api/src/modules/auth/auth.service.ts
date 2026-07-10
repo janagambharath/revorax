@@ -10,7 +10,7 @@ import { PrismaClient, UserRole } from '@revorax/database';
 import { getVerticalPack, slugify } from '@revorax/shared';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
-import { sendEmail, emailTemplates } from '@revorax/email';
+import { sendEmail, emailTemplates, baseEmailTemplate } from '@revorax/email';
 
 @Injectable()
 export class AuthService {
@@ -232,6 +232,79 @@ export class AuthService {
     return { user: this.sanitizeUser(user), org: invite.org, sessionToken: session.token };
   }
 
+  async forgotPassword(email: string) {
+    const user = await this.prisma.user.findFirst({
+      where: { email, deletedAt: null },
+      include: { org: true },
+    });
+
+    // Always return success to prevent email enumeration
+    if (!user) return { success: true };
+
+    const token = crypto.randomBytes(32).toString('hex');
+    const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+
+    // Store reset token as an invite token with special role marker
+    await this.prisma.inviteToken.create({
+      data: {
+        orgId: user.orgId,
+        email: user.email,
+        role: user.role as UserRole,
+        token,
+        expiresAt,
+      },
+    });
+
+    const resetUrl = `${process.env.NEXT_PUBLIC_APP_URL}/reset-password?token=${token}`;
+
+    sendEmail({
+      to: user.email,
+      subject: 'Reset your Revorax password',
+      html: baseEmailTemplate(
+        `<h1>Password Reset</h1>
+        <p>Hi ${user.name}, we received a request to reset your password for <span class="highlight">${user.org.name}</span>.</p>
+        <a href="${resetUrl}" class="btn">Reset Password →</a>
+        <p>This link expires in 1 hour. If you didn't request this, you can safely ignore this email.</p>`,
+        user.org.name,
+      ),
+    }).catch((err) => console.error('[Auth] Reset email failed:', err));
+
+    return { success: true };
+  }
+
+  async resetPassword(token: string, newPassword: string) {
+    const invite = await this.prisma.inviteToken.findUnique({
+      where: { token },
+    });
+
+    if (!invite) throw new BadRequestException('Invalid or expired reset link');
+    if (invite.usedAt) throw new BadRequestException('Reset link already used');
+    if (invite.expiresAt < new Date()) throw new BadRequestException('Reset link expired');
+
+    const user = await this.prisma.user.findFirst({
+      where: { email: invite.email, orgId: invite.orgId, deletedAt: null },
+    });
+
+    if (!user) throw new NotFoundException('Account not found');
+
+    const passwordHash = await bcrypt.hash(newPassword, 12);
+
+    await this.prisma.$transaction(async (tx) => {
+      await tx.user.update({
+        where: { id: user.id },
+        data: { passwordHash },
+      });
+      await tx.inviteToken.update({
+        where: { id: invite.id },
+        data: { usedAt: new Date() },
+      });
+      // Invalidate all existing sessions for security
+      await tx.session.deleteMany({ where: { userId: user.id } });
+    });
+
+    return { success: true };
+  }
+
   private async createSession(userId: string) {
     const token = crypto.randomBytes(32).toString('hex');
     return this.prisma.session.create({
@@ -243,8 +316,8 @@ export class AuthService {
     });
   }
 
-  private sanitizeUser(user: { id: string; name: string; email: string; role: string; orgId: string; avatarUrl?: string | null; isActive: boolean; lastLoginAt?: Date | null }) {
-    const { ...safe } = user;
+  private sanitizeUser(user: Record<string, unknown>) {
+    const { passwordHash, deletedAt, ...safe } = user;
     return safe;
   }
 }

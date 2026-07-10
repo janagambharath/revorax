@@ -90,8 +90,64 @@ export class MembersService {
         notes: data.notes,
         goals: data.goals,
       },
+      },
       include: { contact: true },
     });
+  }
+
+  async importCsv(orgId: string, membersData: any[]) {
+    let imported = 0;
+    
+    for (const row of membersData) {
+      if (!row.name || !row.phone) continue;
+
+      try {
+        await this.prisma.$transaction(async (tx) => {
+          let contact = await tx.contact.findFirst({
+            where: { orgId, phone: row.phone, deletedAt: null },
+          });
+
+          if (!contact) {
+            contact = await tx.contact.create({
+              data: {
+                orgId,
+                name: row.name,
+                phone: row.phone,
+                email: row.email || null,
+                source: 'OTHER',
+              },
+            });
+          }
+
+          const existingMember = await tx.member.findFirst({
+            where: { orgId, contactId: contact.id, deletedAt: null },
+          });
+
+          if (!existingMember && row.renewalDate) {
+            const renewalDate = new Date(row.renewalDate);
+            const status = renewalDate < new Date() ? 'EXPIRED' : 'ACTIVE';
+            
+            await tx.member.create({
+              data: {
+                orgId,
+                contactId: contact.id,
+                membershipType: row.membershipType || 'MONTHLY',
+                status,
+                startDate: row.startDate ? new Date(row.startDate) : new Date(),
+                renewalDate,
+                amount: row.amount ? parseFloat(row.amount) : 0,
+                paidAmount: row.amount ? parseFloat(row.amount) : 0,
+              },
+            });
+            imported++;
+          }
+        });
+      } catch (err) {
+        console.error(`Failed to import row for ${row.name}:`, err);
+      }
+    }
+
+    return { success: true, count: imported };
   }
 
   async update(orgId: string, id: string, data: Record<string, unknown>) {

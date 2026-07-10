@@ -49,6 +49,12 @@ export class MembersController {
     return this.membersService.create(orgId, body);
   }
 
+  @Post('import')
+  @ApiOperation({ summary: 'Import members from CSV' })
+  importCsv(@OrgId() orgId: string, @Body() body: { members: any[] }) {
+    return this.membersService.importCsv(orgId, body.members);
+  }
+
   @Put(':id')
   @ApiOperation({ summary: 'Update member' })
   update(@OrgId() orgId: string, @Param('id') id: string, @Body() body: Record<string, unknown>) {

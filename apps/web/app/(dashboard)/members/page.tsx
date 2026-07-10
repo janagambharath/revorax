@@ -83,9 +83,63 @@ export default function MembersPage() {
           <h1 className="text-2xl font-bold text-zinc-100">{pack.primaryNavLabel}</h1>
           <p className="text-zinc-500 text-sm mt-1">{pack.recoveryListLabel}: {pack.positioning}</p>
         </div>
-        <Link href="/dashboard/members/new" className="btn-primary text-sm flex items-center gap-2">
-          <Plus className="w-4 h-4" /> Add {titleCase(pack.primaryEntity)}
-        </Link>
+        <div className="flex items-center gap-3">
+          <label className="btn-secondary text-sm flex items-center gap-2 cursor-pointer">
+            <RefreshCw className="w-4 h-4" /> Import CSV
+            <input
+              type="file"
+              accept=".csv"
+              className="hidden"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = async (evt) => {
+                  try {
+                    const text = evt.target?.result as string;
+                    const lines = text.split('\n').filter(Boolean);
+                    if (lines.length < 2) throw new Error('File is empty or missing headers');
+                    const headers = lines[0].split(',').map(h => h.trim().toLowerCase().replace(/[^a-z0-9]/g, ''));
+                    
+                    const nameIdx = headers.findIndex(h => h.includes('name'));
+                    const phoneIdx = headers.findIndex(h => h.includes('phone'));
+                    const emailIdx = headers.findIndex(h => h.includes('email'));
+                    const amountIdx = headers.findIndex(h => h.includes('amount'));
+                    const renewalIdx = headers.findIndex(h => h.includes('renewal'));
+                    
+                    if (nameIdx === -1 || phoneIdx === -1) {
+                      throw new Error('CSV must contain Name and Phone columns');
+                    }
+
+                    const members = lines.slice(1).map(line => {
+                      const values = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.trim().replace(/^"|"$/g, ''));
+                      if (!values[nameIdx] || !values[phoneIdx]) return null;
+                      return {
+                        name: values[nameIdx],
+                        phone: values[phoneIdx],
+                        email: emailIdx !== -1 ? values[emailIdx] : undefined,
+                        renewalDate: renewalIdx !== -1 ? values[renewalIdx] : new Date().toISOString(),
+                        amount: amountIdx !== -1 ? values[amountIdx] : 0,
+                        membershipType: 'MONTHLY'
+                      };
+                    }).filter(Boolean);
+
+                    const res = await membersApi.importCsv(members) as any;
+                    toast.success(`Imported ${res.count} members successfully`);
+                    qc.invalidateQueries({ queryKey: ['members'] });
+                  } catch (err: any) {
+                    toast.error(err?.message || 'Failed to parse CSV');
+                  }
+                  e.target.value = '';
+                };
+                reader.readAsText(file);
+              }}
+            />
+          </label>
+          <Link href="/dashboard/members/new" className="btn-primary text-sm flex items-center gap-2">
+            <Plus className="w-4 h-4" /> Add {titleCase(pack.primaryEntity)}
+          </Link>
+        </div>
       </div>
 
       {/* Tabs */}

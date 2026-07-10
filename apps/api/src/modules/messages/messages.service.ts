@@ -6,9 +6,21 @@ import { paginate, interpolateTemplate } from '@revorax/shared';
 
 @Injectable()
 export class MessagesService {
-  private whatsapp = new WhatsAppClient();
-
   constructor(@Inject('PRISMA') private prisma: PrismaClient) {}
+
+  private async getWhatsAppClient(orgId: string) {
+    const org = await this.prisma.organization.findUnique({ where: { id: orgId } });
+    if (!org) throw new Error('Organization not found');
+
+    if (org.whatsappPhoneNumberId && org.whatsappAccessToken) {
+      return new WhatsAppClient({
+        phoneNumberId: org.whatsappPhoneNumberId,
+        accessToken: org.whatsappAccessToken,
+      });
+    }
+    // Fallback to global config (useful for testing or single-tenant mode)
+    return new WhatsAppClient();
+  }
 
   async findByContact(orgId: string, contactId: string, query: { page?: number; limit?: number }) {
     const page = query.page || 1;
@@ -63,7 +75,8 @@ export class MessagesService {
 
     // Send via WhatsApp Cloud API
     try {
-      const result = await this.whatsapp.sendTextMessage({ to: contact.phone, body });
+      const whatsapp = await this.getWhatsAppClient(orgId);
+      const result = await whatsapp.sendTextMessage({ to: contact.phone, body });
       await this.prisma.message.update({
         where: { id: message.id },
         data: { status: 'SENT', externalId: result.messageId, sentAt: new Date() },

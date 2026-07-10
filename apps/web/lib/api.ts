@@ -30,6 +30,8 @@ export const authApi = {
   logout: () => api.post('/auth/logout'),
   me: () => api.get('/auth/me'),
   invite: (email: string, role: string) => api.post('/auth/invite', { email, role }),
+  forgotPassword: (email: string) => api.post('/auth/forgot-password', { email }),
+  resetPassword: (token: string, password: string) => api.post('/auth/reset-password', { token, password }),
 };
 
 // ─── Analytics ────────────────────────────────────────────────────────────────
@@ -49,6 +51,7 @@ export const membersApi = {
   create: (data: Record<string, unknown>) => api.post('/members', data),
   update: (id: string, data: Record<string, unknown>) => api.put(`/members/${id}`, data),
   delete: (id: string) => api.delete(`/members/${id}`),
+  importCsv: (members: any[]) => api.post('/members/import', { members }),
   expiringSoon: (days?: number) => api.get(`/members/expiring-soon${days ? `?days=${days}` : ''}`),
   overdue: () => api.get('/members/overdue'),
   reactivation: () => api.get('/members/reactivation'),

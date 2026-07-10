@@ -180,17 +180,16 @@ export default function DashboardPage() {
           trend={{ value: `${m?.revenue?.renewalRate || 0}% ${pack.retentionMetricLabel}`, up: (m?.revenue?.renewalRate || 0) > 70 }}
         />
         <StatCard
-          label="Revenue At Risk"
-          value={metricsLoading ? '-' : formatCurrency(recovery.revenueAtRisk || 0)}
-          sub={`${recovery.followUpsDue || 0} follow-ups due`}
-          icon={AlertCircle}
-          href="/dashboard/members"
+          label="Revenue Recovered"
+          value={metricsLoading ? '—' : formatCurrency(m?.revenue?.recovered || 0)}
+          sub="via Revorax AI"
+          icon={Zap}
         />
         <StatCard
-          label={pack.expiringLabel}
-          value={metricsLoading ? '-' : m?.members?.expiringThisWeek || 0}
-          sub="Action required"
-          icon={Calendar}
+          label="Revenue At Risk"
+          value={metricsLoading ? '-' : formatCurrency(recovery?.revenueAtRisk || 0)}
+          sub={`${recovery?.followUpsDue || 0} follow-ups due`}
+          icon={AlertCircle}
           href="/dashboard/members"
         />
       </div>

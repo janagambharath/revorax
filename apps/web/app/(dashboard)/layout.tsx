@@ -6,22 +6,19 @@ import Link from 'next/link';
 import {
   LayoutDashboard, Users, UserCheck, Target, ListTodo,
   Megaphone, BarChart3, Sparkles, Settings, LogOut,
-  Bell, ChevronDown,
+  Bell, ChevronDown, Zap, Building2, MessageSquare
 } from 'lucide-react';
 import { useAuthStore } from '@/stores/auth.store';
 import { toast } from 'sonner';
 import { getVerticalPack } from '@revorax/shared';
 
+import { OnboardingWizard } from '@/components/OnboardingWizard';
+
 function getNavItems(primaryNavLabel: string) {
   return [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/dashboard/members', label: primaryNavLabel, icon: Users },
-    { href: '/dashboard/leads', label: 'Leads', icon: Target },
-    { href: '/dashboard/contacts', label: 'Contacts', icon: UserCheck },
-    { href: '/dashboard/tasks', label: 'Tasks', icon: ListTodo },
-    { href: '/dashboard/campaigns', label: 'Campaigns', icon: Megaphone },
-    { href: '/dashboard/analytics', label: 'Analytics', icon: BarChart3 },
-    { href: '/dashboard/ai-assistant', label: 'AI Assistant', icon: Sparkles },
+    { href: '/dashboard/messages', label: 'Messages', icon: MessageSquare },
   ];
 }
 
@@ -59,6 +56,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="flex h-screen bg-surface overflow-hidden">
+      <OnboardingWizard />
       {/* Sidebar */}
       <aside className="w-64 flex-shrink-0 bg-surface-50 border-r border-surface-200 flex flex-col">
         {/* Logo */}
