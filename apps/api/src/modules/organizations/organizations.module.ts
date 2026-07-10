@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { Controller, Get, Post, Put, Param, Body, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { OrganizationsService } from '../crm/crm.service';
+import { OrganizationsService } from './organizations.service';
 import { AuthGuard } from '../auth/auth.guard';
 import { OrgId } from '../auth/decorators/current-user.decorator';
 import { Roles } from '../auth/decorators/roles.decorator';

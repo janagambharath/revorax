@@ -90,7 +90,6 @@ export class MembersService {
         notes: data.notes,
         goals: data.goals,
       },
-      },
       include: { contact: true },
     });
   }

@@ -201,6 +201,7 @@ model Organization {
   contacts      Contact[]
   leads         Lead[]
   notes         Note[]
+  tasks         Task[]
   messages      Message[]
   members       Member[]
   patients      Patient[]
@@ -242,6 +243,7 @@ model User {
   sessions     Session[]
   assignedLeads Lead[]       @relation("LeadAssignee")
   notes        Note[]
+  tasks        Task[]
   auditLogs    AuditLog[]
   campaigns    Campaign[]
 
@@ -310,6 +312,7 @@ model Contact {
   org          Organization  @relation(fields: [orgId], references: [id], onDelete: Cascade)
   leads        Lead[]
   notesList    Note[]
+  tasks        Task[]
   messages     Message[]
   member       Member?
   patient      Patient?
@@ -375,6 +378,32 @@ model Note {
   @@index([contactId])
   @@index([deletedAt])
   @@map("notes")
+}
+
+// ─── CRM: Tasks ──────────────────────────────────────────────────────────────
+
+model Task {
+  id          String    @id @default(cuid())
+  orgId       String
+  contactId   String?
+  createdById String
+  title       String
+  description String?
+  status      String    @default("PENDING") // PENDING | COMPLETED
+  dueAt       DateTime?
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+
+  org         Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  contact     Contact?     @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  createdBy   User         @relation(fields: [createdById], references: [id])
+
+  @@index([orgId])
+  @@index([contactId])
+  @@index([deletedAt])
+  @@map("tasks")
 }
 
 // ─── Messaging ───────────────────────────────────────────────────────────────
