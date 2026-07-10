@@ -10,6 +10,7 @@ import {
   ChevronRight, Phone, MessageSquare, RefreshCw,
 } from 'lucide-react';
 import { useAuthStore } from '@/stores/auth.store';
+import { toast } from 'sonner';
 
 const STATUS_CONFIG: Record<string, { label: string; cls: string }> = {
   ACTIVE: { label: 'Active', cls: 'badge-green' },
