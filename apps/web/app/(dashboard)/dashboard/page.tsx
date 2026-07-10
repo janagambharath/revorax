@@ -6,7 +6,6 @@ import { daysUntil, formatCurrency, formatDate, getVerticalPack } from '@revorax
 import {
   AlertCircle,
   ArrowRight,
-  Calendar,
   CheckCircle,
   Clock,
   MessageSquare,
