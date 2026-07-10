@@ -29,7 +29,7 @@ export function OnboardingWizard() {
     setIsLoading(true);
     try {
       if (step === 1) {
-        const updated = await orgApi.update({ name, phone });
+        const updated = await orgApi.update({ name, phone }) as any;
         setOrg(updated);
         setStep(2);
       } else if (step === 2) {
@@ -39,7 +39,7 @@ export function OnboardingWizard() {
           whatsappPhoneNumberId: waPhoneId,
           whatsappAccessToken: waToken,
           settings: { ...org.settings, onboardingCompleted: true },
-        });
+        }) as any;
         setOrg(updated);
         toast.success('Welcome to Revorax!');
       }
