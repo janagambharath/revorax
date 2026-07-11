@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowRight, Zap, TrendingUp, Users, MessageSquare, BarChart3, Shield, CheckCircle, Star } from 'lucide-react';
+import { ArrowRight, Zap, TrendingUp, Users, MessageSquare, BarChart3, Shield, CheckCircle, ChevronRight } from 'lucide-react';
 import { BUSINESS_TYPE_ORDER, VERTICAL_PACKS } from '@revorax/shared';
 
 export const metadata: Metadata = {
@@ -11,6 +11,26 @@ export const metadata: Metadata = {
 const nichePacks = BUSINESS_TYPE_ORDER
   .filter((type) => type !== 'OTHER')
   .map((type) => VERTICAL_PACKS[type]);
+
+const nicheRoutes: Record<string, string> = {
+  GYM: '/gym',
+  CLINIC: '/clinic',
+  SALON: '/salon',
+  COACHING: '/coaching',
+  REAL_ESTATE: '/real-estate',
+  DENTAL: '/dental',
+  AGENCY: '/agency',
+};
+
+const nicheEmojis: Record<string, string> = {
+  GYM: '🏋️',
+  CLINIC: '🏥',
+  SALON: '💇',
+  COACHING: '📚',
+  REAL_ESTATE: '🏠',
+  DENTAL: '🦷',
+  AGENCY: '📊',
+};
 
 const features = [
   {
@@ -63,13 +83,6 @@ const features = [
   },
 ];
 
-const metrics = [
-  { value: '₹2.4L', label: 'Avg. recoverable revenue tracked per month' },
-  { value: '83%', label: 'Retention workflow improvement' },
-  { value: '4.2x', label: 'More leads converted' },
-  { value: '6 hrs', label: 'Staff time saved per week' },
-];
-
 const plans = [
   {
     name: 'Starter',
@@ -101,10 +114,10 @@ const plans = [
   },
 ];
 
-const testimonials = [
-  { name: 'Vikram Singh', role: 'Owner, FitZone Mumbai', text: 'Revorax helped us track expired memberships and follow up before revenue disappeared. My staff finally has a system.', rating: 5 },
-  { name: 'Priya Mehta', role: 'Clinic Manager, Pune', text: 'Appointment reminders and recall follow-ups are visible in one place. Fewer missed follow-ups, cleaner operations.', rating: 5 },
-  { name: 'Rahul Nair', role: 'Agency Founder, Bangalore', text: 'Proposal follow-ups and client renewals no longer sit in separate inboxes. The team knows exactly what needs action.', rating: 5 },
+const howItWorks = [
+  { step: '01', title: 'Import your data', desc: 'Upload your member, patient, client, or student list from Excel or CSV. Setup takes under 5 minutes.', emoji: '📥' },
+  { step: '02', title: 'Automate follow-ups', desc: 'Revorax sends WhatsApp reminders, renewal nudges, and follow-up messages — automatically, on schedule.', emoji: '⚡' },
+  { step: '03', title: 'Recover revenue', desc: 'Track renewals, conversions, and revenue recovered in real-time. See exactly how much Revorax saves you.', emoji: '💰' },
 ];
 
 export default function LandingPage() {
@@ -118,8 +131,8 @@ export default function LandingPage() {
           </div>
           <div className="hidden md:flex items-center gap-8 text-sm text-zinc-400">
             <Link href="#features" className="hover:text-zinc-100 transition-colors">Features</Link>
+            <Link href="#niches" className="hover:text-zinc-100 transition-colors">Industries</Link>
             <Link href="#pricing" className="hover:text-zinc-100 transition-colors">Pricing</Link>
-            <Link href="#testimonials" className="hover:text-zinc-100 transition-colors">Testimonials</Link>
           </div>
           <div className="flex items-center gap-3">
             <Link href="/login" className="btn-ghost text-sm py-2 px-4">Login</Link>
@@ -138,7 +151,7 @@ export default function LandingPage() {
         <div className="relative max-w-5xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-brand-500/30 text-brand-300 text-sm font-medium mb-8 animate-fade-in">
             <Zap className="w-4 h-4" />
-            AI-Powered Revenue OS for Growing Businesses
+            AI-Powered Revenue OS for 7+ Industries
           </div>
 
           <h1 className="text-5xl md:text-7xl font-black text-zinc-100 leading-tight mb-6 animate-slide-up">
@@ -148,26 +161,30 @@ export default function LandingPage() {
           </h1>
 
           <p className="text-xl text-zinc-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-            Revorax helps growing businesses recover missed revenue, convert more leads, and send
-            WhatsApp reminders, so your team focuses on growth, not chasing people.
+            Revorax helps gyms, clinics, salons, coaching centers, dental clinics, real estate teams, and agencies 
+            recover missed revenue with automated WhatsApp follow-ups and AI-powered messaging.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
-            <Link href="/signup" className="btn-primary text-base px-8 py-3 flex items-center gap-2">
+            <Link href="/signup" className="btn-primary text-base px-8 py-3.5 flex items-center gap-2">
               Start Free 14-Day Trial <ArrowRight className="w-5 h-5" />
             </Link>
-            <Link href="#features" className="btn-secondary text-base px-8 py-3">
+            <Link href="#how-it-works" className="btn-secondary text-base px-8 py-3.5">
               See How It Works
             </Link>
           </div>
 
-          {/* Metrics strip */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
-            {metrics.map((m) => (
-              <div key={m.label} className="card p-5 text-center">
-                <div className="text-3xl font-black text-gradient mb-1">{m.value}</div>
-                <div className="text-xs text-zinc-500">{m.label}</div>
-              </div>
+          {/* Niche badges - floating */}
+          <div className="flex flex-wrap items-center justify-center gap-2 max-w-3xl mx-auto">
+            {nichePacks.map((pack) => (
+              <Link
+                key={pack.businessType}
+                href={nicheRoutes[pack.businessType]}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 hover:scale-105 bg-surface-50 border-surface-300 text-zinc-300 hover:border-zinc-500 hover:text-zinc-100"
+              >
+                <span>{nicheEmojis[pack.businessType]}</span>
+                {pack.shortLabel}
+              </Link>
             ))}
           </div>
         </div>
@@ -193,6 +210,33 @@ export default function LandingPage() {
                 <div className="text-3xl mb-3">{item.emoji}</div>
                 <h3 className="font-bold text-zinc-100 mb-2">{item.title}</h3>
                 <p className="text-sm text-zinc-500">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works */}
+      <section id="how-it-works" className="py-20 px-6 bg-surface-50/30">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-black text-zinc-100 mb-4">
+              Live in <span className="text-gradient">3 simple steps</span>
+            </h2>
+            <p className="text-lg text-zinc-400">No technical setup. No complicated onboarding. Just results.</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            {howItWorks.map((s, i) => (
+              <div key={s.step} className="relative">
+                {i < howItWorks.length - 1 && (
+                  <div className="hidden md:block absolute top-8 left-full w-full h-px bg-gradient-to-r from-brand-500/30 to-transparent" />
+                )}
+                <div className="card p-6 relative">
+                  <div className="text-4xl mb-4">{s.emoji}</div>
+                  <div className="text-xs font-black text-brand-500/40 mb-2">STEP {s.step}</div>
+                  <h3 className="text-lg font-bold text-zinc-100 mb-2">{s.title}</h3>
+                  <p className="text-sm text-zinc-400 leading-relaxed">{s.desc}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -229,64 +273,66 @@ export default function LandingPage() {
       </section>
 
       {/* Niche Packs */}
-      <section className="py-20 px-6 bg-surface-50/30">
+      <section id="niches" className="py-20 px-6 bg-surface-50/30">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-black text-zinc-100 mb-4">
-              One platform for every revenue-recovery niche
+              One platform. <span className="text-gradient">Every industry.</span>
             </h2>
             <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
-              Same core CRM, AI, WhatsApp, campaigns, and analytics. Different workflows, labels, templates, and revenue goals.
+              Same powerful core. Different workflows, labels, templates, and revenue goals — purpose-built for your niche.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {nichePacks.map((pack) => {
-              const route = pack.businessType === 'REAL_ESTATE' ? 'real-estate' : pack.shortLabel.toLowerCase();
-              return (
-                <Link key={pack.businessType} href={`/${route}`} className="card p-6 hover:border-brand-500/20 transition-all group">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center text-xs font-black text-white" style={{ background: pack.accentColor }}>
-                      {pack.iconLabel}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            {nichePacks.map((pack) => (
+              <Link
+                key={pack.businessType}
+                href={nicheRoutes[pack.businessType]}
+                className="card p-5 hover:border-brand-500/20 transition-all group relative overflow-hidden"
+              >
+                <div className="absolute top-0 right-0 w-24 h-24 rounded-full blur-2xl opacity-10 group-hover:opacity-20 transition-opacity" style={{ background: pack.accentColor }} />
+                <div className="relative">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center text-lg" style={{ background: `${pack.accentColor}20`, color: pack.accentColor }}>
+                      {nicheEmojis[pack.businessType]}
                     </div>
                     <div>
-                      <h3 className="font-bold text-zinc-100">{pack.shortLabel}</h3>
-                      <p className="text-xs text-zinc-500">{pack.retentionMetricLabel}</p>
+                      <h3 className="font-bold text-zinc-100 text-sm">{pack.shortLabel}</h3>
+                      <p className="text-[10px] text-zinc-600 uppercase tracking-wider">{pack.retentionMetricLabel}</p>
                     </div>
                   </div>
-                  <p className="text-sm font-semibold text-zinc-200 mb-2">{pack.positioning}</p>
-                  <p className="text-sm text-zinc-500 leading-relaxed">{pack.valueDelivered}</p>
-                  <div className="mt-3 text-xs font-medium group-hover:text-brand-400 text-zinc-600 transition-colors flex items-center gap-1">
-                    Learn more <ArrowRight className="w-3 h-3" />
+                  <p className="text-sm font-medium text-zinc-200 mb-1.5">{pack.positioning}</p>
+                  <p className="text-xs text-zinc-500 leading-relaxed mb-3">{pack.signupHint}</p>
+                  <div className="text-xs font-medium group-hover:text-brand-400 text-zinc-600 transition-colors flex items-center gap-1">
+                    Explore {pack.shortLabel} <ChevronRight className="w-3 h-3" />
                   </div>
-                </Link>
-              );
-            })}
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section id="testimonials" className="py-20 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-black text-zinc-100 mb-4">
-              Businesses that switched to Revorax
-            </h2>
-          </div>
+      {/* Social Proof */}
+      <section className="py-20 px-6">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl font-black text-zinc-100 mb-6">
+            Trusted by growing businesses across India
+          </h2>
+          <p className="text-zinc-400 mb-12">
+            From solo gyms to multi-location clinics — Revorax powers revenue recovery for service businesses that depend on recurring customers.
+          </p>
           <div className="grid md:grid-cols-3 gap-6">
-            {testimonials.map((t) => (
-              <div key={t.name} className="card p-6">
-                <div className="flex gap-1 mb-4">
-                  {Array.from({ length: t.rating }).map((_, i) => (
-                    <Star key={i} className="w-4 h-4 text-amber-400 fill-amber-400" />
-                  ))}
-                </div>
-                <p className="text-zinc-300 text-sm leading-relaxed mb-6">"{t.text}"</p>
-                <div>
-                  <div className="font-semibold text-zinc-100 text-sm">{t.name}</div>
-                  <div className="text-zinc-500 text-xs">{t.role}</div>
-                </div>
+            {[
+              { metric: '7', label: 'Industry verticals supported', sub: 'Gym, Clinic, Salon, Coaching, Real Estate, Dental, Agency' },
+              { metric: '94%', label: 'WhatsApp message open rate', sub: 'vs 20% for email and 5% for SMS' },
+              { metric: '5 min', label: 'Average setup time', sub: 'Import CSV → Connect WhatsApp → Go live' },
+            ].map((item) => (
+              <div key={item.label} className="card p-6">
+                <div className="text-3xl font-black text-gradient mb-2">{item.metric}</div>
+                <div className="text-sm font-semibold text-zinc-200 mb-1">{item.label}</div>
+                <div className="text-xs text-zinc-600">{item.sub}</div>
               </div>
             ))}
           </div>
@@ -294,7 +340,7 @@ export default function LandingPage() {
       </section>
 
       {/* Pricing */}
-      <section id="pricing" className="py-20 px-6">
+      <section id="pricing" className="py-20 px-6 bg-surface-50/30">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-black text-zinc-100 mb-4">
@@ -355,22 +401,42 @@ export default function LandingPage() {
             <Link href="/signup" className="btn-primary text-base px-10 py-3.5 inline-flex items-center gap-2">
               Start Your Free Trial <ArrowRight className="w-5 h-5" />
             </Link>
-            <p className="mt-4 text-xs text-zinc-600">No credit card required. Setup in 30 minutes.</p>
+            <p className="mt-4 text-xs text-zinc-600">No credit card required. Setup in 5 minutes.</p>
           </div>
         </div>
       </section>
 
       {/* Footer */}
       <footer className="border-t border-surface-200 py-12 px-6">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="text-xl font-black text-gradient">⚡ Revorax</div>
-          <p className="text-sm text-zinc-600">
-            © 2025 Revorax. AI Revenue OS for growing businesses.
-          </p>
-          <div className="flex gap-6 text-sm text-zinc-500">
-            <Link href="/privacy" className="hover:text-zinc-300 transition-colors">Privacy</Link>
-            <Link href="/terms" className="hover:text-zinc-300 transition-colors">Terms</Link>
-            <a href="mailto:support@revorax.online" className="hover:text-zinc-300 transition-colors">Support</a>
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row items-start justify-between gap-8">
+            <div>
+              <div className="text-xl font-black text-gradient mb-2">⚡ Revorax</div>
+              <p className="text-sm text-zinc-600 max-w-xs">AI Revenue OS for growing businesses. Recover missed revenue across 7+ industries.</p>
+            </div>
+            <div>
+              <div className="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-3">Industries</div>
+              <div className="grid grid-cols-2 gap-x-8 gap-y-1.5 text-sm text-zinc-500">
+                <Link href="/gym" className="hover:text-zinc-300 transition-colors">Gyms</Link>
+                <Link href="/clinic" className="hover:text-zinc-300 transition-colors">Clinics</Link>
+                <Link href="/salon" className="hover:text-zinc-300 transition-colors">Salons</Link>
+                <Link href="/coaching" className="hover:text-zinc-300 transition-colors">Coaching</Link>
+                <Link href="/dental" className="hover:text-zinc-300 transition-colors">Dental</Link>
+                <Link href="/agency" className="hover:text-zinc-300 transition-colors">Agencies</Link>
+                <Link href="/real-estate" className="hover:text-zinc-300 transition-colors">Real Estate</Link>
+              </div>
+            </div>
+            <div>
+              <div className="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-3">Company</div>
+              <div className="flex flex-col gap-1.5 text-sm text-zinc-500">
+                <Link href="/login" className="hover:text-zinc-300 transition-colors">Login</Link>
+                <Link href="/signup" className="hover:text-zinc-300 transition-colors">Sign Up</Link>
+                <a href="mailto:support@revorax.online" className="hover:text-zinc-300 transition-colors">Support</a>
+              </div>
+            </div>
+          </div>
+          <div className="mt-8 pt-6 border-t border-surface-200 text-center text-xs text-zinc-600">
+            © {new Date().getFullYear()} Revorax. All rights reserved.
           </div>
         </div>
       </footer>

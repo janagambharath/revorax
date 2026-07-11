@@ -19,100 +19,81 @@ export class AnalyticsService {
     const last30Days = new Date(now);
     last30Days.setDate(last30Days.getDate() - 30);
 
-    if (businessType === 'CLINIC') {
+    // For non-GYM verticals, use the same real Payment-based computation as GYM
+    // to avoid fabricated multipliers. The queries below work for ALL verticals
+    // (CLINIC, SALON, COACHING, DENTAL, REAL_ESTATE, AGENCY) using real data.
+    if (businessType !== 'GYM') {
       const [
-        totalPatients,
-        activePatients,
-        recallPatients,
+        totalMembers,
+        activeMembers,
+        expiredMembers,
+        trialMembers,
+        expiringThisWeek,
         newLeads,
         totalLeads,
-        totalTreatmentValAgg,
-        missedAppointments,
+        monthlyRevenueAgg,
+        overdueMembersCount,
+        totalRevenueAgg,
+        overdueRevenueAgg,
+        expiringRevenueAgg,
+        reactivationRevenueAgg,
+        followUpsDue,
+        recoveredRevenueAgg,
       ] = await Promise.all([
         this.prisma.member.count({ where: { orgId, deletedAt: null } }),
         this.prisma.member.count({ where: { orgId, status: 'ACTIVE', deletedAt: null } }),
         this.prisma.member.count({ where: { orgId, status: 'EXPIRED', deletedAt: null } }),
+        this.prisma.member.count({ where: { orgId, status: 'TRIAL', deletedAt: null } }),
+        this.prisma.member.count({ where: { orgId, deletedAt: null, status: { in: ['ACTIVE', 'TRIAL'] }, renewalDate: { gte: now, lte: next7Days } } }),
         this.prisma.lead.count({ where: { orgId, deletedAt: null, createdAt: { gte: last30Days } } }),
         this.prisma.lead.count({ where: { orgId, deletedAt: null } }),
-        this.prisma.member.aggregate({ where: { orgId, deletedAt: null }, _sum: { amount: true } }),
-        this.prisma.member.count({ where: { orgId, missedCount: { gt: 0 }, deletedAt: null } }),
+        this.prisma.payment.aggregate({ where: { orgId, status: 'PAID', paidAt: { gte: startOfMonth } }, _sum: { amount: true } }),
+        this.prisma.member.count({ where: { orgId, deletedAt: null, renewalDate: { lt: now }, status: { not: 'CANCELLED' } } }),
+        this.prisma.payment.aggregate({ where: { orgId, status: 'PAID' }, _sum: { amount: true } }),
+        this.prisma.member.aggregate({
+          where: { orgId, deletedAt: null, renewalDate: { lt: now }, status: { not: 'CANCELLED' } },
+          _sum: { amount: true },
+        }),
+        this.prisma.member.aggregate({
+          where: { orgId, deletedAt: null, status: { in: ['ACTIVE', 'TRIAL'] }, renewalDate: { gte: now, lte: next7Days } },
+          _sum: { amount: true },
+        }),
+        this.prisma.member.aggregate({
+          where: { orgId, deletedAt: null, status: 'EXPIRED', renewalDate: { gte: last30Days } },
+          _sum: { amount: true },
+        }),
+        this.prisma.member.count({
+          where: {
+            orgId,
+            deletedAt: null,
+            status: { not: 'CANCELLED' },
+            followUpStatus: { not: 'DONE' },
+            OR: [
+              { renewalDate: { lt: now } },
+              { renewalDate: { gte: now, lte: next7Days } },
+            ],
+          },
+        }),
+        this.prisma.payment.aggregate({ where: { orgId, status: 'PAID', paidAt: { gte: startOfMonth }, member: { createdAt: { lt: startOfMonth } } }, _sum: { amount: true } }),
       ]);
 
-      const totalTreatmentVal = Number(totalTreatmentValAgg._sum.amount || 0);
-      const monthlyRevenue = totalTreatmentVal * 0.15;
-      const recoveredRevenue = totalTreatmentVal * 0.05;
+      const renewalRate = totalMembers > 0 ? Math.round((activeMembers / totalMembers) * 100) : 0;
 
       return {
-        members: {
-          total: totalPatients,
-          active: activePatients,
-          expired: recallPatients,
-          trial: 0,
-          expiringThisWeek: missedAppointments,
-          overdue: missedAppointments,
-        },
+        members: { total: totalMembers, active: activeMembers, expired: expiredMembers, trial: trialMembers, expiringThisWeek, overdue: overdueMembersCount },
         leads: { total: totalLeads, newThisMonth: newLeads },
         revenue: {
-          thisMonth: monthlyRevenue,
-          total: totalTreatmentVal,
-          recovered: recoveredRevenue,
-          renewalRate: totalPatients > 0 ? Math.round((activePatients / totalPatients) * 100) : 0,
+          thisMonth: Number(monthlyRevenueAgg._sum.amount || 0),
+          total: Number(totalRevenueAgg._sum.amount || 0),
+          recovered: Number(recoveredRevenueAgg._sum.amount || 0),
+          renewalRate,
         },
         recovery: {
-          overdueRevenue: totalTreatmentVal * 0.1,
-          expiringRevenue: totalTreatmentVal * 0.05,
-          reactivationRevenue: totalTreatmentVal * 0.02,
-          revenueAtRisk: totalTreatmentVal * 0.15,
-          followUpsDue: missedAppointments,
-        },
-      };
-    }
-
-    if (businessType === 'SALON') {
-      const [
-        totalClients,
-        activeClients,
-        lapsedClients,
-        newLeads,
-        totalLeads,
-        totalSpendAgg,
-        lapsedCount,
-      ] = await Promise.all([
-        this.prisma.member.count({ where: { orgId, deletedAt: null } }),
-        this.prisma.member.count({ where: { orgId, status: 'ACTIVE', deletedAt: null } }),
-        this.prisma.member.count({ where: { orgId, status: 'EXPIRED', deletedAt: null } }),
-        this.prisma.lead.count({ where: { orgId, deletedAt: null, createdAt: { gte: last30Days } } }),
-        this.prisma.lead.count({ where: { orgId, deletedAt: null } }),
-        this.prisma.member.aggregate({ where: { orgId, deletedAt: null }, _sum: { amount: true } }),
-        this.prisma.member.count({ where: { orgId, status: 'EXPIRED', deletedAt: null } }),
-      ]);
-
-      const totalSpend = Number(totalSpendAgg._sum.amount || 0);
-      const monthlyRevenue = totalSpend * 1.2;
-      const recoveredRevenue = totalSpend * 0.15;
-
-      return {
-        members: {
-          total: totalClients,
-          active: activeClients,
-          expired: lapsedClients,
-          trial: 0,
-          expiringThisWeek: lapsedCount,
-          overdue: lapsedCount,
-        },
-        leads: { total: totalLeads, newThisMonth: newLeads },
-        revenue: {
-          thisMonth: monthlyRevenue,
-          total: totalSpend,
-          recovered: recoveredRevenue,
-          renewalRate: totalClients > 0 ? Math.round((activeClients / totalClients) * 100) : 0,
-        },
-        recovery: {
-          overdueRevenue: totalSpend * 0.2,
-          expiringRevenue: totalSpend * 0.1,
-          reactivationRevenue: totalSpend * 0.05,
-          revenueAtRisk: totalSpend * 0.3,
-          followUpsDue: lapsedCount,
+          overdueRevenue: Number(overdueRevenueAgg._sum.amount || 0),
+          expiringRevenue: Number(expiringRevenueAgg._sum.amount || 0),
+          reactivationRevenue: Number(reactivationRevenueAgg._sum.amount || 0),
+          revenueAtRisk: Number(overdueRevenueAgg._sum.amount || 0) + Number(expiringRevenueAgg._sum.amount || 0),
+          followUpsDue,
         },
       };
     }
@@ -262,35 +243,8 @@ export class AnalyticsService {
   }
 
   async getMemberStatusChart(orgId: string) {
-    const org = await this.prisma.organization.findUnique({
-      where: { id: orgId },
-      select: { businessType: true },
-    });
-    const businessType = org?.businessType || 'GYM';
-
-    if (businessType === 'CLINIC') {
-      const statuses = ['ACTIVE', 'INACTIVE', 'EXPIRED'];
-      const counts = await Promise.all(
-        statuses.map(async (status) => ({
-          status,
-          count: await this.prisma.member.count({ where: { orgId, status: status as any, deletedAt: null } }),
-        })),
-      );
-      return counts.filter((c) => c.count > 0);
-    }
-
-    if (businessType === 'SALON') {
-      const statuses = ['ACTIVE', 'INACTIVE', 'EXPIRED'];
-      const counts = await Promise.all(
-        statuses.map(async (status) => ({
-          status,
-          count: await this.prisma.member.count({ where: { orgId, status: status as any, deletedAt: null } }),
-        })),
-      );
-      return counts.filter((c) => c.count > 0);
-    }
-
-    const statuses = ['ACTIVE', 'TRIAL', 'EXPIRED', 'FROZEN', 'CANCELLED'];
+    // Universal status chart — works for all verticals
+    const statuses = ['ACTIVE', 'TRIAL', 'EXPIRED', 'FROZEN', 'CANCELLED', 'INACTIVE'];
     const counts = await Promise.all(
       statuses.map(async (status) => ({
         status,
