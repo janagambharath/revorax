@@ -64,8 +64,12 @@ async def validate_twilio_request(request: Request) -> None:
 
     validator = RequestValidator(settings.TWILIO_AUTH_TOKEN)
 
-    # Get the full URL Twilio sent the request to
-    url = str(request.url)
+    # The public request arrives through the Next.js same-origin proxy in the
+    # single-service Railway deployment. Validate against the canonical public
+    # callback URL instead of the private 127.0.0.1 URL FastAPI receives.
+    url = f"{settings.BACKEND_URL.rstrip('/')}{request.url.path}"
+    if request.url.query:
+        url = f"{url}?{request.url.query}"
 
     # Get the POST body as a dict
     form_data = await request.form()

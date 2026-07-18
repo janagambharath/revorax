@@ -9,7 +9,7 @@ from alembic import context
 from sqlalchemy import pool
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
-from app.core.config import get_settings
+from app.core.config import get_settings, normalize_database_url
 from app.core.database import Base
 from app.models.models import *  # noqa: F401, F403 — ensure all models are imported
 
@@ -20,7 +20,7 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 # Override the URL from settings
-config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
+config.set_main_option("sqlalchemy.url", normalize_database_url(settings.DATABASE_URL))
 
 target_metadata = Base.metadata
 

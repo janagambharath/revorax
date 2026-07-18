@@ -1,75 +1,70 @@
-# Revorax — Production Environment Checklist
+# Revorax single-service Railway deployment
 
-## Before you deploy, make sure every item below is set up.
+This repository now deploys the Next.js frontend and FastAPI backend together
+as one Railway service. Railway exposes Next.js on its assigned `PORT`; Next.js
+proxies `/api/v1/*` and `/health` to FastAPI over `127.0.0.1:8000`.
 
-### 1. Domain (revorax.com)
-- [ ] Domain registered (Namecheap, Cloudflare, etc.)
-- [ ] DNS pointed to Vercel (CNAME or A record)
-- [ ] SSL auto-provisioned by Vercel
+## Deploy
 
-### 2. Vercel (Frontend)
-- [ ] Connect GitHub repo → frontend folder
-- [ ] Set root directory to `frontend`
-- [ ] Set environment variables:
-  - `RESEND_API_KEY` — from https://resend.com/api-keys
-  - `NOTIFY_EMAIL` — your personal email for demo requests
+1. In Railway, create one service from this GitHub repository and deploy the
+   `main` branch.
+2. Leave the service **Root Directory** blank (the repository root).
+3. Leave the config path at the root `railway.toml` and redeploy. Railway will
+   use the root `Dockerfile` automatically.
+4. Generate a public Railway domain, then set both variables below to that
+   exact HTTPS URL, with no trailing slash. Railway can keep them in sync with
+   its domain by using its template variable:
 
-### 3. Railway (Backend)
-- [ ] Create new project on Railway
-- [ ] Add PostgreSQL service (Railway built-in)
-- [ ] Add Redis service (Railway built-in)
-- [ ] Connect GitHub repo → backend folder
-- [ ] Set environment variables:
-  - `APP_ENV=production`
-  - `DEBUG=false`
-  - `FRONTEND_URL=https://revorax.com`
-  - `BACKEND_URL=https://your-railway-app.railway.app`
-  - `DATABASE_URL` — auto-set by Railway PostgreSQL
-  - `REDIS_URL` — auto-set by Railway Redis
-  - `JWT_SECRET_KEY` — generate: `python -c "import secrets; print(secrets.token_hex(32))"`
-  - `TWILIO_ACCOUNT_SID` — from Twilio console
-  - `TWILIO_AUTH_TOKEN` — from Twilio console
-  - `OPENROUTER_API_KEY` — from https://openrouter.ai/keys
-  - `OPENROUTER_MODEL=deepseek/deepseek-chat-v3-0324:free`
-  - `GROQ_API_KEY` — from https://console.groq.com/keys
-  - `RESEND_API_KEY` — from https://resend.com/api-keys
-  - `SENTRY_DSN` — from https://sentry.io (create a FastAPI project)
+   ```text
+   FRONTEND_URL=https://${{RAILWAY_PUBLIC_DOMAIN}}
+   BACKEND_URL=https://${{RAILWAY_PUBLIC_DOMAIN}}
+   ```
 
-### 4. Twilio
-- [ ] Create account at https://twilio.com
-- [ ] Add $20 balance (minimum to buy a number)
-- [ ] Verify your personal phone number
-- [ ] Register for A2P 10DLC (required for business SMS in US)
-  - Brand registration (~$4 one-time)
-  - Campaign registration (~$15/month)
-  - This is required or Twilio will block your SMS
+5. Verify `https://your-service.up.railway.app/health` returns a healthy JSON
+   response and load the homepage from the same domain.
 
-### 5. Resend
-- [ ] Create account at https://resend.com
-- [ ] Add domain `revorax.com` and verify DNS records
-- [ ] Create API key
+## Required Railway variables
 
-### 6. OpenRouter
-- [ ] Create account at https://openrouter.ai
-- [ ] Add $5 credits (start small)
-- [ ] Create API key
+```text
+APP_ENV=production
+DEBUG=false
+FRONTEND_URL=https://${{RAILWAY_PUBLIC_DOMAIN}}
+BACKEND_URL=https://${{RAILWAY_PUBLIC_DOMAIN}}
+DATABASE_URL=${{Postgres.DATABASE_URL}}
+REDIS_URL=${{Redis.REDIS_URL}}
+JWT_SECRET_KEY=<generate a long random secret>
+TWILIO_ACCOUNT_SID=<Twilio account SID>
+TWILIO_AUTH_TOKEN=<Twilio auth token>
+OPENROUTER_API_KEY=<OpenRouter key>
+GROQ_API_KEY=<Groq key>
+RESEND_API_KEY=<Resend key>
+FROM_EMAIL=Revorax <verified-sender@your-domain.com>
+NOTIFY_EMAIL=<demo-request notification email>
+CORS_ORIGINS=["https://${{RAILWAY_PUBLIC_DOMAIN}}"]
+```
 
-### 7. Groq
-- [ ] Create account at https://console.groq.com
-- [ ] Create API key (free tier is generous)
+Add Railway Postgres and Redis services before enabling the workflow that
+processes leads. `FROM_EMAIL` must be a Resend-verified sender whenever
+`RESEND_API_KEY` is configured. Set `SENTRY_DSN` and Stripe variables only when
+those integrations are configured.
 
-### 8. After Deploy
-- [ ] Run database migrations: `alembic upgrade head`
-- [ ] Hit /health endpoint to verify backend is running
-- [ ] Test CTA form submission on landing page
-- [ ] Create first user account via API
-- [ ] Provision first Twilio number via API
-- [ ] Make a test call to the number
-- [ ] Verify auto-text arrives on your phone
-- [ ] Reply to auto-text and verify AI response
-- [ ] Check database for lead creation
+## Twilio callbacks
 
-### 9. Monitoring
-- [ ] Sentry alerts set up for errors
-- [ ] Railway logs accessible
-- [ ] Vercel deployment logs accessible
+Set the Twilio webhook URLs to the same Railway domain:
+
+```text
+https://your-service.up.railway.app/api/v1/webhooks/twilio/voice
+https://your-service.up.railway.app/api/v1/webhooks/twilio/sms
+https://your-service.up.railway.app/api/v1/webhooks/twilio/status
+```
+
+The public `BACKEND_URL` must remain the same domain because it is used to
+generate and validate Twilio callback URLs.
+
+## Before accepting real traffic
+
+- The application runs `alembic upgrade head` before starting FastAPI. Confirm
+  the deployment logs show the initial migration completing successfully.
+- Submit the homepage demo form and confirm notification delivery.
+- Create a test business and Twilio number, then verify the missed-call and
+  inbound-SMS paths end to end.

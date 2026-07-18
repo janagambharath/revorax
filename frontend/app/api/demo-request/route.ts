@@ -27,6 +27,8 @@ export async function POST(request: NextRequest) {
     // Send notification email via Resend if API key is configured
     const resendApiKey = process.env.RESEND_API_KEY;
     const notifyEmail = process.env.NOTIFY_EMAIL || "hello@revorax.com";
+    const fromEmail =
+      process.env.FROM_EMAIL || "Revorax <notifications@revorax.com>";
 
     if (resendApiKey) {
       try {
@@ -37,7 +39,7 @@ export async function POST(request: NextRequest) {
             Authorization: `Bearer ${resendApiKey}`,
           },
           body: JSON.stringify({
-            from: "Revorax <notifications@revorax.com>",
+            from: fromEmail,
             to: [notifyEmail],
             subject: `🔥 New Demo Request — ${company}`,
             html: `

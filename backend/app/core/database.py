@@ -11,12 +11,12 @@ from sqlalchemy.ext.asyncio import (
 )
 from sqlalchemy.orm import DeclarativeBase
 
-from app.core.config import get_settings
+from app.core.config import get_settings, normalize_database_url
 
 settings = get_settings()
 
 engine = create_async_engine(
-    settings.DATABASE_URL,
+    normalize_database_url(settings.DATABASE_URL),
     echo=settings.DATABASE_ECHO,
     pool_size=10,
     max_overflow=20,

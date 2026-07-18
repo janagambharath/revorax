@@ -94,6 +94,11 @@ class AppointmentStatus(str, enum.Enum):
     CANCELLED = "cancelled"
 
 
+def enum_values(enum_class: type[enum.Enum]) -> list[str]:
+    """Persist the enum values used by the API instead of Python member names."""
+    return [member.value for member in enum_class]
+
+
 # ── Models ───────────────────────────────────────────────
 
 
@@ -158,8 +163,8 @@ class Business(Base):
     stripe_subscription_id = Column(String(100), nullable=True)
 
     # Status
-    plan = Column(Enum(BusinessPlan), default=BusinessPlan.PRO)
-    status = Column(Enum(BusinessStatus), default=BusinessStatus.ONBOARDING)
+    plan = Column(Enum(BusinessPlan, values_callable=enum_values), default=BusinessPlan.PRO)
+    status = Column(Enum(BusinessStatus, values_callable=enum_values), default=BusinessStatus.ONBOARDING)
 
     # Timestamps
     created_at = Column(DateTime(timezone=True), server_default=func.now())
@@ -193,7 +198,7 @@ class Lead(Base):
     )
 
     # Source
-    source = Column(Enum(LeadSource), nullable=False)
+    source = Column(Enum(LeadSource, values_callable=enum_values), nullable=False)
 
     # Contact info
     caller_name = Column(String(255), nullable=True)
@@ -203,7 +208,7 @@ class Lead(Base):
     # Qualification
     zip_code = Column(String(10), nullable=True)
     service_type = Column(String(255), nullable=True)
-    urgency = Column(Enum(Urgency), default=Urgency.UNKNOWN)
+    urgency = Column(Enum(Urgency, values_callable=enum_values), default=Urgency.UNKNOWN)
     preferred_time = Column(String(255), nullable=True)
     notes = Column(Text, nullable=True)
 
@@ -216,7 +221,7 @@ class Lead(Base):
     response_time_seconds = Column(Integer, nullable=True)  # How fast auto-text was sent
 
     # Status
-    status = Column(Enum(LeadStatus), default=LeadStatus.NEW, index=True)
+    status = Column(Enum(LeadStatus, values_callable=enum_values), default=LeadStatus.NEW, index=True)
 
     # Timestamps
     created_at = Column(DateTime(timezone=True), server_default=func.now())
@@ -244,7 +249,7 @@ class CallLog(Base):
 
     # Twilio data
     twilio_call_sid = Column(String(50), unique=True, nullable=False)
-    direction = Column(Enum(CallDirection), nullable=False)
+    direction = Column(Enum(CallDirection, values_callable=enum_values), nullable=False)
     from_number = Column(String(20), nullable=False)
     to_number = Column(String(20), nullable=False)
     duration_seconds = Column(Integer, nullable=True)
@@ -253,7 +258,7 @@ class CallLog(Base):
     transcription = Column(Text, nullable=True)
 
     # Status
-    status = Column(Enum(CallStatus), nullable=False)
+    status = Column(Enum(CallStatus, values_callable=enum_values), nullable=False)
 
     # Timestamps
     created_at = Column(DateTime(timezone=True), server_default=func.now())
@@ -276,7 +281,7 @@ class SMSMessage(Base):
 
     # Twilio data
     twilio_message_sid = Column(String(50), nullable=True)
-    direction = Column(Enum(SMSDirection), nullable=False)
+    direction = Column(Enum(SMSDirection, values_callable=enum_values), nullable=False)
     from_number = Column(String(20), nullable=False)
     to_number = Column(String(20), nullable=False)
     body = Column(Text, nullable=False)
@@ -307,7 +312,7 @@ class Appointment(Base):
     notes = Column(Text, nullable=True)
 
     # Status
-    status = Column(Enum(AppointmentStatus), default=AppointmentStatus.CONFIRMED)
+    status = Column(Enum(AppointmentStatus, values_callable=enum_values), default=AppointmentStatus.CONFIRMED)
 
     # Reminders
     reminder_24h_sent_at = Column(DateTime(timezone=True), nullable=True)

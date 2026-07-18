@@ -10,6 +10,15 @@ from pydantic_settings import BaseSettings
 from functools import lru_cache
 
 
+def normalize_database_url(url: str) -> str:
+    """Make Railway's standard Postgres URL usable by async SQLAlchemy."""
+    if url.startswith("postgres://"):
+        return f"postgresql+asyncpg://{url.removeprefix('postgres://')}"
+    if url.startswith("postgresql://"):
+        return f"postgresql+asyncpg://{url.removeprefix('postgresql://')}"
+    return url
+
+
 class Settings(BaseSettings):
     # ── App ──────────────────────────────────────────────
     APP_NAME: str = "Revorax"
