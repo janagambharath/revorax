@@ -132,7 +132,7 @@ async def _get_or_create_lead(
 # ── Voice Webhook ────────────────────────────────────────
 
 
-@router.post("/voice")
+@router.post("/voice", dependencies=[Depends(validate_twilio_request)])
 async def handle_inbound_call(
     request: Request,
     CallSid: str = Form(...),
@@ -160,7 +160,7 @@ async def handle_inbound_call(
         direction=CallDirection.INBOUND,
         from_number=From,
         to_number=To,
-        status=CallStatus_enum_map("ringing"),
+        status=map_twilio_call_status("ringing"),
     )
     db.add(call_log)
 
@@ -172,23 +172,23 @@ async def handle_inbound_call(
     return Response(content=twiml, media_type="application/xml")
 
 
-def CallStatus_enum_map(twilio_status: str) -> CallStatus:
-    """Map Twilio call status to our enum."""
+def map_twilio_call_status(twilio_status: str) -> CallStatusEnum:
+    """Map Twilio call status string to our enum."""
     mapping = {
-        "ringing": CallStatus.MISSED,
-        "in-progress": CallStatus.ANSWERED,
-        "completed": CallStatus.ANSWERED,
-        "no-answer": CallStatus.MISSED,
-        "busy": CallStatus.MISSED,
-        "failed": CallStatus.MISSED,
+        "ringing": CallStatusEnum.MISSED,
+        "in-progress": CallStatusEnum.ANSWERED,
+        "completed": CallStatusEnum.ANSWERED,
+        "no-answer": CallStatusEnum.MISSED,
+        "busy": CallStatusEnum.MISSED,
+        "failed": CallStatusEnum.MISSED,
     }
-    return mapping.get(twilio_status, CallStatus.MISSED)
+    return mapping.get(twilio_status, CallStatusEnum.MISSED)
 
 
 # ── Recording Complete ───────────────────────────────────
 
 
-@router.post("/recording-complete")
+@router.post("/recording-complete", dependencies=[Depends(validate_twilio_request)])
 async def handle_recording_complete(
     CallSid: str = Form(...),
     RecordingUrl: str = Form(...),
@@ -220,7 +220,7 @@ async def handle_recording_complete(
         call.recording_url = f"{RecordingUrl}.wav"
         call.recording_sid = RecordingSid
         call.duration_seconds = int(RecordingDuration)
-        call.status = CallStatus.VOICEMAIL
+        call.status = CallStatusEnum.VOICEMAIL
         call.lead_id = lead.id
 
     # Transcribe the voicemail
@@ -281,7 +281,7 @@ async def handle_recording_complete(
 # ── Call Status Callback ─────────────────────────────────
 
 
-@router.post("/status")
+@router.post("/status", dependencies=[Depends(validate_twilio_request)])
 async def handle_call_status(
     CallSid: str = Form(...),
     CallStatus: str = Form(...),
@@ -300,7 +300,7 @@ async def handle_call_status(
     )
     call = result.scalar_one_or_none()
     if call:
-        call.status = CallStatus_enum_map(CallStatus)
+        call.status = map_twilio_call_status(CallStatus)
         call.duration_seconds = int(CallDuration)
 
     # If missed call, send auto-text
@@ -329,7 +329,7 @@ async def handle_call_status(
                     direction=SMSDirection.OUTBOUND,
                     from_number=business.twilio_phone_number,
                     to_number=From,
-                    body=f"Hi! This is {business.name}. We noticed we missed your call. How can we help you today? Reply with a brief description and we'll get you taken care of right away.",
+                    body=f"Hi! This is {business.name}. We noticed we missed your call. How can we help you today? Reply with a brief description and we'll get you taken care of right away. Reply STOP to opt out.",
                 )
                 db.add(sms)
 
@@ -341,7 +341,7 @@ async def handle_call_status(
 # ── SMS Webhook ──────────────────────────────────────────
 
 
-@router.post("/sms")
+@router.post("/sms", dependencies=[Depends(validate_twilio_request)])
 async def handle_inbound_sms(
     From: str = Form(...),
     To: str = Form(...),
@@ -490,7 +490,7 @@ async def handle_inbound_sms(
 # ── Recording Status Callback ────────────────────────────
 
 
-@router.post("/recording-status")
+@router.post("/recording-status", dependencies=[Depends(validate_twilio_request)])
 async def handle_recording_status(request: Request):
     """
     Callback for recording status changes.

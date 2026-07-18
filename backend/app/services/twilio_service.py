@@ -150,6 +150,6 @@ async def send_missed_call_text(
     body = (
         f"Hi! This is {business_name}. We noticed we missed your call. "
         f"How can we help you today? Reply with a brief description and "
-        f"we'll get you taken care of right away."
+        f"we'll get you taken care of right away. Reply STOP to opt out."
     )
     return await send_sms(to=to, from_=from_, body=body)

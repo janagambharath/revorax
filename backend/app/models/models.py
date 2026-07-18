@@ -211,6 +211,10 @@ class Lead(Base):
     transcript = Column(Text, nullable=True)  # Voicemail transcription
     ai_summary = Column(Text, nullable=True)  # LLM qualification summary
 
+    # Revenue tracking
+    estimated_value = Column(Float, nullable=True)  # Estimated job value in dollars
+    response_time_seconds = Column(Integer, nullable=True)  # How fast auto-text was sent
+
     # Status
     status = Column(Enum(LeadStatus), default=LeadStatus.NEW, index=True)
 
