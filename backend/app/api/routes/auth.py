@@ -2,6 +2,8 @@
 Auth routes — signup, login, token refresh, current user.
 """
 
+import hmac
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -21,14 +23,34 @@ from app.services.auth import (
     verify_token,
 )
 from app.api.deps import get_current_user
+from app.core.config import get_settings
 from app.models.models import User
 
 router = APIRouter(prefix="/auth", tags=["auth"])
+settings = get_settings()
+
+
+def _has_valid_pilot_invite(invite_code: str | None) -> bool:
+    """Compare operator-managed pilot codes without revealing a match."""
+    supplied = (invite_code or "").strip()
+    if not supplied:
+        return False
+    configured_codes = [
+        value.strip()
+        for value in settings.PILOT_SIGNUP_CODES
+        if isinstance(value, str) and value.strip()
+    ]
+    return any(hmac.compare_digest(supplied, candidate) for candidate in configured_codes)
 
 
 @router.post("/signup", response_model=TokenResponse, status_code=status.HTTP_201_CREATED)
 async def signup(data: SignupRequest, db: AsyncSession = Depends(get_db)):
-    """Register a new user account."""
+    """Register an approved pilot user; public sign-up is intentionally gated."""
+    if not settings.ENABLE_SELF_SERVICE_SIGNUP and not _has_valid_pilot_invite(data.invite_code):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Revorax is currently available by approved pilot invitation.",
+        )
     existing = await get_user_by_email(db, data.email)
     if existing:
         raise HTTPException(

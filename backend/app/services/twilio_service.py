@@ -6,8 +6,9 @@ to capturing leads and recovering missed calls.
 """
 
 import logging
+from urllib.parse import urlencode
 from twilio.rest import Client
-from twilio.twiml.voice_response import VoiceResponse
+from twilio.twiml.voice_response import Gather, VoiceResponse
 from twilio.twiml.messaging_response import MessagingResponse
 
 from app.core.config import get_settings
@@ -66,6 +67,63 @@ async def provision_phone_number(area_code: str = "512") -> dict:
 
 
 # ── Voice (Inbound Call Handling) ────────────────────────
+
+
+def build_voice_webhook_url(path: str, query: dict[str, str | int] | None = None) -> str:
+    """Build an absolute callback URL that remains valid behind Railway's proxy."""
+    base_url = settings.BACKEND_URL.rstrip("/")
+    clean_path = path.lstrip("/")
+    url = f"{base_url}/api/v1/webhooks/twilio/{clean_path}"
+    if query:
+        url = f"{url}?{urlencode(query)}"
+    return url
+
+
+def generate_live_call_gather_twiml(
+    prompt: str,
+    action_url: str,
+) -> str:
+    """Ask one short question and send even empty input back to our webhook."""
+    response = VoiceResponse()
+    gather = Gather(
+        input="speech dtmf",
+        action=action_url,
+        method="POST",
+        timeout=5,
+        speech_timeout="auto",
+        language="en-US",
+        action_on_empty_result=True,
+    )
+    gather.say(prompt, voice="Polly.Matthew", language="en-US")
+    response.append(gather)
+    return str(response)
+
+
+def generate_live_call_message_twiml(message: str) -> str:
+    """End a live-call branch with a clear spoken confirmation."""
+    response = VoiceResponse()
+    response.say(message, voice="Polly.Matthew", language="en-US")
+    response.hangup()
+    return str(response)
+
+
+def generate_live_call_transfer_twiml(
+    transfer_to: str,
+    action_url: str,
+    caller_id: str | None = None,
+) -> str:
+    """Transfer to a human and return to the app if the dial attempt ends."""
+    response = VoiceResponse()
+    response.say("Please hold while I connect you with the team.", voice="Polly.Matthew", language="en-US")
+    dial_kwargs: dict[str, str | int] = {
+        "action": action_url,
+        "method": "POST",
+        "timeout": 20,
+    }
+    if caller_id:
+        dial_kwargs["caller_id"] = caller_id
+    response.dial(transfer_to, **dial_kwargs)
+    return str(response)
 
 
 def generate_voicemail_twiml(

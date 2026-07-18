@@ -110,20 +110,12 @@ const workflowSteps = [
 
 const planCards = [
   {
-    name: "Start",
-    description: "For a single office ready to stop losing the first conversation.",
-    features: ["Missed-call text recovery", "Voicemail transcription", "Lead workspace"],
-  },
-  {
-    name: "Grow",
-    description: "For busy HVAC teams that need more clarity across every incoming lead.",
-    features: ["Everything in Start", "AI lead qualification", "Lead alerts and activity visibility"],
+    name: "Founding HVAC pilot",
+    price: "$149",
+    cadence: "per location / month",
+    description: "For one approved HVAC office that wants a visible recovery process before committing to a larger rollout.",
+    features: ["Up to 100 eligible missed-call recovery workflows", "Voicemail transcription and qualified lead context", "Owner alerts, callback queue, and revenue tracking", "White-glove number and workflow setup"],
     featured: true,
-  },
-  {
-    name: "Tailored",
-    description: "For teams planning a deliberate rollout around their call volume and process.",
-    features: ["Everything in Grow", "Guided onboarding", "A rollout plan for your operation"],
   },
 ];
 
@@ -400,6 +392,9 @@ export default function LandingPage() {
           </nav>
 
           <div className="hidden items-center gap-3 lg:flex">
+            <a href="/login" className="px-3 py-2 text-[13px] font-semibold text-rvx-ink transition-colors hover:text-rvx-signal">
+              Sign in
+            </a>
             <a href="#workflow" className="px-3 py-2 text-[13px] font-semibold text-rvx-ink transition-colors hover:text-rvx-signal">
               See the workflow
             </a>
@@ -407,7 +402,7 @@ export default function LandingPage() {
               href="#demo"
               className="inline-flex items-center gap-2 rounded-full bg-rvx-ink px-4 py-2.5 text-[12px] font-bold text-white shadow-[0_8px_20px_rgba(16,40,30,0.15)] transition hover:-translate-y-0.5 hover:bg-rvx-signal focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rvx-signal"
             >
-              Book a demo
+              Request a pilot call
               <ArrowRight className="h-3.5 w-3.5" />
             </a>
           </div>
@@ -438,11 +433,19 @@ export default function LandingPage() {
                 </a>
               ))}
               <a
+                href="/login"
+                onClick={closeMobileMenu}
+                className="flex items-center justify-between rounded-xl px-3 py-3 text-sm font-semibold text-rvx-ink hover:bg-white"
+              >
+                Sign in to your desk
+                <ChevronRight className="h-4 w-4 text-rvx-slate" />
+              </a>
+              <a
                 href="#demo"
                 onClick={closeMobileMenu}
                 className="mt-2 inline-flex items-center justify-center gap-2 rounded-xl bg-rvx-ink px-4 py-3 text-sm font-bold text-white"
               >
-                Book a demo
+                Request a pilot call
                 <ArrowRight className="h-4 w-4" />
               </a>
             </nav>
@@ -472,7 +475,7 @@ export default function LandingPage() {
                   href="#demo"
                   className="inline-flex items-center gap-2 rounded-full bg-rvx-ink px-5 py-3.5 text-[13px] font-bold text-white shadow-[0_14px_24px_rgba(16,40,30,0.16)] transition hover:-translate-y-0.5 hover:bg-rvx-signal focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rvx-signal"
                 >
-                  Book a demo
+                  Request a pilot call
                   <ArrowRight className="h-4 w-4" />
                 </a>
                 <a
@@ -742,22 +745,22 @@ export default function LandingPage() {
         <section id="plans" className="scroll-mt-24 px-5 py-20 sm:px-7 sm:py-28 lg:px-8 lg:py-32">
           <div className="mx-auto max-w-7xl">
             <div className="mx-auto max-w-2xl text-center">
-              <SectionEyebrow>Plans that meet your call volume</SectionEyebrow>
-              <h2 className="text-4xl font-bold leading-[1.03] tracking-[-0.056em] text-rvx-ink sm:text-5xl">Start with the missed calls that matter most.</h2>
-              <p className="mt-5 text-[16px] leading-7 text-rvx-slate">We will help you choose the right launch path for your team, call volume, and lead handoff process.</p>
+              <SectionEyebrow>Founding HVAC pilot</SectionEyebrow>
+              <h2 className="text-4xl font-bold leading-[1.03] tracking-[-0.056em] text-rvx-ink sm:text-5xl">Prove one recovered job, then scale.</h2>
+              <p className="mt-5 text-[16px] leading-7 text-rvx-slate">One location. A clear handoff. A measured result. We set up the recovery workflow with your team before asking you to expand.</p>
             </div>
 
-            <div className="mx-auto mt-14 grid max-w-5xl gap-4 md:grid-cols-3">
+            <div className="mx-auto mt-14 grid max-w-2xl gap-4">
               {planCards.map((plan) => (
                 <article
                   key={plan.name}
-                  className={`relative flex min-h-[360px] flex-col rounded-[24px] border p-6 ${
+                  className={`relative flex min-h-[360px] flex-col rounded-[24px] border p-6 sm:p-8 ${
                     plan.featured ? "border-rvx-ink bg-rvx-ink text-white shadow-[0_20px_45px_rgba(15,40,30,0.16)]" : "border-rvx-border bg-white text-rvx-ink shadow-[0_10px_25px_rgba(24,44,35,0.04)]"
                   }`}
                 >
-                  {plan.featured && <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-rvx-signal px-3 py-1 text-[9px] font-bold uppercase tracking-[0.12em] text-white">Most common path</span>}
+                  {plan.featured && <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-rvx-signal px-3 py-1 text-[9px] font-bold uppercase tracking-[0.12em] text-white">Limited founding cohort</span>}
                   <p className={`text-[10px] font-bold uppercase tracking-[0.14em] ${plan.featured ? "text-rvx-mint" : "text-rvx-slate"}`}>Revorax {plan.name}</p>
-                  <h3 className="mt-3 text-3xl font-bold tracking-[-0.055em]">{plan.name}</h3>
+                  <div className="mt-4 flex flex-wrap items-end gap-x-2 gap-y-1"><span className="text-5xl font-bold tracking-[-0.07em]">{plan.price}</span><span className={`pb-1 text-[11px] font-semibold ${plan.featured ? "text-white/55" : "text-rvx-slate"}`}>{plan.cadence}</span></div>
                   <p className={`mt-4 text-[13px] leading-6 ${plan.featured ? "text-white/65" : "text-rvx-slate"}`}>{plan.description}</p>
                   <ul className="mt-7 flex-1 space-y-3">
                     {plan.features.map((feature) => (
@@ -773,7 +776,7 @@ export default function LandingPage() {
                       plan.featured ? "bg-white text-rvx-ink hover:bg-rvx-mint" : "border border-rvx-border bg-rvx-canvas text-rvx-ink hover:border-rvx-ink hover:bg-white"
                     }`}
                   >
-                    Talk through a plan
+                    Apply for the pilot
                     <ArrowRight className="h-3.5 w-3.5" />
                   </a>
                 </article>
@@ -840,12 +843,12 @@ export default function LandingPage() {
             <div className="pointer-events-none absolute -bottom-40 left-[24%] h-[330px] w-[330px] rounded-full bg-rvx-signal/35 blur-[90px]" />
             <div className="relative grid gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(390px,0.8fr)] lg:items-center lg:gap-16">
               <div>
-                <SectionEyebrow light>See your missed-call flow clearly</SectionEyebrow>
-                <h2 className="max-w-xl text-4xl font-bold leading-[1.02] tracking-[-0.058em] text-white sm:text-5xl">Give every caller a better way back to your team.</h2>
-                <p className="mt-5 max-w-lg text-[16px] leading-7 text-white/65">Tell us a little about your HVAC business. We will show you how a more organized missed-call recovery flow could work for your team.</p>
+                <SectionEyebrow light>Founding pilot applications</SectionEyebrow>
+                <h2 className="max-w-xl text-4xl font-bold leading-[1.02] tracking-[-0.058em] text-white sm:text-5xl">Start with the calls your office cannot get back.</h2>
+                <p className="mt-5 max-w-lg text-[16px] leading-7 text-white/65">We will review your current handoff, configure one recovery workflow, and make the result visible to your team before expanding the scope.</p>
                 <div className="mt-8 flex flex-wrap gap-4 text-[11px] font-semibold text-white/60">
-                  <span className="inline-flex items-center gap-2"><Check className="h-4 w-4 text-rvx-mint" strokeWidth={3} /> No pressure, just a practical walkthrough</span>
-                  <span className="inline-flex items-center gap-2"><Check className="h-4 w-4 text-rvx-mint" strokeWidth={3} /> Built around your current process</span>
+                  <span className="inline-flex items-center gap-2"><Check className="h-4 w-4 text-rvx-mint" strokeWidth={3} /> One location, one accountable workflow</span>
+                  <span className="inline-flex items-center gap-2"><Check className="h-4 w-4 text-rvx-mint" strokeWidth={3} /> Built around your current handoff</span>
                 </div>
               </div>
 
@@ -853,7 +856,7 @@ export default function LandingPage() {
                 <div className="mb-5 flex items-center gap-3">
                   <span className="grid h-9 w-9 place-items-center rounded-xl bg-rvx-mint text-rvx-ink"><Sparkles className="h-4 w-4" /></span>
                   <div>
-                    <p className="text-sm font-bold">Book your walkthrough</p>
+                    <p className="text-sm font-bold">Request a pilot review</p>
                     <p className="text-[11px] text-rvx-slate">We will follow up using the details below.</p>
                   </div>
                 </div>
@@ -881,12 +884,12 @@ export default function LandingPage() {
                   className="mt-5 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-rvx-signal px-4 text-[13px] font-bold text-white transition hover:bg-rvx-ink disabled:cursor-not-allowed disabled:opacity-70"
                 >
                   {formStatus === "loading" ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
-                  {formStatus === "loading" ? "Sending request..." : "Request a demo"}
+                  {formStatus === "loading" ? "Sending request..." : "Request pilot access"}
                 </button>
                 <p className={`mt-3 text-center text-[11px] leading-5 ${formStatus === "success" ? "text-rvx-recovered" : formStatus === "error" ? "text-rvx-signal" : "text-rvx-slate"}`} aria-live="polite">
-                  {formStatus === "success" && "Thanks - your demo request is on its way to the Revorax team."}
+                  {formStatus === "success" && "Thanks — your pilot request is on its way to the Revorax team."}
                   {formStatus === "error" && "We could not send that right now. Please try again in a moment."}
-                  {formStatus === "idle" && "By submitting, you are asking Revorax to contact you about a demo."}
+                  {formStatus === "idle" && "By submitting, you are asking Revorax to contact you about an approved pilot."}
                 </p>
               </form>
             </div>
@@ -913,7 +916,7 @@ export default function LandingPage() {
             <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-rvx-slate">Resources</p>
             <div className="mt-4 grid gap-3 text-[13px] font-semibold text-rvx-ink">
               <a href="#faq" className="hover:text-rvx-signal">FAQ</a>
-              <a href="#demo" className="hover:text-rvx-signal">Book a demo</a>
+              <a href="#demo" className="hover:text-rvx-signal">Request a pilot call</a>
               <a href="mailto:hello@revorax.com" className="hover:text-rvx-signal">Contact</a>
             </div>
           </div>
