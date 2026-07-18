@@ -46,7 +46,8 @@ CORS_ORIGINS=["https://${{RAILWAY_PUBLIC_DOMAIN}}"]
 Add Railway Postgres and Redis services before enabling the workflow that
 processes leads. `FROM_EMAIL` must be a Resend-verified sender whenever
 `RESEND_API_KEY` is configured. Set `SENTRY_DSN` and Stripe variables only when
-those integrations are configured.
+those integrations are configured. Leave `SENTRY_DSN` unset unless it is a
+valid Sentry DSN; do not use a placeholder value.
 
 ## Twilio callbacks
 

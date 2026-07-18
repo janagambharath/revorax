@@ -7,6 +7,7 @@ The AI receptionist that turns missed HVAC calls into booked jobs.
 import logging
 
 import sentry_sdk
+from sentry_sdk.utils import BadDsn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -15,21 +16,27 @@ from app.api.routes import auth, business, dashboard, webhooks
 
 settings = get_settings()
 
-# ── Sentry ───────────────────────────────────────────────
-
-if settings.SENTRY_DSN:
-    sentry_sdk.init(
-        dsn=settings.SENTRY_DSN,
-        traces_sample_rate=0.1,
-        environment=settings.APP_ENV,
-    )
-
 # ── Logging ──────────────────────────────────────────────
 
 logging.basicConfig(
     level=logging.DEBUG if settings.DEBUG else logging.INFO,
     format="%(asctime)s | %(levelname)-8s | %(name)s | %(message)s",
 )
+logger = logging.getLogger(__name__)
+
+# ── Sentry ───────────────────────────────────────────────
+
+if settings.SENTRY_DSN:
+    try:
+        sentry_sdk.init(
+            dsn=settings.SENTRY_DSN,
+            traces_sample_rate=0.1,
+            environment=settings.APP_ENV,
+        )
+    except BadDsn:
+        # Monitoring is optional; a placeholder or malformed DSN must not
+        # prevent the API from starting.
+        logger.warning("Ignoring invalid SENTRY_DSN; error monitoring is disabled.")
 
 # ── App ──────────────────────────────────────────────────
 
