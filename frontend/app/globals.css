@@ -1,22 +1,23 @@
 @import "tailwindcss";
 
 @theme {
-  /* ── Backgrounds & Surfaces ───────────────────────── */
-  --color-rvx-ink: #0F1B12;
-  --color-rvx-bone: #F5F2EA;
-  --color-rvx-signal: #FF5A1F;
-  --color-rvx-recovered: #1E7A5C;
-  --color-rvx-slate: #8A8578;
-  --color-rvx-hairline: #D4CFC0;
-  --color-rvx-hairline-dark: #23301F;
+  --color-rvx-ink: #10281e;
+  --color-rvx-canvas: #fbfcf9;
+  --color-rvx-bone: #f7f7f2;
+  --color-rvx-signal: #f66b43;
+  --color-rvx-recovered: #219f78;
+  --color-rvx-violet: #7466ed;
+  --color-rvx-slate: #66756c;
+  --color-rvx-border: #dbe3dc;
+  --color-rvx-mint: #e4f3eb;
+  --color-rvx-peach: #fff0e9;
+  --color-rvx-lilac-soft: #efedff;
+  --color-rvx-sky: #eaf5fb;
 
-  /* ── Typography ──────────────────────────────────── */
-  --font-display: var(--font-barlow-condensed), sans-serif;
+  --font-display: var(--font-inter), sans-serif;
   --font-body: var(--font-inter), sans-serif;
   --font-mono: var(--font-plex-mono), monospace;
 }
-
-/* ── Base ────────────────────────────────────────── */
 
 html {
   scroll-behavior: smooth;
@@ -25,8 +26,14 @@ html {
 }
 
 body {
-  background-color: var(--color-rvx-bone);
+  background: var(--color-rvx-canvas);
   color: var(--color-rvx-ink);
+}
+
+button,
+a,
+input {
+  -webkit-tap-highlight-color: transparent;
 }
 
 ::selection {
@@ -34,22 +41,20 @@ body {
   color: white;
 }
 
-/* ── Utilities ───────────────────────────────────── */
-.section-spacing {
-  padding-top: 80px;
-  padding-bottom: 80px;
+::-webkit-scrollbar {
+  width: 10px;
 }
 
-@media (min-width: 768px) {
-  .section-spacing {
-    padding-top: 120px;
-    padding-bottom: 120px;
-  }
+::-webkit-scrollbar-track {
+  background: var(--color-rvx-canvas);
 }
 
-/* ── Scrollbar ───────────────────────────────────── */
+::-webkit-scrollbar-thumb {
+  border: 3px solid var(--color-rvx-canvas);
+  border-radius: 999px;
+  background: var(--color-rvx-border);
+}
 
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--color-rvx-hairline); border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: var(--color-rvx-slate); }
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-rvx-slate);
+}

@@ -23,11 +23,11 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Revorax — Stop Losing Jobs to Missed Calls",
-  description: "Every missed call is a lost job. Revorax recovers missed leads, books appointments, and follows up automatically for HVAC companies.",
+  title: "Revorax | AI-assisted missed-call recovery for HVAC",
+  description: "Turn missed HVAC calls into qualified leads with timely text recovery, voicemail intelligence, and a focused lead workspace.",
   openGraph: {
-    title: "Revorax — Stop Losing Jobs to Missed Calls",
-    description: "Recover missed HVAC leads. Book more jobs. Automatically.",
+    title: "Revorax | AI-assisted missed-call recovery for HVAC",
+    description: "Turn missed HVAC calls into qualified leads with timely text recovery and a focused lead workspace.",
     type: "website",
     siteName: "Revorax",
   },
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${inter.variable} ${barlowCondensed.variable} ${ibmPlexMono.variable} h-full scroll-smooth`}>
-      <body className="min-h-full font-body bg-rvx-bone text-rvx-ink antialiased selection:bg-rvx-signal selection:text-white">
+      <body className="min-h-full bg-rvx-canvas font-body text-rvx-ink antialiased selection:bg-rvx-signal selection:text-white">
         {children}
       </body>
     </html>
