@@ -24,6 +24,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     NODE_ENV=production \
     NEXT_TELEMETRY_DISABLED=1 \
+    PYTHONPATH=/app/backend \
     PATH="/opt/venv/bin:/usr/local/bin:${PATH}"
 
 RUN apt-get update \
