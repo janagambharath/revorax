@@ -1,0 +1,41 @@
+# Core
+fastapi==0.115.12
+uvicorn[standard]==0.34.2
+python-dotenv==1.1.0
+pydantic==2.11.4
+pydantic-settings==2.9.1
+
+# Database
+sqlalchemy==2.0.41
+alembic==1.16.2
+asyncpg==0.31.0
+psycopg2-binary==2.9.10
+
+# Redis / Background Jobs
+redis==6.2.0
+arq==0.26.1
+
+# Twilio (Voice + SMS)
+twilio==9.6.2
+
+# AI / LLM
+httpx==0.28.1
+openai==1.86.0
+
+# Email
+resend==2.12.0
+
+# Payments
+stripe==12.2.0
+
+# Auth
+pyjwt[crypto]==2.10.1
+passlib[bcrypt]==1.7.4
+python-multipart==0.0.20
+
+# Monitoring
+sentry-sdk[fastapi]==2.22.0
+
+# Utilities
+python-dateutil==2.9.0.post0
+phonenumbers==9.0.3
