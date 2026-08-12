@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Revorax — Automation Tools for Small Businesses</title>
+  <meta name="description" content="Revorax builds SaaS automation tools for small businesses. Our first product: Renewal Desk — gym membership renewal tracking with WhatsApp reminders and biometric door access.">
+  <link rel="canonical" href="https://revorax.online/">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Outfit:wght@600;700;800&display=swap');
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0a0a0a;
+      color: #f0f0f0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .logo {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, #f0f0f0 0%, #9a9a9a 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .tagline {
+      font-size: 1rem;
+      color: #666;
+      margin-bottom: 3rem;
+      max-width: 400px;
+    }
+
+    .product-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 2rem;
+      background: #161616;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      text-decoration: none;
+      color: #f0f0f0;
+      transition: all 250ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .product-link:hover {
+      border-color: #22c55e;
+      transform: translateY(-2px);
+      box-shadow: 0 0 20px rgba(34, 197, 94, 0.1);
+    }
+
+    .product-link__name {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    .product-link__desc {
+      font-size: 0.8rem;
+      color: #9a9a9a;
+    }
+
+    .product-link__arrow {
+      font-size: 1.2rem;
+      color: #22c55e;
+      margin-left: 0.5rem;
+    }
+
+    .footer-note {
+      position: fixed;
+      bottom: 1.5rem;
+      font-size: 0.75rem;
+      color: #444;
+    }
+  </style>
+</head>
+<body>
+  <div class="logo">Revorax</div>
+  <p class="tagline">Automation tools for small businesses. Built in Hyderabad.</p>
+
+  <a href="/renewal-desk" class="product-link">
+    <div>
+      <div class="product-link__name">Renewal Desk</div>
+      <div class="product-link__desc">Gym membership renewals · WhatsApp reminders · Door access</div>
+    </div>
+    <span class="product-link__arrow">→</span>
+  </a>
+
+  <div class="footer-note">© 2026 Revorax · Hyderabad, India</div>
+</body>
+</html>
