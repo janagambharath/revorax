@@ -1,8 +1,7 @@
 """Railway entry point for the Revorax marketing site.
 
 The public site is intentionally static, while this FastAPI app gives Railway a
-long-running Python process, a health check, and a clear place to add the
-Renewal Desk API as product features are connected.
+long-running Python process and a health check.
 """
 
 from __future__ import annotations
@@ -30,12 +29,6 @@ app = FastAPI(
 def health_check() -> dict[str, str]:
     """Railway health check endpoint."""
     return {"status": "ok"}
-
-
-@app.get("/api/v1/status", include_in_schema=False)
-def api_status() -> dict[str, str]:
-    """Small API foundation for future Renewal Desk product endpoints."""
-    return {"service": "renewal-desk", "status": "online"}
 
 
 @app.get("/", include_in_schema=False)
