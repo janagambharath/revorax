@@ -1,578 +1,458 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Renewal Desk — Gym Membership Renewal & WhatsApp Reminders | Revorax</title>
-  <meta name="description" content="Automatic WhatsApp renewal reminders with payment QR, biometric door access control for expired members, and membership tracking — built for Indian gym owners. Works with eSSL & ZKTeco devices.">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Renewal Desk — Gym Membership Renewal &amp; WhatsApp Reminders</title>
+  <meta name="description" content="Track gym membership expiry, automate WhatsApp renewal reminders, verify payments and connect compatible biometric access systems with Renewal Desk.">
   <link rel="canonical" href="https://revorax.online/renewal-desk">
-  <meta property="og:title" content="Renewal Desk — Gym Membership Renewal & WhatsApp Reminders">
-  <meta property="og:description" content="Stop letting expired members walk in for free. Automatic WhatsApp reminders, payment QR, and biometric door access control for your gym.">
+  <meta property="og:title" content="Renewal Desk — Gym Membership Renewal &amp; WhatsApp Reminders">
+  <meta property="og:description" content="Track expiry dates, send WhatsApp renewal reminders and manage compatible biometric access for your gym.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://revorax.online/renewal-desk">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to content</a>
 
-  <!-- ====== HEADER ====== -->
-  <header class="header" id="site-header">
-    <div class="container header__inner">
-      <a href="/renewal-desk" class="header__logo" id="header-logo">
-        <span class="header__logo-product">Renewal Desk</span>
-        <span class="header__logo-parent">by Revorax</span>
+  <header class="site-header" id="site-header">
+    <div class="shell header-inner">
+      <a class="brand" href="#top" aria-label="Renewal Desk home">
+        <span class="brand-mark">R</span>
+        <span><strong>Renewal Desk</strong><small>by Revorax</small></span>
       </a>
 
-      <nav class="header__nav" id="desktop-nav">
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+        <span class="sr-only">Toggle navigation</span>
+        <span></span><span></span>
+      </button>
+
+      <nav class="site-nav" id="site-nav" aria-label="Primary navigation">
+        <a href="#product">Product</a>
         <a href="#how-it-works">How it works</a>
-        <a href="#biometric">Door access</a>
+        <a href="#biometric">Biometric access</a>
+        <a href="#whatsapp">WhatsApp</a>
         <a href="#pricing">Pricing</a>
         <a href="#faq">FAQ</a>
       </nav>
 
-      <div class="header__actions">
-        <a href="https://wa.me/917995854994?text=Hi%2C%20I%27m%20interested%20in%20Renewal%20Desk%20for%20my%20gym" class="btn btn--whatsapp btn--sm" id="header-cta-whatsapp">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          Chat with us
-        </a>
-        <a href="#how-it-works" class="btn btn--outline" id="header-cta-demo">See how it works</a>
-
-        <button class="header__mobile-toggle" id="mobile-nav-toggle" aria-label="Open navigation menu">
-          <span></span><span></span><span></span>
-        </button>
+      <div class="header-actions">
+        <a class="text-link" href="https://wa.me/917995854994?text=Hi%2C%20I%27m%20interested%20in%20Renewal%20Desk%20for%20my%20gym">WhatsApp us</a>
+        <a class="button button--small" href="https://wa.me/917995854994?text=Hi%2C%20I%27d%20like%20to%20book%20a%2010-minute%20Renewal%20Desk%20demo">Book a demo</a>
       </div>
     </div>
   </header>
 
-  <!-- Mobile Nav Overlay -->
-  <div class="mobile-nav" id="mobile-nav">
-    <button class="mobile-nav__close" id="mobile-nav-close" aria-label="Close navigation menu">✕</button>
-    <a href="#how-it-works">How it works</a>
-    <a href="#biometric">Door access</a>
-    <a href="#pricing">Pricing</a>
-    <a href="#faq">FAQ</a>
-    <a href="https://wa.me/917995854994?text=Hi%2C%20I%27m%20interested%20in%20Renewal%20Desk%20for%20my%20gym" class="btn btn--whatsapp" style="margin-top: 1rem;">Chat with us on WhatsApp</a>
-  </div>
-
-  <main>
-
-    <!-- ====== HERO ====== -->
-    <section class="hero section" id="hero">
-      <div class="container">
-        <div class="hero__grid">
-          <div class="hero__content">
-            <div class="hero__badge">
-              <span class="status-pill__dot"></span>
-              Built for Indian gym owners
-            </div>
-            <h1 class="hero__title">
-              Stop letting <span>expired members</span> walk in for free.
-            </h1>
-            <p class="hero__subtitle">
-              Renewal Desk sends WhatsApp renewal reminders automatically — with your payment QR attached. When a membership expires, the door locks itself. No manual work. No awkward conversations.
-            </p>
-            <div class="hero__ctas">
-              <a href="https://wa.me/917995854994?text=Hi%2C%20I%20want%20to%20see%20Renewal%20Desk%20in%20action%20for%20my%20gym" class="btn btn--whatsapp" id="hero-cta-whatsapp">
-                <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                See it on your members
-              </a>
-              <a href="#biometric" class="btn btn--outline" id="hero-cta-door">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0110 0v4"></path></svg>
-                See how the door locks
-              </a>
-            </div>
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="shell hero-grid">
+        <div class="hero-copy reveal">
+          <p class="eyebrow"><span></span> Built for Indian gyms</p>
+          <h1>Stop losing renewal money because nobody followed up.</h1>
+          <p class="hero-lede">Renewal Desk tracks membership expiry, follows up with members on WhatsApp, helps you verify payments, and can switch off compatible biometric access when a membership expires.</p>
+          <div class="hero-actions">
+            <a class="button" href="https://wa.me/917995854994?text=Hi%2C%20I%27d%20like%20to%20book%20a%2010-minute%20Renewal%20Desk%20demo">Book a 10-minute demo <span aria-hidden="true">→</span></a>
+            <a class="button button--ghost" href="#how-it-works">See how it works <span aria-hidden="true">→</span></a>
           </div>
+          <p class="hero-note"><span class="check-icon">✓</span> Built for gyms using WhatsApp and compatible eSSL / ZKTeco biometric systems.</p>
+        </div>
 
-          <div class="hero__visual reveal">
-            <!-- WhatsApp Chat Mockup — rendered, not an image -->
-            <div class="wa-mockup" id="hero-wa-mockup">
-              <div class="wa-mockup__header">
-                <div class="wa-mockup__avatar">FZ</div>
-                <div>
-                  <div class="wa-mockup__name">FitZone Gym</div>
-                  <div class="wa-mockup__status">Business account</div>
-                </div>
+        <div class="hero-product reveal">
+          <figure class="hero-dashboard">
+            <div class="browser-bar"><span><i></i><i></i><i></i></span><b>app.revorax.online/dashboard</b></div>
+            <img src="assets/renewal-dashboard-real.png" alt="Real Renewal Desk dashboard showing active members, upcoming renewals, recent payments and reminder health" fetchpriority="high">
+            <figcaption>Real Renewal Desk dashboard</figcaption>
+          </figure>
+          <div class="product-surface">
+            <div class="product-surface__bar">
+              <span class="tiny-logo">R</span>
+              <span>Renewal Desk</span>
+              <span class="surface-live"><i></i> Live</span>
+            </div>
+            <div class="surface-body">
+              <div class="surface-heading">
+                <span>Yodha Fitness</span>
+                <strong>Today’s renewal desk</strong>
               </div>
-              <div class="wa-mockup__body">
-                <div class="wa-bubble wa-bubble--out">
-                  <div>Hi <strong>Rahul</strong> 👋</div>
-                  <div style="margin-top: 0.3rem;">Your FitZone Gym membership expires in <strong>3 days</strong> (Aug 15, 2026).</div>
-                  <div style="margin-top: 0.3rem;">Renew now to keep your access active — scan the QR below to pay:</div>
-                  <div class="wa-bubble__qr">
-                    <img src="assets/qr-placeholder.png" alt="UPI Payment QR Code" loading="lazy">
-                  </div>
-                  <div class="wa-bubble__time">
-                    10:00 AM
-                    <svg viewBox="0 0 16 11" width="16" height="11" fill="rgba(255,255,255,0.45)"><path d="M11.071.653a.457.457 0 00-.304-.102.493.493 0 00-.381.178l-6.19 7.636-2.405-2.272a.463.463 0 00-.336-.148.457.457 0 00-.336.148.41.41 0 00-.14.305c0 .12.047.222.14.305l2.733 2.58c.09.085.2.127.336.127a.48.48 0 00.381-.178l6.541-8.074a.374.374 0 00.102-.26.374.374 0 00-.14-.245z"></path><path d="M14.664.653a.457.457 0 00-.304-.102.493.493 0 00-.381.178l-6.19 7.636-1.072-1.012-.336.399 1.4 1.322c.09.085.2.127.336.127a.48.48 0 00.381-.178l6.541-8.074a.374.374 0 00.102-.26.374.374 0 00-.14-.245z" opacity=".35"></path></svg>
-                  </div>
-                </div>
-                <div class="wa-bubble wa-bubble--in">
-                  <div>Done! Paid ₹2,500 via UPI 💪</div>
-                  <div class="wa-bubble__time">10:12 AM</div>
-                </div>
+              <div class="member-alert">
+                <span class="avatar avatar--blue">KP</span>
+                <div><small>MEMBERSHIP EXPIRES TOMORROW</small><strong>Kiran P.</strong><span>Annual plan · 13 Aug 2026</span></div>
+                <b>1 day</b>
+              </div>
+              <div class="surface-stats">
+                <div><span>Active</span><strong>156</strong></div>
+                <div><span>Expiring soon</span><strong class="amber">38</strong></div>
+                <div><span>Expired</span><strong class="red">74</strong></div>
               </div>
             </div>
           </div>
+
+          <div class="flow-line flow-line--one" aria-hidden="true"></div>
+          <article class="hero-message">
+            <div class="mini-wa__header"><span class="avatar avatar--green">YF</span><span><strong>Yodha Fitness</strong><small>WhatsApp Business</small></span><time>10:00</time></div>
+            <p>Hi Kiran 👋<br>Your membership expires tomorrow. Renew today to keep your access active.</p>
+            <div class="qr-attachment"><img src="assets/qr-placeholder.png" alt="" loading="eager"><span><strong>Payment QR</strong><small>Scan to pay</small></span></div>
+            <div class="message-state">Delivered <b>✓✓</b></div>
+          </article>
+
+          <div class="flow-line flow-line--two" aria-hidden="true"></div>
+          <article class="access-card">
+            <span class="access-card__icon" aria-hidden="true">⌁</span>
+            <div><small>BIOMETRIC ACCESS</small><strong>Membership expired</strong><span>Door access disabled</span></div>
+            <span class="status-tag status-tag--red">Blocked</span>
+          </article>
         </div>
       </div>
     </section>
 
-    <!-- ====== THE PROBLEM ====== -->
-    <section class="section section--alt" id="problem">
-      <div class="container">
-        <div class="problem__content reveal">
-          <span class="section-label">The reality at most gyms</span>
-          <h2 style="margin-bottom: 1.5rem;">You know this story.</h2>
-
-          <p>
-            A member's plan expired 12 days ago. Nobody noticed. They walked in this morning, scanned their fingerprint at the door, and <em>it opened anyway</em>. Your front-desk staff didn't flag it because the expiry date is buried somewhere in an Excel sheet that hasn't been updated since last month.
-          </p>
-          <p>
-            Meanwhile, your staff typed out renewal reminders to a WhatsApp broadcast list — <strong>including three members who already paid last week</strong>. One of them replied "I already renewed, check your records." Now it looks like you don't have your act together.
-          </p>
-          <p>
-            The money you should have collected 10 days ago is still sitting uncollected. Not because the member doesn't want to pay — they just forgot, and nobody reminded them at the right time in the right way. <strong>This is what Renewal Desk fixes.</strong>
-          </p>
+    <section class="proof-strip" aria-label="Meta WhatsApp Business metrics">
+      <div class="shell">
+        <p class="proof-strip__source"><span class="meta-dot">M</span> Meta WhatsApp Business metrics <strong>· Last 90 days</strong></p>
+        <div class="proof-grid">
+          <div><strong data-count="369">369</strong><span>messages sent</span></div>
+          <div><strong>100<small>%</small></strong><span>delivery rate</span></div>
+          <div><strong>89<small>%</small></strong><span>messages read</span></div>
+          <div><strong>₹0.11</strong><span>per message delivered</span></div>
         </div>
+        <p class="proof-strip__note">Source: Meta WhatsApp Business Platform dashboard · ₹42.21 total spend</p>
       </div>
     </section>
 
-    <!-- ====== REAL STATS BAR ====== -->
-    <section class="stats-bar" id="stats">
-      <div class="container">
-        <div class="stats-bar__inner reveal">
-          <div class="stats-bar__label">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16" style="color: var(--whatsapp);"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            Real numbers from our WhatsApp API — last 90 days
-          </div>
-          <div class="stats-bar__grid">
-            <div class="stats-bar__stat">
-              <div class="stats-bar__number">369</div>
-              <div class="stats-bar__desc">Renewal reminders sent</div>
-            </div>
-            <div class="stats-bar__divider"></div>
-            <div class="stats-bar__stat">
-              <div class="stats-bar__number">100<span>%</span></div>
-              <div class="stats-bar__desc">Delivery rate</div>
-            </div>
-            <div class="stats-bar__divider"></div>
-            <div class="stats-bar__stat">
-              <div class="stats-bar__number">89<span>%</span></div>
-              <div class="stats-bar__desc">Messages read by members</div>
-            </div>
-            <div class="stats-bar__divider"></div>
-            <div class="stats-bar__stat">
-              <div class="stats-bar__number">₹0.11</div>
-              <div class="stats-bar__desc">Cost per message delivered</div>
-            </div>
-          </div>
-          <div class="stats-bar__footnote">Source: Meta WhatsApp Business Platform dashboard · ₹42.21 total spend for 369 messages</div>
+    <section class="section problem-section">
+      <div class="shell">
+        <div class="section-intro section-intro--center reveal">
+          <p class="eyebrow">The renewal gap</p>
+          <h2>Your gym probably has this problem already.</h2>
+          <p>Expiry dates are easy to miss. The result is lost renewal money and expired members who can still walk through the door.</p>
         </div>
+        <div class="problem-flow reveal">
+          <article class="problem-step">
+            <span class="step-number">01</span>
+            <div class="event-icon event-icon--red">×</div>
+            <h3>Membership ended</h3>
+            <p>Rahul’s plan expired three days ago.</p>
+          </article>
+          <span class="problem-arrow" aria-hidden="true">→</span>
+          <article class="problem-step">
+            <span class="step-number">02</span>
+            <div class="event-icon event-icon--amber">!</div>
+            <h3>No one follows up</h3>
+            <p>No reminder. No call. No payment.</p>
+          </article>
+          <span class="problem-arrow" aria-hidden="true">→</span>
+          <article class="problem-step">
+            <span class="step-number">03</span>
+            <div class="event-icon event-icon--red">⌁</div>
+            <h3>Fingerprint still works</h3>
+            <p>The member walks in anyway.</p>
+          </article>
+        </div>
+        <p class="problem-close reveal"><strong>Renewal Desk fixes all three.</strong> It keeps the expiry date, reminder and access status in one clear workflow.</p>
       </div>
     </section>
 
-    <!-- ====== HOW IT WORKS ====== -->
-    <section class="section" id="how-it-works">
-      <div class="container">
-        <div class="text-center reveal">
-          <span class="section-label">How it works</span>
-          <h2>Three things that actually run your renewals.</h2>
-          <p class="text-secondary" style="max-width: 560px; margin: 0.75rem auto 0; font-size: 0.95rem;">Not 40 features you'll never use. Three mechanics that close the gap between "membership expired" and "money in your account."</p>
+    <section class="section workflow-section" id="how-it-works">
+      <div class="shell">
+        <div class="section-intro reveal">
+          <p class="eyebrow">How it works</p>
+          <h2>Three things happen automatically.</h2>
+          <p>Everything is built around the moment a membership is about to end.</p>
         </div>
 
-        <div class="features-grid reveal-stagger">
-
-          <!-- Feature 1: Tracking -->
-          <div class="feature-card" id="feature-tracking">
-            <div class="feature-card__icon feature-card__icon--calendar">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+        <div class="workflow-list">
+          <article class="workflow-card reveal">
+            <div class="workflow-card__copy">
+              <span class="card-number">01</span>
+              <h3>Know who is expiring.</h3>
+              <p>See upcoming, active and expired memberships in one view. Your staff knows who needs attention before renewal money slips away.</p>
+              <a href="#product" class="inline-link">See the dashboard <span>→</span></a>
             </div>
-            <h3>Every membership tracked to the day</h3>
-            <p>Add members once, set their plan and dates. The dashboard shows you exactly who's expiring this week, who's overdue, and who's active — at a glance, per gym.</p>
-
-            <!-- Mini member table -->
-            <div class="member-table-mockup" style="margin-top: 1.25rem;">
-              <table class="member-table">
-                <thead>
-                  <tr>
-                    <th>Member</th>
-                    <th>Expires</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="member-table__name">Rahul K.</td>
-                    <td class="member-table__date">Aug 15</td>
-                    <td><span class="status-pill status-pill--warning"><span class="status-pill__dot"></span>3 days</span></td>
-                  </tr>
-                  <tr>
-                    <td class="member-table__name">Priya M.</td>
-                    <td class="member-table__date">Aug 2</td>
-                    <td><span class="status-pill status-pill--expired"><span class="status-pill__dot"></span>Expired</span></td>
-                  </tr>
-                  <tr>
-                    <td class="member-table__name">Arjun S.</td>
-                    <td class="member-table__date">Sep 20</td>
-                    <td><span class="status-pill status-pill--active"><span class="status-pill__dot"></span>Active</span></td>
-                  </tr>
-                </tbody>
-              </table>
+            <div class="expiry-panel" aria-label="Upcoming membership expiry example">
+              <div class="panel-label">UPCOMING RENEWALS <span>View all</span></div>
+              <div class="renewal-row"><span class="avatar avatar--blue">KP</span><span><strong>Kiran P.</strong><small>Gold · Expires tomorrow</small></span><b class="state state--amber">1 day</b></div>
+              <div class="renewal-row"><span class="avatar avatar--purple">RS</span><span><strong>Rahul S.</strong><small>Annual · Expires 14 Aug</small></span><b class="state state--amber">2 days</b></div>
+              <div class="renewal-row"><span class="avatar avatar--pink">MR</span><span><strong>Manideep R.</strong><small>Monthly · Expired</small></span><b class="state state--red">Expired</b></div>
             </div>
-          </div>
+          </article>
 
-          <!-- Feature 2: WhatsApp Reminders -->
-          <div class="feature-card" id="feature-whatsapp">
-            <div class="feature-card__icon feature-card__icon--whatsapp">
-              <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          <article class="workflow-card workflow-card--reverse reveal">
+            <div class="workflow-card__copy">
+              <span class="card-number">02</span>
+              <h3>WhatsApp follows up for you.</h3>
+              <p>Each member gets a timely, personal reminder with your payment QR. Once payment is verified, future renewal reminders stop.</p>
+              <p class="smart-note"><span>✓</span><strong>Already renewed?</strong> We stop the reminder automatically.</p>
             </div>
-            <h3>WhatsApp reminders go out automatically</h3>
-            <p>Every day, the system scans for upcoming and overdue expirations and sends personalized WhatsApp messages — with your gym's payment QR code attached so members can pay right from the chat.</p>
-            <div class="feature-card__detail">
-              <strong style="color: var(--status-active); font-style: normal;">Smart skip:</strong> If a member already paid or has a verified payment in the last 7 days, they don't get reminded. No embarrassing duplicate messages.
-            </div>
-          </div>
-
-          <!-- Feature 3: Door Access -->
-          <div class="feature-card" id="feature-door">
-            <div class="feature-card__icon feature-card__icon--biometric">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M12 11c0-1.1-.9-2-2-2s-2 .9-2 2 2 4 2 4"></path><path d="M14.5 11c0-2.5-2-4.5-4.5-4.5S5.5 8.5 5.5 11c0 1 .5 2 .5 2"></path><path d="M17 11c0-3.9-3.1-7-7-7s-7 3.1-7 7c0 1.5.5 3 .5 3"></path><path d="M19.5 11c0-5.2-4.3-9.5-9.5-9.5S.5 5.8.5 11c0 2 .6 3.8.6 3.8"></path></svg>
-            </div>
-            <h3>The door locks itself</h3>
-            <p>Connected to the same eSSL or ZKTeco fingerprint scanner you already have at your entrance. When a membership lapses, that member's access turns off automatically. When they renew, it turns back on.</p>
-            <div class="feature-card__detail">
-              No awkward front-desk confrontation. No manual work for your staff. No more "membership khatam ho gaya but door abhi bhi khulta hai."
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ====== DASHBOARD SHOWCASE ====== -->
-    <section class="section section--alt" id="dashboard">
-      <div class="container">
-        <div class="text-center reveal">
-          <span class="section-label">The actual product</span>
-          <h2>This is what you see when you log in.</h2>
-          <p class="text-secondary" style="max-width: 540px; margin: 0.75rem auto 0; font-size: 0.95rem;">Not a concept render. This is the real Renewal Desk dashboard — members, payments, expiry tracking, WhatsApp reminder health, all in one screen.</p>
-        </div>
-        <div class="dashboard-showcase reveal" id="dashboard-showcase">
-          <div class="dashboard-showcase__frame">
-            <div class="dashboard-showcase__toolbar">
-              <div class="dashboard-showcase__dots">
-                <span></span><span></span><span></span>
-              </div>
-              <div class="dashboard-showcase__url">app.revorax.online/dashboard</div>
-            </div>
-            <img src="assets/dashboard.png" alt="Renewal Desk gym dashboard showing active members, upcoming renewals, recent payments, and WhatsApp reminder health stats" loading="lazy" class="dashboard-showcase__img">
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ====== BIOMETRIC DEEP DIVE ====== -->
-    <section class="section" id="biometric">
-      <div class="container">
-        <div class="biometric-demo reveal">
-          <div>
-            <span class="section-label">The real differentiator</span>
-            <h2 style="margin-bottom: 1rem;">Your biometric scanner finally knows who's paid.</h2>
-            <p class="text-secondary" style="line-height: 1.75; margin-bottom: 1.25rem;">
-              Most gym software has no idea your biometric door exists. Renewal Desk connects to it through a small Windows bridge app running on your gym's PC — the same PC your eSSL/ZKTeco device is already plugged into.
-            </p>
-            <p class="text-secondary" style="line-height: 1.75; margin-bottom: 1.25rem;">
-              When a membership expires, a <strong style="color: var(--status-expired);">disable command</strong> goes to the device. That member's fingerprint or face no longer opens the door. Period.
-            </p>
-            <p class="text-secondary" style="line-height: 1.75;">
-              When they renew and you verify the payment, an <strong style="color: var(--status-active);">enable command</strong> goes out instantly. Access restored. No one at the front desk had to do anything.
-            </p>
-          </div>
-
-          <div class="biometric-visual">
-            <!-- Fingerprint SVG -->
-            <div class="biometric-visual__icon">
-              <svg class="fingerprint-svg" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="48" cy="48" r="46" stroke="#2a2a2a" stroke-width="1.5"/>
-                <path d="M48 20c-15.464 0-28 12.536-28 28 0 5.6 1.64 10.8 4.464 15.2" stroke="#818cf8" stroke-width="2" stroke-linecap="round" opacity="0.3"/>
-                <path d="M71.536 63.2A27.87 27.87 0 0076 48c0-15.464-12.536-28-28-28" stroke="#818cf8" stroke-width="2" stroke-linecap="round" opacity="0.3"/>
-                <path d="M48 28c-11.046 0-20 8.954-20 20 0 4 1.176 7.728 3.2 10.864" stroke="#818cf8" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
-                <path d="M64.8 58.864A19.91 19.91 0 0068 48c0-11.046-8.954-20-20-20" stroke="#818cf8" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
-                <path d="M48 36c-6.627 0-12 5.373-12 12 0 2.4.704 4.636 1.92 6.512" stroke="#818cf8" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
-                <path d="M58.08 54.512A11.94 11.94 0 0060 48c0-6.627-5.373-12-12-12" stroke="#818cf8" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
-                <path d="M48 44c-2.209 0-4 1.791-4 4s1.791 4 4 4 4-1.791 4-4-1.791-4-4-4z" fill="#818cf8"/>
-              </svg>
-            </div>
-
-            <div class="biometric-visual__states">
-              <div class="biometric-state">
-                <div class="biometric-state__indicator biometric-state__indicator--locked"></div>
-                <span class="biometric-state__label">Expired</span>
-                <span class="biometric-state__sub">Door locked</span>
-              </div>
-              <div class="biometric-state">
-                <div class="biometric-state__indicator biometric-state__indicator--unlocked"></div>
-                <span class="biometric-state__label">Renewed</span>
-                <span class="biometric-state__sub">Door opens</span>
+            <div class="wa-panel">
+              <div class="wa-panel__bar"><span class="avatar avatar--green">YF</span><span><strong>Yodha Fitness</strong><small>online</small></span></div>
+              <div class="wa-panel__body">
+                <p class="wa-bubble">Hi Kiran 👋<br>Your gym membership expires tomorrow. Renew today to keep your access active.</p>
+                <div class="qr-attachment qr-attachment--wide"><img src="assets/qr-placeholder.png" alt="Example payment QR attachment" loading="lazy"><span><strong>Yodha Fitness payment QR</strong><small>Image · scan to pay</small></span></div>
+                <p class="delivery-label">Delivered <b>✓✓</b> · Read <b>✓✓</b></p>
               </div>
             </div>
+          </article>
+
+          <article class="workflow-card reveal">
+            <div class="workflow-card__copy">
+              <span class="card-number">03</span>
+              <h3>Expired means no more free entry.</h3>
+              <p>For compatible eSSL and ZKTeco setups, expiry can turn off a member’s biometric access. After renewal is verified, access can be restored.</p>
+              <a href="#biometric" class="inline-link">How compatible access works <span>→</span></a>
+            </div>
+            <div class="door-panel" aria-label="Biometric access status example">
+              <div class="door-panel__head"><span>BIOMETRIC ACCESS</span><span class="status-tag status-tag--red">Access denied</span></div>
+              <div class="door-member"><span class="avatar avatar--pink">MR</span><span><strong>Manideep R.</strong><small>Membership expired</small></span></div>
+              <div class="door-line"></div>
+              <div class="door-restored"><span class="restore-icon">✓</span><span><strong>After verified renewal</strong><small>Door access enabled</small></span><span class="status-tag status-tag--green">Active</span></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section dashboard-section" id="product">
+      <div class="shell">
+        <div class="section-intro section-intro--center reveal">
+          <p class="eyebrow">The actual product</p>
+          <h2>A clear picture of every renewal.</h2>
+          <p>This is the real Renewal Desk interface—not an illustration. Check expiry, payments and reminder health from one dashboard.</p>
+        </div>
+        <figure class="dashboard-frame reveal">
+          <div class="browser-bar"><span><i></i><i></i><i></i></span><b>app.revorax.online/dashboard</b></div>
+          <img src="assets/renewal-dashboard-real.png" alt="Real Renewal Desk dashboard with membership counts, upcoming renewals, recent payments and reminder health" loading="lazy">
+        </figure>
+        <div class="dashboard-callouts reveal" aria-label="Dashboard features">
+          <span><b>01</b> Active, expiring and expired members</span>
+          <span><b>02</b> Upcoming renewals and recent payments</span>
+          <span><b>03</b> Reminder delivery and read health</span>
+          <span><b>04</b> Verified revenue visibility</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section account-metrics">
+      <div class="shell">
+        <div class="metrics-layout">
+          <div class="section-intro reveal">
+            <p class="eyebrow">Product activity</p>
+            <h2>See what is actually happening.</h2>
+            <p>Example figures from a live account dashboard. They are product activity, not company-wide claims.</p>
+            <p class="metric-disclaimer">Live account data shown for product illustration.</p>
+          </div>
+          <div class="account-metric-grid reveal">
+            <div><span>Active members</span><strong>156</strong><i class="metric-up">+18 this month</i></div>
+            <div><span>Expiring soon</span><strong>38</strong><i class="metric-amber">Next 7 days</i></div>
+            <div><span>Expired</span><strong>74</strong><i class="metric-red">Needs attention</i></div>
+            <div><span>Verified revenue</span><strong>₹24,680</strong><i class="metric-up">This month</i></div>
+            <div><span>Reminders sent</span><strong>22,458</strong><i class="metric-up">Reminder health</i></div>
+            <div><span>Delivered</span><strong>21,872</strong><i class="metric-up">97.4%</i></div>
+            <div><span>Read</span><strong>18,643</strong><i class="metric-up">85.2%</i></div>
+            <div><span>Replies</span><strong>1,256</strong><i class="metric-amber">5.6%</i></div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ====== PAYMENT VERIFICATION ====== -->
-    <section class="section" id="payment">
-      <div class="container">
-        <div class="payment-block reveal">
-          <div>
-            <span class="section-label">Payment verification</span>
-            <h2 style="margin-bottom: 1rem;">Confirm the payment. Everything else updates itself.</h2>
-            <p class="text-secondary" style="line-height: 1.75;">
-              This is India — members pay via UPI, Google Pay, or cash at the counter. No complex payment gateway needed. When a member pays, your staff opens Renewal Desk and marks the payment as verified. That's it.
-            </p>
-          </div>
+    <section class="section biometric-section" id="biometric">
+      <div class="shell biometric-layout">
+        <div class="biometric-copy reveal">
+          <p class="eyebrow eyebrow--light">Biometric access</p>
+          <h2>Your biometric scanner finally knows when someone has expired.</h2>
+          <p>Renewal Desk connects to compatible eSSL and ZKTeco systems through a small Windows bridge running on your gym’s existing PC.</p>
+          <p class="compatibility-note">Compatible biometric setup required. A Windows bridge runs on the gym’s existing computer.</p>
+          <a class="button button--white" href="https://wa.me/917995854994?text=Hi%2C%20I%27d%20like%20to%20check%20whether%20my%20biometric%20setup%20is%20compatible">Check your setup <span>→</span></a>
+        </div>
+        <ol class="biometric-flow reveal">
+          <li><span>01</span><strong>Membership expiry</strong><small>Plan reaches its end date</small></li>
+          <li><span>02</span><strong>Renewal Desk detects it</strong><small>Expiry state is updated</small></li>
+          <li class="biometric-flow__blocked"><span>03</span><strong>Access disabled</strong><small>Compatible bridge updates the device</small></li>
+          <li><span>04</span><strong>Member renews</strong><small>Payment is verified</small></li>
+          <li class="biometric-flow__active"><span>05</span><strong>Access restored</strong><small>Membership becomes active</small></li>
+        </ol>
+      </div>
+    </section>
 
-          <div class="payment-flow">
-            <div class="payment-step">
-              <div class="payment-step__num">1</div>
-              <div class="payment-step__text"><strong>Member pays via UPI/cash</strong> — scans the QR from WhatsApp or pays at the front desk.</div>
-            </div>
-            <div class="payment-step">
-              <div class="payment-step__num">2</div>
-              <div class="payment-step__text"><strong>Staff verifies in Renewal Desk</strong> — one click to confirm. Membership dates update instantly.</div>
-            </div>
-            <div class="payment-step">
-              <div class="payment-step__num">3</div>
-              <div class="payment-step__text"><strong>Door access re-enables automatically</strong> — member's fingerprint works again. No further reminders sent.</div>
-            </div>
+    <section class="section whatsapp-section" id="whatsapp">
+      <div class="shell whatsapp-layout">
+        <div class="whatsapp-phone reveal">
+          <figure class="meta-screenshot">
+            <img src="assets/meta-performance-real.png" alt="Real Meta WhatsApp Business performance report showing 369 messages sent and delivered, 327 messages read, and a cost of ₹0.11 per delivered message" loading="lazy">
+            <figcaption>Real Meta WhatsApp Business report — last 90 days</figcaption>
+          </figure>
+          <div class="phone-speaker"></div>
+          <div class="phone-head"><span class="avatar avatar--green">YF</span><span><strong>Yodha Fitness</strong><small>Business account</small></span></div>
+          <div class="phone-body">
+            <p class="phone-date">TODAY</p>
+            <div class="phone-message">Hi Kiran 👋<br><br>Your gym membership expires tomorrow.<br>Renew today to keep your access active.<time>10:00 <b>✓✓</b></time></div>
+            <div class="phone-qr"><img src="assets/qr-placeholder.png" alt="Example QR payment attachment" loading="lazy"><span><strong>payment-qr.png</strong><small>Tap to view</small></span><time>10:00 <b>✓✓</b></time></div>
+            <div class="phone-reply">Done! Paid via UPI.<time>10:12</time></div>
+          </div>
+        </div>
+        <div class="whatsapp-copy reveal">
+          <p class="eyebrow">WhatsApp reminders</p>
+          <h2>Your staff shouldn’t have to type the same renewal message every day.</h2>
+          <p>Send a ready-to-pay reminder at the right time, then see whether it was delivered and read.</p>
+          <ul class="tick-list">
+            <li><span>✓</span> Automatic reminders based on expiry date</li>
+            <li><span>✓</span> Payment QR attached to the message</li>
+            <li><span>✓</span> Approved templates when required</li>
+            <li><span>✓</span> Retry logging and delivery visibility</li>
+            <li><span>✓</span> Duplicate-reminder protection after payment</li>
+          </ul>
+          <a class="button button--outline" href="https://wa.me/917995854994?text=Hi%2C%20I%27d%20like%20to%20see%20Renewal%20Desk%20WhatsApp%20reminders">See a reminder flow <span>→</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section roi-section">
+      <div class="shell">
+        <div class="section-intro section-intro--center reveal">
+          <p class="eyebrow">Renewal value calculator</p>
+          <h2>How many renewals are slipping through every month?</h2>
+          <p>Use your own numbers to explore the value of following up. This is an example—not a savings claim.</p>
+        </div>
+        <div class="calculator reveal">
+          <form class="calculator-inputs" id="roi-calculator">
+            <label>Active members<input id="active-members" type="number" min="1" value="200"></label>
+            <label>Average membership fee<input id="membership-fee" type="number" min="1" value="1500" inputmode="numeric"></label>
+            <label>Monthly expiry rate <span class="input-suffix">%</span><input id="expiry-rate" type="number" min="0" max="100" value="10"></label>
+            <label>Current renewal rate <span class="input-suffix">%</span><input id="renewal-rate" type="number" min="0" max="100" value="55"></label>
+          </form>
+          <div class="calculator-results" aria-live="polite">
+            <p class="example-pill">Example</p>
+            <div><span>Potential monthly renewal value</span><strong id="potential-value">₹30,000</strong></div>
+            <div><span>Value at your current renewal rate</span><strong id="current-value">₹16,500</strong></div>
+            <div class="result-highlight"><span>Value of 5 additional renewals</span><strong id="five-renewals-value">₹7,500</strong></div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ====== MULTI-GYM ====== -->
-    <section class="section section--alt" id="multi-gym">
-      <div class="container">
-        <div class="reveal">
-          <div class="text-center" style="margin-bottom: 2rem;">
-            <span class="section-label">Multiple locations</span>
-            <h2>One login. Every gym. Data never crosses.</h2>
-          </div>
-
-          <div class="multi-gym-card">
-            <div>
-              <p class="text-secondary" style="line-height: 1.75; margin-bottom: 1rem;">
-                Own 2 gyms? 3? Manage all locations from a single dashboard. Your staff accounts are scoped — they only see the gym they're assigned to. Members from one location never appear in another.
-              </p>
-              <p class="text-secondary" style="line-height: 1.75;">
-                Every table in the system is isolated by gym. Not a shared pool with filters — actual data separation. Each gym's data is its own.
-              </p>
-            </div>
-
-            <div class="multi-gym-card__visual">
-              <div class="gym-location-pill">
-                <span class="gym-location-pill__icon">🏋️</span>
-                <span class="gym-location-pill__name">FitZone Ameerpet</span>
-                <span class="gym-location-pill__role">Owner</span>
-              </div>
-              <div class="gym-location-pill">
-                <span class="gym-location-pill__icon">💪</span>
-                <span class="gym-location-pill__name">FitZone Kukatpally</span>
-                <span class="gym-location-pill__role">Owner</span>
-              </div>
-              <div class="gym-location-pill">
-                <span class="gym-location-pill__icon">👤</span>
-                <span class="gym-location-pill__name">Ravi (Front Desk)</span>
-                <span class="gym-location-pill__role">Staff</span>
-              </div>
-            </div>
-          </div>
+    <section class="section comparison-section">
+      <div class="shell">
+        <div class="section-intro section-intro--center reveal">
+          <p class="eyebrow">The day-to-day difference</p>
+          <h2>Don’t leave renewals to a spreadsheet.</h2>
+        </div>
+        <div class="comparison-grid reveal">
+          <article class="comparison-card comparison-card--without">
+            <p class="comparison-label">Without Renewal Desk</p>
+            <h3>Staff are left chasing the gap.</h3>
+            <ul><li>Expiry dates in spreadsheets</li><li>Manual WhatsApp follow-up</li><li>Forgotten reminders and payments</li><li>Expired members still entering</li><li>No clear reminder history</li></ul>
+          </article>
+          <article class="comparison-card comparison-card--with">
+            <p class="comparison-label">With Renewal Desk</p>
+            <h3>The right action happens on time.</h3>
+            <ul><li>Expiry tracked automatically</li><li>WhatsApp reminder with payment QR</li><li>Verified payments update status</li><li>Compatible biometric access control</li><li>Clear dashboard and reminder logs</li></ul>
+          </article>
         </div>
       </div>
     </section>
 
-    <!-- ====== FOUNDER CREDIBILITY ====== -->
-    <section class="section" id="founder">
-      <div class="container">
-        <div class="text-center reveal">
-          <span class="section-label">Who built this</span>
-          <h2>Not a big company. A builder who talked to gym owners first.</h2>
+    <section class="section multi-gym-section">
+      <div class="shell multi-gym-card reveal">
+        <div>
+          <p class="eyebrow">For small chains</p>
+          <h2>One login. Every gym.</h2>
+          <p>Owners can see all locations. Staff see only the gym assigned to them, and member data stays separated by gym.</p>
         </div>
-
-        <div class="founder-block reveal">
-          <div class="founder-block__avatar">BJ</div>
-          <div>
-            <p class="founder-block__quote">
-              "I cold-called gyms across Hyderabad before writing a single line of code. Every owner told me the same thing: members expire and they don't find out until someone walks in expecting free entry. Renewal Desk exists because that problem shouldn't require a ₹50,000/year enterprise tool to solve."
-            </p>
-            <div class="founder-block__name">Bharath Janagam</div>
-            <div class="founder-block__role">18-year-old founder from Hyderabad · Building Revorax</div>
-          </div>
+        <div class="location-switcher" aria-label="Example gym locations">
+          <div class="location location--selected"><span class="location-dot"></span><strong>Banjara Hills</strong><small>Owner view</small><b>156 members</b></div>
+          <div class="location"><span class="location-dot"></span><strong>Ameerpet</strong><small>Manager view</small><b>112 members</b></div>
+          <div class="location"><span class="location-dot"></span><strong>Kukatpally</strong><small>Staff view</small><b>94 members</b></div>
         </div>
       </div>
     </section>
 
-    <!-- ====== PRICING ====== -->
-    <section class="section section--alt" id="pricing">
-      <div class="container">
-        <div class="text-center reveal">
-          <span class="section-label">Pricing</span>
-          <h2>Simple. Per gym. No hidden charges.</h2>
-          <p class="text-secondary" style="max-width: 480px; margin: 0.75rem auto 0;">No per-member fees. No setup costs. One price covers everything — WhatsApp reminders, biometric integration, dashboard, staff accounts.</p>
+    <section class="section payment-section">
+      <div class="shell payment-layout">
+        <div class="payment-copy reveal">
+          <p class="eyebrow">Payment verification</p>
+          <h2>When the payment comes in, mark it once.</h2>
+          <p>Once payment is verified, Renewal Desk makes the next steps clear—membership can be active again, reminders stop and compatible access can be restored.</p>
+          <a class="inline-link" href="https://wa.me/917995854994?text=Hi%2C%20I%27d%20like%20to%20see%20the%20payment%20verification%20flow">See the payment flow <span>→</span></a>
         </div>
-
-        <div class="pricing-card reveal" id="pricing-card">
-          <div class="pricing-card__name">Renewal Desk</div>
-          <div class="pricing-card__price">
-            Contact us <span></span>
-          </div>
-          <div class="pricing-card__period">per gym · billed monthly</div>
-
-          <div class="pricing-card__features">
-            <div class="pricing-card__feature">Unlimited members per gym</div>
-            <div class="pricing-card__feature">Automatic WhatsApp renewal reminders</div>
-            <div class="pricing-card__feature">Payment QR attached in WhatsApp messages</div>
-            <div class="pricing-card__feature">eSSL/ZKTeco biometric door integration</div>
-            <div class="pricing-card__feature">Staff accounts scoped per location</div>
-            <div class="pricing-card__feature">Reminder log — proof every message went out</div>
-            <div class="pricing-card__feature">Multi-gym support from one dashboard</div>
-          </div>
-
-          <a href="https://wa.me/917995854994?text=Hi%2C%20I%27m%20interested%20in%20Renewal%20Desk%20pricing%20for%20my%20gym" class="btn btn--whatsapp" style="width: 100%;" id="pricing-cta-whatsapp">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            Talk to us about pricing
-          </a>
-        </div>
+        <ol class="payment-steps reveal">
+          <li><b>1</b><span><strong>Member pays via UPI / QR</strong><small>Payment proof reaches your gym</small></span></li>
+          <li><b>2</b><span><strong>Owner verifies payment</strong><small>Confirm it in Renewal Desk</small></span></li>
+          <li><b>3</b><span><strong>Membership becomes active</strong><small>Future renewal reminders stop</small></span></li>
+          <li><b>4</b><span><strong>Access can be restored</strong><small>For compatible biometric setups</small></span></li>
+        </ol>
       </div>
     </section>
 
-    <!-- ====== FAQ ====== -->
-    <section class="section" id="faq">
-      <div class="container">
-        <div class="text-center reveal">
-          <span class="section-label">FAQ</span>
-          <h2>Questions gym owners actually ask.</h2>
+    <section class="section testimonial-section" aria-labelledby="madhu-review-heading">
+      <div class="shell testimonial-card reveal">
+        <div class="testimonial-card__eyebrow">
+          <span class="quote-mark" aria-hidden="true">“</span>
+          <p class="eyebrow">From a gym owner</p>
         </div>
+        <blockquote id="madhu-review-heading">Renewal Desk has made managing our gym much easier. The website gives our gym a professional presence, and the renewal reminders help us follow up with members without doing everything manually. The biometric integration is especially useful because membership expiry and gym access are connected instead of being handled separately. The team understood what we actually needed and built the system around our day-to-day gym operations.</blockquote>
+        <footer class="testimonial-card__author">
+          <span class="testimonial-avatar" aria-hidden="true">MA</span>
+          <cite><strong>Madhu</strong><span>Yodha Fitness · Palmakul, Hyderabad</span></cite>
+        </footer>
+      </div>
+    </section>
 
+    <section class="section founder-section">
+      <div class="shell founder-card reveal">
+        <div class="founder-mark"><img src="assets/founder-bharath.jpg" alt="Bharath, founder of Revorax" loading="lazy"></div>
+        <div><p class="eyebrow">Built in Hyderabad</p><h2>Built because gym owners kept having the same problem.</h2><p>Renewal Desk is built by Bharath at Revorax for the practical work behind a gym: expiry dates, renewals, payments, staff follow-up and door access.</p><p class="founder-name"><strong>Bharath</strong> · Founder &amp; Builder, Revorax</p></div>
+        <div class="founder-proof">Currently onboarding gyms in Hyderabad.</div>
+      </div>
+    </section>
+
+    <section class="section pricing-section" id="pricing">
+      <div class="shell">
+        <div class="section-intro section-intro--center reveal"><p class="eyebrow">Simple pricing</p><h2>Plans built for individual gyms and small chains.</h2><p>Tell us about your gyms and biometric setup. We’ll share the right pricing for your workflow.</p></div>
+        <article class="pricing-card reveal">
+          <div><p class="pricing-name">Renewal Desk</p><h3>Everything your gym needs to stay on top of renewals.</h3></div>
+          <ul><li>Membership expiry tracking</li><li>WhatsApp renewal reminders</li><li>Payment verification and QR sharing</li><li>Reminder logs and delivery visibility</li><li>Compatible biometric access integration</li></ul>
+          <a class="button" href="https://wa.me/917995854994?text=Hi%2C%20I%27d%20like%20Renewal%20Desk%20pricing%20for%20my%20gym">Get pricing <span>→</span></a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section faq-section" id="faq">
+      <div class="shell faq-layout">
+        <div class="section-intro reveal"><p class="eyebrow">FAQ</p><h2>Questions gym owners usually ask.</h2><p>Prefer a straight answer? Message us and we’ll walk through your current setup.</p><a class="button button--outline" href="https://wa.me/917995854994?text=Hi%2C%20I%20have%20a%20question%20about%20Renewal%20Desk">WhatsApp us <span>→</span></a></div>
         <div class="faq-list reveal">
-
-          <div class="faq-item" id="faq-biometric">
-            <button class="faq-question" aria-expanded="false">
-              Do I need to buy a new biometric machine?
-              <span class="faq-question__icon">+</span>
-            </button>
-            <div class="faq-answer">
-              <div class="faq-answer__inner">
-                No. Renewal Desk connects to eSSL and ZKTeco devices — the same brands most Indian gyms already use (X990, F22, K45 Pro, SpeedFace series, etc.). If you already have a fingerprint or face scanner at your door, there's a good chance it's compatible. The bridge app runs on the Windows PC your device is already plugged into. No new hardware needed.
-              </div>
-            </div>
-          </div>
-
-          <div class="faq-item" id="faq-whatsapp-setup">
-            <button class="faq-question" aria-expanded="false">
-              Does this work if I don't have WhatsApp Business set up?
-              <span class="faq-question__icon">+</span>
-            </button>
-            <div class="faq-answer">
-              <div class="faq-answer__inner">
-                You'll need a WhatsApp Business account connected through the official Meta (WhatsApp Business Cloud) API. Each gym uses its own WhatsApp Business number — not a shared or third-party number. We'll help you set this up during onboarding. It's what ensures your messages don't get flagged as spam and your gym name shows up properly on the member's phone.
-              </div>
-            </div>
-          </div>
-
-          <div class="faq-item" id="faq-internet">
-            <button class="faq-question" aria-expanded="false">
-              What happens if the internet goes down at my gym?
-              <span class="faq-question__icon">+</span>
-            </button>
-            <div class="faq-answer">
-              <div class="faq-answer__inner">
-                WhatsApp reminders are sent from the cloud — they don't depend on your gym's internet. The biometric bridge does need your local PC to be online to receive enable/disable commands. If the internet drops, the device keeps working with its last-known state (existing members can still scan in). Once the connection is back, any pending access changes sync automatically. Nothing is lost.
-              </div>
-            </div>
-          </div>
-
-          <div class="faq-item" id="faq-data">
-            <button class="faq-question" aria-expanded="false">
-              Is my members' data shared with other gyms?
-              <span class="faq-question__icon">+</span>
-            </button>
-            <div class="faq-answer">
-              <div class="faq-answer__inner">
-                No. Every gym's data is completely isolated. Each database query is scoped to your gym ID — one gym owner never sees another gym's members, reminder logs, or payment records. Even if you own multiple gyms, each location's data stays separate unless you're viewing it from the owner dashboard.
-              </div>
-            </div>
-          </div>
-
-          <div class="faq-item" id="faq-revorax">
-            <button class="faq-question" aria-expanded="false">
-              Is Renewal Desk part of a bigger company?
-              <span class="faq-question__icon">+</span>
-            </button>
-            <div class="faq-answer">
-              <div class="faq-answer__inner">
-                Yes. Renewal Desk is built and maintained by Revorax, a SaaS company focused on automation tools for small businesses. Renewal Desk is our first product, purpose-built for gym owners. You can learn more at <a href="https://revorax.online" style="color: var(--accent); text-decoration: underline;">revorax.online</a>.
-              </div>
-            </div>
-          </div>
-
+          <details open><summary>Do I need a new biometric machine?<span>+</span></summary><p>No. Renewal Desk can connect to compatible eSSL and ZKTeco devices already installed at the gym through the Windows bridge.</p></details>
+          <details><summary>Do I need WhatsApp Business?<span>+</span></summary><p>Yes. Each gym connects its own WhatsApp Business setup so members receive messages from the right gym number.</p></details>
+          <details><summary>What happens when someone renews?<span>+</span></summary><p>After payment is verified, their membership becomes active, renewal reminders stop, and compatible biometric access can be restored.</p></details>
+          <details><summary>What if a member already paid?<span>+</span></summary><p>The reminder logic checks recent verified payments so members are not sent unnecessary renewal reminders.</p></details>
+          <details><summary>What if the internet goes down?<span>+</span></summary><p>The exact behavior depends on your installed device and PC setup. We will confirm it during your demo rather than promise an offline access state we cannot verify.</p></details>
+          <details><summary>Is my data shared with another gym?<span>+</span></summary><p>No. Each gym’s members, payments and staff access are kept separate.</p></details>
+          <details><summary>Does it work with every biometric machine?<span>+</span></summary><p>No. Renewal Desk currently supports compatible eSSL and ZKTeco setups through the Windows bridge.</p></details>
         </div>
       </div>
     </section>
 
-    <!-- ====== FINAL CTA ====== -->
-    <section class="section section--alt" id="contact">
-      <div class="container">
-        <div class="final-cta reveal">
-          <h2>Ready to stop losing renewal money?</h2>
-          <p>Talk to us on WhatsApp. We'll show you how Renewal Desk works on your actual member list — no generic demo, no sales deck.</p>
-          <div class="final-cta__buttons">
-            <a href="https://wa.me/917995854994?text=Hi%20Bharath%2C%20I%20want%20to%20try%20Renewal%20Desk%20for%20my%20gym.%20Can%20you%20show%20me%20a%20demo%3F" class="btn btn--whatsapp" id="final-cta-whatsapp">
-              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-              Chat with Bharath on WhatsApp
-            </a>
-            <a href="#hero" class="btn btn--outline" id="final-cta-top">Back to top ↑</a>
-          </div>
-        </div>
+    <section class="final-cta">
+      <div class="shell reveal">
+        <p class="eyebrow eyebrow--light">See it on your own workflow</p>
+        <h2>Stop finding out about expired members after they walk through the door.</h2>
+        <p>See Renewal Desk with your own member workflow.</p>
+        <div><a class="button button--white" href="https://wa.me/917995854994?text=Hi%2C%20I%27d%20like%20to%20book%20a%2010-minute%20Renewal%20Desk%20demo">Book a demo <span>→</span></a><a class="button button--on-dark" href="https://wa.me/917995854994?text=Hi%2C%20I%27m%20interested%20in%20Renewal%20Desk">WhatsApp us</a></div>
+        <small>10-minute demo · No pressure</small>
       </div>
     </section>
-
   </main>
 
-  <!-- ====== FOOTER ====== -->
-  <footer class="footer">
-    <div class="container">
-      <div class="footer__inner">
-        <div class="footer__brand">
-          <div class="footer__product-name">Renewal Desk</div>
-          <div class="footer__parent-note">A Revorax product · Built in Hyderabad</div>
-        </div>
-
-        <div class="footer__socials">
-          <!-- WhatsApp -->
-          <a href="https://wa.me/917995854994" class="footer__social-link" id="footer-whatsapp" aria-label="WhatsApp" title="WhatsApp">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          </a>
-          <!-- LinkedIn -->
-          <a href="https://www.linkedin.com/in/janagam-bharath-9ab1b235b/" class="footer__social-link" id="footer-linkedin" aria-label="LinkedIn" title="LinkedIn" target="_blank" rel="noopener">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-          </a>
-          <!-- Instagram -->
-          <a href="https://www.instagram.com/bharath._ai/" class="footer__social-link" id="footer-instagram" aria-label="Instagram" title="Instagram" target="_blank" rel="noopener">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-          </a>
-          <!-- YouTube -->
-          <a href="https://www.youtube.com/@bharathai" class="footer__social-link" id="footer-youtube" aria-label="YouTube" title="YouTube" target="_blank" rel="noopener">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-          </a>
-        </div>
-      </div>
-      <div class="footer__copyright">
-        © 2026 Revorax. All rights reserved. · Hyderabad, Telangana, India · <a href="tel:+917995854994" style="color: var(--text-muted);">+91 79958 54994</a>
-      </div>
+  <footer class="site-footer" id="contact">
+    <div class="shell footer-grid">
+      <div><a class="brand" href="#top"><span class="brand-mark">R</span><span><strong>Renewal Desk</strong><small>A Revorax product</small></span></a><p>Practical software for real gym renewal workflows.</p></div>
+      <div class="footer-links"><a href="#product">Product</a><a href="#how-it-works">How it works</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a><a href="https://wa.me/917995854994?text=Hi%2C%20I%27m%20interested%20in%20Renewal%20Desk">Contact</a></div>
+      <div class="footer-contact"><strong>Hyderabad, India</strong><a href="https://wa.me/917995854994?text=Hi%2C%20I%27m%20interested%20in%20Renewal%20Desk">Chat on WhatsApp <span>→</span></a></div>
     </div>
+    <div class="shell footer-bottom">© 2026 Revorax. All rights reserved.</div>
   </footer>
 
+  <div class="mobile-cta" aria-label="Quick actions"><a href="https://wa.me/917995854994?text=Hi%2C%20I%27d%20like%20to%20book%20a%2010-minute%20Renewal%20Desk%20demo">Book demo</a><a href="https://wa.me/917995854994?text=Hi%2C%20I%27m%20interested%20in%20Renewal%20Desk">WhatsApp</a></div>
   <script src="script.js"></script>
 </body>
 </html>
