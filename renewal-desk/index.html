@@ -33,7 +33,7 @@
       <nav class="site-nav" id="site-nav" aria-label="Primary navigation">
         <a href="#product">Product</a>
         <a href="#how-it-works">How it works</a>
-        <a href="#biometric">Biometric access</a>
+        <a href="#biometric">Biometric</a>
         <a href="#pricing">Pricing</a>
         <a href="#faq">FAQ</a>
       </nav>
@@ -51,7 +51,7 @@
         <div class="hero-copy reveal">
           <p class="eyebrow"><span></span> Renewal Desk for gyms</p>
           <h1>Stop letting expired members walk in for free.</h1>
-          <p class="hero-lede">Track membership expiry, automatically remind members on WhatsApp, verify renewals, and control compatible biometric access when memberships expire.</p>
+          <p class="hero-lede">Automatic WhatsApp renewal reminders for gyms — with payment verification and optional biometric access control.</p>
           <div class="hero-actions">
             <a class="button" href="https://wa.me/917995854994?text=Hi%2C%20I%27d%20like%20to%20talk%20about%20Renewal%20Desk%20for%20my%20gym">Chat on WhatsApp <span aria-hidden="true">→</span></a>
             <a class="button button--ghost" href="#how-it-works">See how it works <span aria-hidden="true">→</span></a>
@@ -187,8 +187,8 @@
           <article class="workflow-card workflow-card--reverse reveal">
             <div class="workflow-card__copy">
               <span class="card-number">04</span>
-              <h3>Payment verification updates access.</h3>
-              <p>Your owner or staff verifies the UPI or QR payment. The membership updates, future reminders stop, and compatible access can be restored.</p>
+              <h3>Renew the member.</h3>
+              <p>Your owner or staff verifies the UPI or QR payment. Membership status updates and future reminders stop. Compatible access can then be re-enabled.</p>
               <a href="#biometric" class="inline-link">How compatible access works <span>→</span></a>
             </div>
             <div class="door-panel" aria-label="Biometric access status example">
@@ -231,27 +231,6 @@
       </div>
     </section>
 
-    <section class="section biometric-section" id="biometric">
-      <div class="shell biometric-layout">
-        <div class="biometric-copy reveal">
-          <p class="eyebrow eyebrow--light">Biometric access</p>
-          <h2>When the membership expires, the fingerprint should stop working too.</h2>
-          <p>Renewal Desk can connect to compatible eSSL and ZKTeco biometric devices through a small Windows bridge installed on your gym’s PC.</p>
-          <p class="compatibility-note">Compatible biometric setup required. A Windows bridge runs on the gym’s existing computer.</p>
-          <p class="biometric-reassurance">No manual lookup. No awkward front-desk conversation. No forgotten access.</p>
-          <a class="button button--white" href="https://wa.me/917995854994?text=Hi%2C%20I%27d%20like%20to%20check%20whether%20my%20biometric%20setup%20is%20compatible">Check your setup <span>→</span></a>
-        </div>
-        <ol class="biometric-flow reveal">
-          <li><span>01</span><strong>Membership expires</strong><small>Plan reaches its end date</small></li>
-          <li><span>02</span><strong>Renewal Desk marks access inactive</strong><small>The membership state is updated</small></li>
-          <li class="biometric-flow__blocked"><span>03</span><strong>Bridge sends the disable command</strong><small>To a compatible device on your gym PC</small></li>
-          <li class="biometric-flow__blocked"><span>04</span><strong>Biometric device denies access</strong><small>The expired member cannot enter</small></li>
-          <li><span>05</span><strong>Payment is verified</strong><small>The owner or staff confirms the UPI / QR payment</small></li>
-          <li class="biometric-flow__active"><span>06</span><strong>Access is re-enabled</strong><small>Membership is active again</small></li>
-        </ol>
-      </div>
-    </section>
-
     <section class="section whatsapp-section" id="whatsapp">
       <div class="shell whatsapp-layout">
         <div class="whatsapp-phone reveal">
@@ -259,15 +238,16 @@
           <div class="phone-head"><span class="avatar avatar--green">YF</span><span><strong>Yodha Fitness</strong><small>Business account</small></span></div>
           <div class="phone-body">
             <p class="phone-date">TODAY</p>
-            <div class="phone-message">Hi Kiran 👋<br><br>Your gym membership expires tomorrow.<br>Renew today to keep your access active.<time>10:00 <b>✓✓</b></time></div>
+            <div class="phone-message">Hi Kiran 👋<br><br>Your membership expires on <strong>15 Aug</strong>.<br>Renew today to keep your membership active.<time>10:00 <b>✓✓</b></time></div>
             <div class="phone-qr"><img src="assets/qr-placeholder.png" alt="Example QR payment attachment" loading="lazy"><span><strong>payment-qr.png</strong><small>Tap to view</small></span><time>10:00 <b>✓✓</b></time></div>
             <div class="phone-reply">Done! Paid via UPI.<time>10:12</time></div>
           </div>
         </div>
         <div class="whatsapp-copy reveal">
           <p class="eyebrow">WhatsApp reminders</p>
-          <h2>Your staff shouldn’t have to type the same renewal message every day.</h2>
+          <h2>Automatic WhatsApp reminders that keep renewals moving.</h2>
           <p>Send a ready-to-pay reminder at the right time, then see whether it was delivered and read. Each gym connects its own WhatsApp Business setup through the official Meta Cloud API flow.</p>
+          <p class="whatsapp-skip"><strong>Already renewed?</strong> We check the payment and renewal state before sending another reminder.</p>
           <ul class="tick-list">
             <li><span>✓</span> Automatic reminders based on expiry date</li>
             <li><span>✓</span> Payment QR attached to the message</li>
@@ -277,6 +257,27 @@
           </ul>
           <a class="button button--outline" href="https://wa.me/917995854994?text=Hi%2C%20I%27d%20like%20to%20see%20Renewal%20Desk%20WhatsApp%20reminders">See a reminder flow <span>→</span></a>
         </div>
+      </div>
+    </section>
+
+    <section class="section biometric-section" id="biometric">
+      <div class="shell biometric-layout">
+        <div class="biometric-copy reveal">
+          <p class="eyebrow eyebrow--light">Optional biometric access control</p>
+          <h2>When the membership expires, the fingerprint should stop working too.</h2>
+          <p>Already have eSSL or ZKTeco? Renewal Desk can connect to compatible biometric hardware through a Windows bridge running on the gym’s PC.</p>
+          <p class="compatibility-note">Compatible eSSL/ZKTeco setup required. This is an additional capability—not a requirement for renewal reminders.</p>
+          <p class="biometric-reassurance">No manual lookup. No awkward front-desk conversation. No forgotten access.</p>
+          <a class="button button--white" href="https://wa.me/917995854994?text=Hi%2C%20I%27d%20like%20to%20check%20whether%20my%20biometric%20setup%20is%20compatible">Check your setup <span>→</span></a>
+        </div>
+        <ol class="biometric-flow reveal">
+          <li><span>01</span><strong>Membership expires</strong><small>Plan reaches its end date</small></li>
+          <li><span>02</span><strong>Renewal Desk marks the member expired</strong><small>The membership state is updated</small></li>
+          <li class="biometric-flow__blocked"><span>03</span><strong>Windows bridge updates the device</strong><small>For compatible hardware on your gym PC</small></li>
+          <li class="biometric-flow__blocked"><span>04</span><strong>Member access is automatically disabled</strong><small>The expired member cannot be authorised</small></li>
+          <li><span>05</span><strong>Payment is verified</strong><small>The owner or staff confirms the UPI / QR payment</small></li>
+          <li class="biometric-flow__active"><span>06</span><strong>Member access is re-enabled</strong><small>Membership is active again</small></li>
+        </ol>
       </div>
     </section>
 
@@ -314,12 +315,12 @@
           <article class="comparison-card comparison-card--without">
             <p class="comparison-label">Without Renewal Desk</p>
             <h3>Staff are left chasing the gap.</h3>
-            <ul><li>Expiry dates in Excel or a notebook</li><li>Staff manually texting members</li><li>Payments updated in more than one place</li><li>Expired members still entering</li><li>Owner finds the problem too late</li></ul>
+            <ul><li>Spreadsheet or notebook tracking</li><li>Manual follow-up and WhatsApp lists</li><li>Staff checking multiple places</li><li>Forgotten expiries</li><li>Compatible biometric access still active</li></ul>
           </article>
           <article class="comparison-card comparison-card--with">
             <p class="comparison-label">With Renewal Desk</p>
             <h3>The right action happens on time.</h3>
-            <ul><li>Expiry dates visible in one place</li><li>WhatsApp reminder with payment QR</li><li>Verified payments update membership</li><li>Compatible biometric access reacts to status</li><li>Clear dashboard and reminder logs</li></ul>
+            <ul><li>Expiry tracking in one place</li><li>Automatic WhatsApp reminders with QR</li><li>Staff payment verification</li><li>Reminder suppression after payment</li><li>Optional compatible biometric control</li></ul>
           </article>
         </div>
       </div>
