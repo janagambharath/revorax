@@ -1,0 +1,5 @@
+[phases.setup]
+nixPkgs = ["python312", "nodejs_22"]
+
+[phases.build]
+cmds = ["cd dental && npm ci && npm run build"]

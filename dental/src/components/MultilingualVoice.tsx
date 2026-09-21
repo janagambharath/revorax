@@ -117,6 +117,29 @@ export default function MultilingualVoice() {
           })}
         </div>
 
+        {activeLang === "te" && (
+          <div
+            className={cn(
+              "max-w-[560px] mx-auto mb-10 rounded-xl border border-blue/20 bg-blue-pale/40 px-5 py-4 transition-all duration-300",
+              isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+            )}
+          >
+            <div className="mb-3">
+              <p className="text-[14px] font-semibold text-navy">Listen to the Telugu voice demo</p>
+              <p className="mt-0.5 text-[12px] text-slate">A sample patient conversation in Telugu.</p>
+            </div>
+            <audio
+              controls
+              preload="metadata"
+              className="w-full h-10"
+              aria-label="Telugu voice demo"
+            >
+              <source src="/dental/audio/telugu-demo.mp3" type="audio/mpeg" />
+              Your browser does not support audio playback.
+            </audio>
+          </div>
+        )}
+
         {/* Supporting Line */}
         <div
           className={cn(
