@@ -16,6 +16,7 @@ import ConversationPreview from "@/components/ConversationPreview";
 import CTASection from "@/components/CTASection";
 import FAQ from "@/components/FAQ";
 import FinalCTA from "@/components/FinalCTA";
+import Founder from "@/components/Founder";
 import Footer from "@/components/Footer";
 
 export default function DentalPage() {
@@ -40,6 +41,7 @@ export default function DentalPage() {
         <CTASection />
         <FAQ />
         <FinalCTA />
+        <Founder />
       </main>
       <Footer />
     </>

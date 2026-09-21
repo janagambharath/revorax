@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useInView } from "@/hooks/useInView";
 import { cn } from "@/lib/utils";
-import { Globe, MessageCircle } from "lucide-react";
+import { Globe, MessageCircle, Pause, Play } from "lucide-react";
 
 type Lang = "en" | "te" | "hi";
 
@@ -31,6 +31,25 @@ const conversations: Record<Lang, { patient: string; system: string }> = {
 export default function MultilingualVoice() {
   const { ref, isInView } = useInView();
   const [activeLang, setActiveLang] = useState<Lang>("en");
+  const [isTeluguAudioPlaying, setIsTeluguAudioPlaying] = useState(false);
+  const teluguAudioRef = useRef<HTMLAudioElement>(null);
+
+  const toggleTeluguAudio = async () => {
+    const audio = teluguAudioRef.current;
+    if (!audio) return;
+
+    if (audio.paused) {
+      try {
+        await audio.play();
+        setIsTeluguAudioPlaying(true);
+      } catch {
+        setIsTeluguAudioPlaying(false);
+      }
+    } else {
+      audio.pause();
+      setIsTeluguAudioPlaying(false);
+    }
+  };
 
   return (
     <section className="py-20 lg:py-28 bg-surface-alt">
@@ -129,14 +148,21 @@ export default function MultilingualVoice() {
               <p className="mt-0.5 text-[12px] text-slate">A sample patient conversation in Telugu.</p>
             </div>
             <audio
-              controls
+              ref={teluguAudioRef}
               preload="metadata"
-              className="w-full h-10"
-              aria-label="Telugu voice demo"
+              onEnded={() => setIsTeluguAudioPlaying(false)}
             >
               <source src="/dental/audio/telugu-demo.mp3" type="audio/mpeg" />
-              Your browser does not support audio playback.
             </audio>
+            <button
+              type="button"
+              onClick={() => void toggleTeluguAudio()}
+              className="inline-flex items-center gap-2 rounded-lg bg-navy px-4 py-2.5 text-[13px] font-semibold text-white transition-colors hover:bg-navy/90"
+              aria-label={isTeluguAudioPlaying ? "Pause Telugu voice demo" : "Play Telugu voice demo"}
+            >
+              {isTeluguAudioPlaying ? <Pause size={15} /> : <Play size={15} />}
+              {isTeluguAudioPlaying ? "Pause Telugu demo" : "Hear Telugu demo"}
+            </button>
           </div>
         )}
 
