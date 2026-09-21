@@ -15,6 +15,7 @@ from fastapi.staticfiles import StaticFiles
 
 ROOT_DIR = Path(__file__).resolve().parent
 LANDING_DIR = ROOT_DIR / "renewal-desk"
+DENTAL_DIR = ROOT_DIR / "dental" / "out"
 
 app = FastAPI(
     title="Revorax",
@@ -43,8 +44,20 @@ def renewal_desk_home() -> RedirectResponse:
     return RedirectResponse(url="/renewal-desk/", status_code=307)
 
 
+@app.get("/dental", include_in_schema=False)
+def dental_home() -> RedirectResponse:
+    """Keep the canonical dental landing-page URL working without a trailing slash."""
+    return RedirectResponse(url="/dental/", status_code=307)
+
+
 app.mount(
     "/renewal-desk",
     StaticFiles(directory=LANDING_DIR, html=True),
     name="renewal-desk",
+)
+
+app.mount(
+    "/dental",
+    StaticFiles(directory=DENTAL_DIR, html=True),
+    name="dental",
 )
