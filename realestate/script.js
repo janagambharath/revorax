@@ -32,20 +32,24 @@ document.addEventListener('DOMContentLoaded', () => {
     te: {
       hasAudio: true,
       src: 'assets/telugu-demo.mp3',
-      title: 'Inbound Buyer Follow-Up (Telugu)',
-      desc: 'Telugu Native Speech · 650ms Latency',
+      title: 'Inbound Ad Follow-Up — Sri Vasavi Realty (Telugu)',
+      desc: 'Telugu Native Speech · Instant Qualification · Facebook Lead',
+      extraction: '✓ Extracted: Miyapur · Budget ₹55L · Facebook Lead · Qualified',
       lines: [
-        { who: 'ai',       name: 'AI Voice Agent', text: 'నమస్తే అండి, నేను సినర్జీ రియల్టీ నుండి మాట్లాడుతున్నాను. మీరు జూబ్లీహిల్స్ విల్లా ప్రాజెక్ట్ గురించి ఎంక్వైరీ చేశారు కదా, వివరాలు తెలుసుకోవడానికి మాట్లాడొచ్చా?', t: 0 },
-        { who: 'prospect', name: 'Prospect',        text: 'అవునండి, నేను ఫేస్‌బుక్‌లో యాడ్ చూశాను. 3BHK విల్లా ప్రైసింగ్ మరియు పొజిషన్ డీటెయిల్స్ ఎలా ఉన్నాయి?', t: 6 },
-        { who: 'ai',       name: 'AI Voice Agent', text: 'కచ్చితంగా అండి. 3BHK విల్లాస్ 3200 sq.ft నుండి ప్రారంభమవుతాయి, ప్రైస్ 1.2 కోట్ల నుండి ఉంది. వచ్చే 6 నెలల్లో పొజిషన్ రెడీ అవుతుంది. మీరు ఈ శనివారం సైట్ విజిట్ ప్లాన్ చేసుకుంటారా?', t: 14 },
-        { who: 'prospect', name: 'Prospect',        text: 'శనివారం ఉదయం 11 గంటలకు నాకు అనుకూలంగా ఉంటుంది.', t: 23 },
-        { who: 'ai',       name: 'AI Voice Agent', text: 'పర్ఫెక్ట్ అండి! శనివారం ఉదయం 11 గంటల స్లాట్ కన్ఫర్మ్ చేశాను. మీకు వాట్సాప్‌లో లొకేషన్ వివరాలు పంపించాను. ధన్యవాదాలు!', t: 27 },
+        { who: 'ai',       name: 'AI Voice Agent (Priya)', text: 'హలో, భారత్ గారు మాట్లాడుతున్నారా? నేను ప్రియాని, శ్రీ వాసవి రియాల్టీ నుంచి.', t: 0 },
+        { who: 'ai',       name: 'AI Voice Agent (Priya)', text: 'మీరు మియాపూర్‌లో ఫ్లాట్ గురించి ఫేస్‌బుక్ యాడ్‌లో ఎంక్వైరీ చేశారు కదా, కొనాలని ఇంట్రెస్ట్ ఉందా?', t: 6.5 },
+        { who: 'prospect', name: 'Bharath (Prospect)',     text: 'అవునండి, ఇంట్రెస్ట్ ఉంది. వివరాలు చెప్పండి.', t: 14.5 },
+        { who: 'ai',       name: 'AI Voice Agent (Priya)', text: 'ఖచ్చితంగా అండి! మీ డీటెయిల్స్ కన్ఫర్మ్ చేసుకుందాం. మియాపూర్‌లో ఫ్లాట్ బడ్జెట్ 55 లక్షలు కరెక్ట్ కదా?', t: 17 },
+        { who: 'prospect', name: 'Bharath (Prospect)',     text: 'అవును, కరెక్ట్ అండి.', t: 22 },
+        { who: 'ai',       name: 'AI Voice Agent (Priya)', text: 'సరేనండి, మీ ఎంక్వైరీ క్వాలిఫైడ్ అయింది! మా సేల్స్ టీమ్ మిమ్మల్ని వెంటనే కాంటాక్ట్ చేస్తారు.', t: 24.5 },
+        { who: 'ai',       name: 'AI Voice Agent (Priya)', text: 'మళ్లీ ఏమైనా ఉంటే చెప్పండి, ధన్యవాదాలు భారత్ గారు!', t: 28.5 },
       ],
     },
     en: {
       hasAudio: false,
       title: 'Instant Ad Follow-Up (English)',
       desc: 'US / Indian English · Instant Speed-to-Lead',
+      extraction: '✓ Extracted: 3BHK Villa · Budget ₹1.2-1.3 Cr · Site Visit Confirmed',
       lines: [
         { who: 'ai',       name: 'AI Voice Agent', text: 'Hello Arjun! I noticed you just submitted an enquiry for the Lakeview Luxury Villas. Calling to share project details — is now a good time?', t: 0 },
         { who: 'prospect', name: 'Prospect',        text: 'Yes, hi! I wanted to check the pricing for 3BHK units and whether possession is ready this year.', t: 5 },
@@ -58,6 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
       hasAudio: false,
       title: 'Lead Qualification Call (Hindi)',
       desc: 'Hindi Conversational · Real-Time CRM Sync',
+      extraction: '✓ Extracted: 3BHK Villa · Budget ₹1.2 Cr · Site Visit Saturday',
       lines: [
         { who: 'ai',       name: 'AI Voice Agent', text: 'नमस्ते अर्जुन जी! आपने अभी हमारे जुबली हिल्स प्रीमियम विला प्रोजेक्ट के लिए इन्क्वायरी की थी। क्या दो मिनट बात हो सकती है?', t: 0 },
         { who: 'prospect', name: 'Prospect',        text: 'हाँ, बताइए। मुझे 3BHK विला का बजट और पज़ेशन टाइमलाइन जानना था।', t: 6 },
@@ -81,6 +86,11 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('track-subtitle').textContent = d.desc;
     document.getElementById('track-name').textContent     = d.title;
     document.getElementById('track-desc-text').textContent = d.desc;
+
+    const badge = document.querySelector('.extraction-badge');
+    if (badge && d.extraction) {
+      badge.textContent = d.extraction;
+    }
 
     dlList.innerHTML = '';
     d.lines.forEach((ln, i) => {
