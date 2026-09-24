@@ -17,6 +17,7 @@ ROOT_DIR = Path(__file__).resolve().parent
 LANDING_DIR = ROOT_DIR / "renewal-desk"
 DENTAL_DIR = ROOT_DIR / "dental" / "out"
 REALESTATE_DIR = ROOT_DIR / "realestate"
+SOLAR_DIR = ROOT_DIR / "solar"
 
 app = FastAPI(
     title="Revorax",
@@ -57,6 +58,12 @@ def realestate_home() -> RedirectResponse:
     return RedirectResponse(url="/realestate/", status_code=307)
 
 
+@app.get("/solar", include_in_schema=False)
+def solar_home() -> RedirectResponse:
+    """Keep the canonical solar landing-page URL working without a trailing slash."""
+    return RedirectResponse(url="/solar/", status_code=307)
+
+
 app.mount(
     "/renewal-desk",
     StaticFiles(directory=LANDING_DIR, html=True),
@@ -73,5 +80,11 @@ app.mount(
     "/realestate",
     StaticFiles(directory=REALESTATE_DIR, html=True),
     name="realestate",
+)
+
+app.mount(
+    "/solar",
+    StaticFiles(directory=SOLAR_DIR, html=True),
+    name="solar",
 )
 
