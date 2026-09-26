@@ -990,3 +990,51 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 ::-webkit-scrollbar-track { background: var(--surface-alt); }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--slate-light); }
+
+/* ========================================================================
+   PRODUCT SCREENSHOTS — real dashboard captures
+   ======================================================================== */
+.shots-section {
+  padding: 5rem 0;
+  background: #F6F8FB;
+}
+.shots-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+.shot-card {
+  margin: 0;
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, .07);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: 0 14px 44px rgba(15, 23, 42, .09);
+}
+.shot-frame {
+  border-bottom: 1px solid rgba(15, 23, 42, .06);
+  background: #EEF1F6;
+}
+.shot-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.shot-card figcaption {
+  padding: 1.2rem 1.5rem;
+  font-size: .95rem;
+  line-height: 1.55;
+  color: var(--charcoal);
+}
+.shot-card figcaption strong {
+  color: var(--navy);
+}
+@media (min-width: 900px) {
+  .shots-grid { grid-template-columns: 1fr 1fr; }
+  .shot-card:first-child { grid-column: 1 / -1; }
+}
+@media (max-width: 768px) {
+  .shots-section { padding: 3.5rem 0; }
+}
