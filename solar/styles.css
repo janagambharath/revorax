@@ -1073,3 +1073,151 @@ html, body { overflow-x: clip; }
   .btn-lg { height: 50px; padding: 0 1.6rem; }
   .audit-card h2 { font-size: 1.7rem; }
 }
+
+/* ==========================================================================
+   GNANI-STYLE ADDITIONS — stats band, voice stack, FAQ
+   ========================================================================== */
+
+/* ─── Hero eyebrow + sub ─── */
+.hero-eyebrow {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--blue);
+  background: var(--blue-pale);
+  border: 1px solid var(--blue-soft);
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  margin-bottom: 1.4rem;
+}
+.hero-sub {
+  margin-top: 1.2rem;
+  font-size: 1.12rem;
+  color: var(--text-secondary);
+  max-width: 34rem;
+}
+
+/* ─── Stats band (dark) ─── */
+.stats-band {
+  background: var(--navy);
+  padding: 3.2rem 0;
+}
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+.stat { text-align: center; }
+.stat strong {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 2.6rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+.stat span {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.92rem;
+  color: var(--slate-light);
+  max-width: 20rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ─── Voice stack cards ─── */
+.stack-section { padding: 5.5rem 0; background: var(--surface); }
+.stack-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  margin-top: 2.8rem;
+}
+.stack-card {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.8rem 1.5rem;
+  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+}
+.stack-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px -18px rgba(37, 99, 235, 0.25);
+}
+.stack-icon {
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 12px;
+  background: var(--blue-pale);
+  color: var(--blue);
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.1rem;
+}
+.stack-card h3 {
+  font-family: var(--font-heading);
+  font-size: 1.08rem;
+  font-weight: 700;
+  margin-bottom: 0.6rem;
+  color: var(--text-primary);
+}
+.stack-card p {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+/* ─── FAQ ─── */
+.faq-section { padding: 5.5rem 0; background: var(--surface-alt); }
+.faq-list { max-width: 46rem; margin: 2.5rem auto 0; }
+.faq-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  margin-bottom: 0.8rem;
+  overflow: hidden;
+}
+.faq-item summary {
+  cursor: pointer;
+  padding: 1.15rem 1.4rem;
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text-primary);
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after {
+  content: '+';
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: var(--blue);
+  flex-shrink: 0;
+  transition: transform 0.25s var(--ease);
+}
+.faq-item[open] summary::after { transform: rotate(45deg); }
+.faq-item p {
+  padding: 0 1.4rem 1.3rem;
+  font-size: 0.94rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 900px) {
+  .stack-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .stats-grid { grid-template-columns: 1fr; gap: 1.6rem; }
+  .stat strong { font-size: 2.1rem; }
+  .stack-grid { grid-template-columns: 1fr; }
+  .stack-section, .faq-section { padding: 3.8rem 0; }
+}

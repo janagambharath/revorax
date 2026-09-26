@@ -56,29 +56,49 @@ document.addEventListener('DOMContentLoaded', () => {
       ],
     },
     en: {
-      hasAudio: false,
-      title: 'Solar Lead Follow-Up (English)',
-      desc: 'English · Instant Speed-to-Lead · Solar Rooftop',
-      extraction: '✓ Extracted: 5kW Rooftop · Budget ₹3.5L · Site Survey Confirmed',
+      hasAudio: true,
+      src: 'assets/english-demo-solar.mp3',
+      title: 'Inbound Ad Follow-Up — Solar Lead (English)',
+      desc: 'English Native Speech · Instant Qualification · Facebook Lead',
+      extraction: '✓ Extracted: Solar · Independent House · Bill ₹3K · Qualified',
       lines: [
-        { who: 'ai',       name: 'AI Voice Agent', text: 'Hello Arjun! I noticed you just submitted an enquiry for rooftop solar installation. Calling to share details — is now a good time?', t: 0 },
-        { who: 'prospect', name: 'Prospect',        text: 'Yes, hi! I wanted to check the pricing for a 5kW system and whether installation can happen this month.', t: 5 },
-        { who: 'ai',       name: 'AI Voice Agent', text: 'A 5kW rooftop system starts at ₹3.2 Lakhs with subsidy, and our team can complete installation within 10 days. What is your preferred budget range?', t: 12 },
-        { who: 'prospect', name: 'Prospect',        text: 'My budget is around 3 to 3.5 Lakhs. I would like a site survey first.', t: 20 },
-        { who: 'ai',       name: 'AI Voice Agent', text: 'That fits our premium panel range perfectly. Would Saturday at 10:00 AM or Monday at 2:00 PM work for a site survey?', t: 26 },
+        { who: 'ai',       name: 'AI Voice Agent (Priya)', text: 'Hello... am I speaking with Bharat?', t: 0.6 },
+        { who: 'prospect', name: 'Bharath (Prospect)',     text: 'Yes, speaking. Who\'s this?', t: 5.6 },
+        { who: 'ai',       name: 'AI Voice Agent (Priya)', text: 'Hi, I\'m Priya... calling from Sri Surya Solar.', t: 9.0 },
+        { who: 'ai',       name: 'AI Voice Agent (Priya)', text: 'You\'d enquired about rooftop solar... on Facebook, right?', t: 14.7 },
+        { who: 'prospect', name: 'Bharath (Prospect)',     text: 'Yes, I did. Tell me.', t: 18.3 },
+        { who: 'ai',       name: 'AI Voice Agent (Priya)', text: 'Great... so just two quick things. Yours is an independent house, correct?', t: 20.5 },
+        { who: 'prospect', name: 'Bharath (Prospect)',     text: 'Yes, independent house.', t: 26.0 },
+        { who: 'ai',       name: 'AI Voice Agent (Priya)', text: 'Nice. And... is there open space on the terrace?', t: 28.3 },
+        { who: 'prospect', name: 'Bharath (Prospect)',     text: 'Yes, the terrace is mostly empty.', t: 33.3 },
+        { who: 'ai',       name: 'AI Voice Agent (Priya)', text: 'Got it... so what\'s the monthly electricity bill like?', t: 35.3 },
+        { who: 'prospect', name: 'Bharath (Prospect)',     text: 'Hmm... around three thousand.', t: 38.9 },
+        { who: 'ai',       name: 'AI Voice Agent (Priya)', text: 'Understood... so, independent house, empty terrace, three-thousand bill — correct?', t: 41.5 },
+        { who: 'prospect', name: 'Bharath (Prospect)',     text: 'Yes, that\'s right.', t: 45.9 },
+        { who: 'ai',       name: 'AI Voice Agent (Priya)', text: 'Then your enquiry qualifies. Our team... will contact you for the site survey. Thank you!', t: 47.5 },
       ],
     },
     hi: {
-      hasAudio: false,
-      title: 'Solar Lead Qualification (Hindi)',
-      desc: 'Hindi Conversational · Real-Time CRM Sync',
-      extraction: '✓ Extracted: 3kW Rooftop · Budget ₹2.5L · Site Survey Saturday',
+      hasAudio: true,
+      src: 'assets/hindi-demo-solar.mp3',
+      title: 'Inbound Ad Follow-Up — Solar Lead (Hindi)',
+      desc: 'Hindi Native Speech · Instant Qualification · Facebook Lead',
+      extraction: '✓ Extracted: Solar · Independent House · Bill ₹3K · Qualified',
       lines: [
-        { who: 'ai',       name: 'AI Voice Agent', text: 'नमस्ते अर्जुन जी! आपने अभी हमारे सोलर रूफटॉप इंस्टॉलेशन के लिए इन्क्वायरी की थी। क्या दो मिनट बात हो सकती है?', t: 0 },
-        { who: 'prospect', name: 'Prospect',        text: 'हाँ, बताइए। मुझे 3kW सिस्टम का बजट और सब्सिडी जानना था।', t: 6 },
-        { who: 'ai',       name: 'AI Voice Agent', text: 'बिल्कुल सर। 3kW सिस्टम ₹2.5 लाख से शुरू है सब्सिडी के बाद, और 7 दिन में इंस्टॉलेशन हो जाता है। क्या आप इस वीकेंड साइट सर्वे शेड्यूल करना चाहेंगे?', t: 14 },
-        { who: 'prospect', name: 'Prospect',        text: 'हाँ, इस शनिवार सुबह 11 बजे ठीक रहेगा।', t: 22 },
-        { who: 'ai',       name: 'AI Voice Agent', text: 'शानदार! शनिवार 11:00 AM का स्लॉट बुक हो गया है। लोकेशन डिटेल्स आपके व्हाट्सएप पर भेज दिए गए हैं। धन्यवाद!', t: 26 },
+        { who: 'ai',       name: 'AI Voice Agent (Priya)', text: 'नमस्ते... भरत जी बात कर रहे हैं?', t: 0 },
+        { who: 'prospect', name: 'Bharath (Prospect)',     text: 'हाँ, बोल रहा हूँ। कौन?', t: 3.5 },
+        { who: 'ai',       name: 'AI Voice Agent (Priya)', text: 'नमस्ते, मैं प्रिया बोल रही हूँ... श्री सूर्या सोलर से कॉल कर रही हूँ।', t: 5.8 },
+        { who: 'ai',       name: 'AI Voice Agent (Priya)', text: 'आपने रूफटॉप सोलर के बारे में... फेसबुक पर इन्क्वायरी की थी, है ना?', t: 11.5 },
+        { who: 'prospect', name: 'Bharath (Prospect)',     text: 'हाँ, की थी। बताइए।', t: 16.7 },
+        { who: 'ai',       name: 'AI Voice Agent (Priya)', text: 'ठीक है... तो दो छोटी बातें पूछूँगी। आपका इंडिपेंडेंट हाउस है ना?', t: 19.5 },
+        { who: 'prospect', name: 'Bharath (Prospect)',     text: 'हाँ, इंडिपेंडेंट हाउस ही है।', t: 22.8 },
+        { who: 'ai',       name: 'AI Voice Agent (Priya)', text: 'बढ़िया। और... छत पर खाली जगह है?', t: 25.1 },
+        { who: 'prospect', name: 'Bharath (Prospect)',     text: 'हाँ, छत खाली ही है।', t: 31.6 },
+        { who: 'ai',       name: 'AI Voice Agent (Priya)', text: 'अच्छा... तो महीने का बिजली बिल कितना आता है?', t: 34.3 },
+        { who: 'prospect', name: 'Bharath (Prospect)',     text: 'हम्म... तीन हज़ार तक आ जाता है।', t: 38.8 },
+        { who: 'ai',       name: 'AI Voice Agent (Priya)', text: 'समझ गई... मतलब, इंडिपेंडेंट हाउस, छत खाली, बिल तीन हज़ार — सही है ना?', t: 42.1 },
+        { who: 'prospect', name: 'Bharath (Prospect)',     text: 'हाँ, बिल्कुल सही।', t: 49.1 },
+        { who: 'ai',       name: 'AI Voice Agent (Priya)', text: 'तो आपकी इन्क्वायरी क्वालिफाई हो गई है। हमारी टीम... साइट सर्वे के लिए संपर्क करेगी। धन्यवाद!', t: 51.3 },
       ],
     },
   };
@@ -192,6 +212,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* Audio hooks */
   if (audio) {
+    audio.addEventListener('loadedmetadata', () => {
+      if (DATA[lang].hasAudio && audio.duration) updateScrub(0, audio.duration);
+    });
     audio.addEventListener('timeupdate', () => {
       if (DATA[lang].hasAudio) updateScrub(audio.currentTime, audio.duration || SIM_DUR);
     });
