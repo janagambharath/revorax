@@ -999,3 +999,20 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 ::-webkit-scrollbar-track { background: var(--surface-alt); }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--slate-light); }
+
+/* ─── Mobile polish — site review 2026-09-26 ─── */
+html, body { overflow-x: clip; }
+
+@media (max-width: 768px) {
+  .header-actions .btn-outline { display: none; }
+  .header-inner { height: 58px; }
+  .demo-top-bar { flex-direction: column; align-items: flex-start; gap: .75rem; }
+  .lang-pills { display: flex; width: 100%; }
+  .lang-pill { flex: 1; text-align: center; }
+  .footer-inner { flex-direction: column; text-align: center; }
+  .footer-links { flex-wrap: wrap; justify-content: center; }
+}
+
+@media (max-width: 480px) {
+  .brand small { display: none; }
+}
