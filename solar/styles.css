@@ -1038,3 +1038,38 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 @media (max-width: 768px) {
   .shots-section { padding: 3.5rem 0; }
 }
+
+/* ========================================================================
+   MOBILE OPTIMIZATION
+   ======================================================================== */
+/* Safety net: clip (not hidden) so sticky header keeps working */
+html, body { overflow-x: clip; }
+
+@media (max-width: 768px) {
+  /* Header: one CTA only — the outline button was overflowing the viewport */
+  .header-actions .btn-outline { display: none; }
+  .header-inner { height: 58px; }
+  .brand strong { font-size: 1.1rem; }
+
+  /* Demo player top bar stacks instead of squeezing */
+  .demo-top-bar { flex-direction: column; align-items: flex-start; gap: .8rem; }
+
+  /* Footer stacks cleanly */
+  .footer-inner { flex-direction: column; align-items: flex-start; gap: .9rem; }
+  .footer-links { flex-wrap: wrap; gap: .6rem 1.25rem; }
+
+  /* Screenshots section: tighter on small screens */
+  .shots-section { padding: 3.5rem 0; }
+  .shots-grid { gap: 1.4rem; }
+  .shot-card figcaption { padding: 1rem 1.15rem; font-size: .88rem; }
+  .section-head h2 { font-size: 1.65rem; }
+  .section-head p { font-size: .95rem; }
+}
+
+@media (max-width: 480px) {
+  /* "Voice Workflows" pill wraps ugly on small phones — hide it there */
+  .brand small { display: none; }
+  .hero h1 { font-size: 2rem; }
+  .btn-lg { height: 50px; padding: 0 1.6rem; }
+  .audit-card h2 { font-size: 1.7rem; }
+}
