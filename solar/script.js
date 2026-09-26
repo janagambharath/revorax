@@ -31,20 +31,28 @@ document.addEventListener('DOMContentLoaded', () => {
   const DATA = {
     te: {
       hasAudio: true,
-      src: 'assets/telugu-demo-solar.mp3',
+      src: 'assets/telugu-demo-solar-v2.mp3',
       title: 'Inbound Ad Follow-Up — Solar Lead (Telugu)',
       desc: 'Telugu Native Speech · Instant Qualification · Facebook Lead',
       extraction: '✓ Extracted: Solar · Rooftop · Bill ₹3K · Qualified',
       lines: [
-        { who: 'ai',       name: 'AI Voice Agent (Priya)', text: 'హలో, భారత్ గారు మాట్లాడుతున్నారా? నేను ప్రియాని, శ్రీ సూర్యా సోలార్ నుంచి.', t: 0.3 },
-        { who: 'ai',       name: 'AI Voice Agent (Priya)', text: 'మీరు రూఫ్‌టాప్ సోలార్ గురించి ఫేస్‌బుక్‌లో ఎంక్వైరీ చేశారు కదా, రెండు నిమిషాలు మాట్లాడవచ్చా?', t: 4.4 },
-        { who: 'prospect', name: 'Bharath (Prospect)',     text: 'అవునండి, చెప్పండి.', t: 9.1 },
-        { who: 'ai',       name: 'AI Voice Agent (Priya)', text: 'మీది ఇండిపెండెంట్ హౌసా అండి? టెర్రస్ మీద ఖాళీ స్థలం ఉందా?', t: 10.1 },
-        { who: 'prospect', name: 'Bharath (Prospect)',     text: 'అవును, ఇండిపెండెంట్ హౌసే. టెర్రస్ ఖాళీగానే ఉంది.', t: 13.4 },
-        { who: 'ai',       name: 'AI Voice Agent (Priya)', text: 'మీ నెల కరెంట్ బిల్లు సుమారు ఎంత వస్తుంది అండి?', t: 16.4 },
-        { who: 'prospect', name: 'Bharath (Prospect)',     text: 'మూడు వేల రూపాయల దాకా వస్తుంది.', t: 19.1 },
-        { who: 'ai',       name: 'AI Voice Agent (Priya)', text: 'సరేనండి, మీ ఎంక్వైరీ క్వాలిఫైడ్ అయింది. మా టీమ్ సైట్ సర్వే కోసం మిమ్మల్ని కాంటాక్ట్ చేస్తారు.', t: 20.6 },
-        { who: 'ai',       name: 'AI Voice Agent (Priya)', text: 'ధన్యవాదాలు భారత్ గారు!', t: 25.4 },
+        { who: 'ai',       name: 'AI Voice Agent (Priya)', text: 'హలో... భారత్ గారు మాట్లాడుతున్నారా అండి?', t: 0 },
+        { who: 'prospect', name: 'Bharath (Prospect)',     text: 'అవునండి, మాట్లాడుతున్నాను. ఎవరండి?', t: 2.2 },
+        { who: 'ai',       name: 'AI Voice Agent (Priya)', text: 'నమస్తే అండి, నేను ప్రియాని... శ్రీ సూర్యా సోలార్ నుంచి కాల్ చేస్తున్నాను.', t: 4.6 },
+        { who: 'ai',       name: 'AI Voice Agent (Priya)', text: 'మీరు రూఫ్‌టాప్ సోలార్ గురించి... ఫేస్‌బుక్‌లో ఎంక్వైరీ చేశారు కదండీ?', t: 8.5 },
+        { who: 'prospect', name: 'Bharath (Prospect)',     text: 'ఆ, చేశానండి. చెప్పండి.', t: 12.5 },
+        { who: 'ai',       name: 'AI Voice Agent (Priya)', text: 'ఓకే అండి... అయితే, రెండు చిన్న విషయాలు అడుగుతాను.', t: 14.5 },
+        { who: 'ai',       name: 'AI Voice Agent (Priya)', text: 'మీది ఇండిపెండెంట్ హౌసా అండి?', t: 18.2 },
+        { who: 'prospect', name: 'Bharath (Prospect)',     text: 'అవునండి, ఇండిపెండెంట్ హౌసే.', t: 21.8 },
+        { who: 'ai',       name: 'AI Voice Agent (Priya)', text: 'ఓకే... టెర్రస్ మీద ఖాళీ స్థలం ఉందా అండి?', t: 24.5 },
+        { who: 'prospect', name: 'Bharath (Prospect)',     text: 'ఉందండి, పైన ఖాళీగానే ఉంది.', t: 26.3 },
+        { who: 'ai',       name: 'AI Voice Agent (Priya)', text: 'మంచిదండి. మరి... నెలకు కరెంట్ బిల్లు ఎంత వస్తుంది?', t: 29.9 },
+        { who: 'prospect', name: 'Bharath (Prospect)',     text: 'మ్మ్... మూడు వేల దాకా వస్తుందండి.', t: 32.3 },
+        { who: 'ai',       name: 'AI Voice Agent (Priya)', text: 'అర్థమైంది అండి... అంటే, ఇండిపెండెంట్ హౌస్, టెర్రస్ ఖాళీ, బిల్లు మూడు వేలు — కదండీ?', t: 34.0 },
+        { who: 'prospect', name: 'Bharath (Prospect)',     text: 'అవునండి, కరెక్ట్.', t: 37.9 },
+        { who: 'ai',       name: 'AI Voice Agent (Priya)', text: 'సరేనండి, అయితే మీ ఎంక్వైరీ క్వాలిఫైడ్ అయింది.', t: 38.8 },
+        { who: 'ai',       name: 'AI Voice Agent (Priya)', text: 'మా టీమ్... సైట్ సర్వే కోసం మిమ్మల్ని కాంటాక్ట్ చేస్తారు.', t: 41.6 },
+        { who: 'ai',       name: 'AI Voice Agent (Priya)', text: 'థాంక్యూ అండి, భారత్ గారు!', t: 42.8 },
       ],
     },
     en: {
@@ -209,7 +217,10 @@ document.addEventListener('DOMContentLoaded', () => {
       pill.setAttribute('aria-selected', 'true');
       lang = pill.dataset.lang;
       pause();
-      if (audio) audio.currentTime = 0;
+      if (audio) {
+        if (DATA[lang].hasAudio && DATA[lang].src) { audio.src = DATA[lang].src; }
+        audio.currentTime = 0;
+      }
       simSec = 0;
       updateScrub(0, SIM_DUR);
       renderTranscript(lang);
