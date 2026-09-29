@@ -179,15 +179,56 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  /* ─── Play / Pause ─── */
+  /* ─── Play / Pause (hardened for iOS Safari) ─── */
+  let stallRetries = 0;
+  const MAX_STALL_RETRIES = 3;
+
+  function showAudioError(msg) {
+    if (timeTxt) timeTxt.textContent = msg;
+  }
+
+  // iOS Safari sometimes reports the element playable before data is
+  // actually buffered (preload="metadata" races). Ensure we really have
+  // data before calling play(), otherwise the first seconds can stall
+  // or a premature 'ended' can fire and kill playback.
+  function ensureReady() {
+    if (audio.readyState >= 2) return Promise.resolve(true); // HAVE_CURRENT_DATA+
+    return new Promise(resolve => {
+      const to = setTimeout(() => { cleanup(); resolve(false); }, 8000);
+      const onCan = () => { cleanup(); resolve(true); };
+      const onErr = () => { cleanup(); resolve(false); };
+      function cleanup() {
+        clearTimeout(to);
+        audio.removeEventListener('canplay', onCan);
+        audio.removeEventListener('error', onErr);
+      }
+      audio.addEventListener('canplay', onCan);
+      audio.addEventListener('error', onErr);
+      try { audio.load(); } catch (e) { cleanup(); resolve(false); }
+    });
+  }
+
   async function toggle() {
     if (!playing) {
       playing = true;
       iconPlay.style.display = 'none';
       iconPause.style.display = 'block';
       animWave(true);
+      stallRetries = 0;
       if (DATA[lang].hasAudio && audio) {
-        try { await audio.play(); } catch { simPlay(); }
+        const ready = await ensureReady();
+        if (!ready) {
+          showAudioError('Audio failed to load — tap play to retry');
+          pause();
+          return;
+        }
+        try {
+          await audio.play();
+        } catch (err) {
+          // Never fake-play silently: surface the failure so it can be retried
+          showAudioError('Tap play again to start audio');
+          pause();
+        }
       } else { simPlay(); }
     } else { pause(); }
   }
@@ -218,7 +259,32 @@ document.addEventListener('DOMContentLoaded', () => {
     audio.addEventListener('timeupdate', () => {
       if (DATA[lang].hasAudio) updateScrub(audio.currentTime, audio.duration || SIM_DUR);
     });
-    audio.addEventListener('ended', () => { pause(); updateScrub(0, audio.duration || SIM_DUR); });
+    audio.addEventListener('ended', () => {
+      const dur = audio.duration || SIM_DUR;
+      // Guard against premature 'ended' on iOS: only reset if truly at the end.
+      // A spurious 'ended' mid-track resumes instead of killing playback.
+      if (audio.currentTime < dur - 1.5) {
+        audio.play().catch(() => {});
+        return;
+      }
+      pause(); updateScrub(0, dur);
+    });
+    // Network stall recovery: nudge playback instead of dying silently
+    audio.addEventListener('stalled', () => {
+      if (!playing || stallRetries >= MAX_STALL_RETRIES) return;
+      stallRetries++;
+      const pos = audio.currentTime || 0;
+      setTimeout(() => {
+        if (!playing) return;
+        try {
+          audio.currentTime = pos;
+          audio.play().catch(() => {});
+        } catch (e) { /* let the error handler surface it */ }
+      }, 1500);
+    });
+    audio.addEventListener('error', () => {
+      if (playing) showAudioError('Audio error — tap play to retry');
+    });
   }
 
   playBtn.addEventListener('click', toggle);
@@ -242,7 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
       pause();
       if (audio) {
         if (DATA[lang].hasAudio && DATA[lang].src) { audio.src = DATA[lang].src; }
-        audio.currentTime = 0;
+        try { audio.currentTime = 0; } catch (e) { /* metadata not ready yet */ }
       }
       simSec = 0;
       updateScrub(0, SIM_DUR);
