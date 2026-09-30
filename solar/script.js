@@ -16,6 +16,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const langPills = document.querySelectorAll('.lang-pill');
   const dlList    = document.getElementById('dialogue-list');
 
+  /* ─── Transcript collapse (compact demo section) ─── */
+  const transcriptBox = document.getElementById('transcript');
+  const tglBtn        = document.getElementById('transcript-toggle');
+  function setTranscript(open) {
+    transcriptBox.classList.toggle('open', open);
+    tglBtn.setAttribute('aria-expanded', String(open));
+    tglBtn.innerHTML = open ? 'Hide transcript ▴' : 'View transcript ▾';
+  }
+  tglBtn.addEventListener('click', () => setTranscript(!transcriptBox.classList.contains('open')));
+
   /* ─── Waveform bars ─── */
   const BAR_COUNT = 60;
   waveform.innerHTML = '';
@@ -211,6 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function toggle() {
     if (!playing) {
       playing = true;
+      setTranscript(true); // auto-expand the transcript so listeners can follow along
       iconPlay.style.display = 'none';
       iconPause.style.display = 'block';
       animWave(true);
