@@ -113,7 +113,66 @@ section { padding: 110px 0; }
   margin: 24px auto 0; max-width: 620px;
   font-size: 1.15rem; color: #4A4A4A;
 }
-.hero-actions { margin-top: 36px; }
+.hero-actions { margin-top: 36px; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.eyebrow {
+  text-transform: uppercase; letter-spacing: .22em;
+  font-size: .78rem; font-weight: 700; color: var(--sunrise);
+  margin-bottom: 20px;
+}
+.hero-body {
+  margin: 18px auto 0; max-width: 640px;
+  font-size: 1.02rem; color: var(--body); line-height: 1.7;
+}
+.btn-ghost {
+  background: transparent; color: var(--ink);
+  border: 1.5px solid rgba(20,20,20,.28);
+}
+.btn-ghost:hover { border-color: rgba(20,20,20,.55); }
+.btn-dark { background: var(--ink); color: #fff; box-shadow: 0 8px 24px -10px rgba(20,20,20,.4); }
+.btn-dark:hover { transform: translateY(-2px); }
+
+/* ─── First conversation: does / doesn't ─── */
+.dodont { background: var(--cream-deep); padding: 110px 0; }
+.dodont .section-head { text-align: center; margin-bottom: 56px; }
+.dodont-grid {
+  display: grid; grid-template-columns: 1fr 1.35fr; gap: 28px;
+  max-width: 1060px; margin: 0 auto;
+}
+.dodont-col {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 38px 36px;
+  box-shadow: var(--shadow-soft);
+}
+.dodont-col h3 {
+  font-family: var(--font-display); font-weight: 500;
+  font-size: 1.5rem; color: var(--ink); margin-bottom: 22px;
+}
+.dodont-col ul { list-style: none; }
+.dodont-col li {
+  position: relative; padding: 10px 0 10px 34px;
+  font-size: .99rem; line-height: 1.65; color: var(--body);
+  border-bottom: 1px solid var(--border);
+}
+.dodont-col li:last-child { border-bottom: none; }
+.dodont-col li::before {
+  position: absolute; left: 0; top: 10px;
+  width: 22px; height: 22px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: .8rem; font-weight: 700;
+}
+.dodont-col.dont li::before { content: "✕"; background: #FDE8E8; color: #C24141; }
+.dodont-col.do { border-top: 4px solid var(--sunrise); }
+.dodont-col.do li::before { content: "✓"; background: #E6F7ED; color: #1E9E5A; }
+.dodont-closer {
+  max-width: 760px; margin: 48px auto 0; text-align: center;
+  font-family: var(--font-display); font-size: 1.45rem; font-weight: 500;
+  line-height: 1.45; color: var(--ink);
+}
+.dodont-cta { text-align: center; margin-top: 34px; }
+@media (max-width: 860px) {
+  .dodont-grid { grid-template-columns: 1fr; }
+  .dodont { padding: 80px 0; }
+}
 
 /* ─── Demo section (cream) ─── */
 .demo-section { background: var(--cream); }
