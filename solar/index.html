@@ -12,7 +12,7 @@
   <meta property="og:url" content="https://revorax.online/solar">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="styles.css?v=copy3">
+  <link rel="stylesheet" href="styles.css?v=copy4">
 </head>
 <body>
 
@@ -51,46 +51,6 @@
         <div class="hero-actions">
           <a href="#demo" class="btn btn-white btn-md">Hear A Live Conversation</a>
           <a href="#how" class="btn btn-ghost btn-md">See How It Works</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================================================================
-         FIRST CONVERSATION — what it does / doesn't do
-         ================================================================ -->
-    <section class="dodont" id="first-conversation">
-      <div class="shell">
-        <div class="section-head reveal">
-          <p class="eyebrow">First Line Sales for Solar</p>
-          <h2>The first conversation,<br>handled before sales starts.</h2>
-        </div>
-        <div class="dodont-grid reveal">
-          <div class="dodont-col dont">
-            <h3>What it doesn't do</h3>
-            <ul>
-              <li>It doesn't replace your sales team.</li>
-              <li>It doesn't negotiate your final price.</li>
-              <li>It doesn't conduct the site survey.</li>
-              <li>It doesn't replace the relationship with the customer.</li>
-              <li>It doesn't decide how you close the deal.</li>
-            </ul>
-          </div>
-          <div class="dodont-col do">
-            <h3>What it does do</h3>
-            <ul>
-              <li>It calls within seconds of a form submission — before they contact the next solar company.</li>
-              <li>It has the first conversation while the enquiry is fresh — not sitting in a CRM waiting for a salesperson.</li>
-              <li>It asks the first qualification questions, so your sales team skips the basic-details round.</li>
-              <li>It labels every lead by intent — High Intent, Callback, Info Needed, Not Interested, Wrong Number.</li>
-              <li>It records and transcribes every call — your salesperson gets full context before ever speaking to the customer.</li>
-              <li>It extracts what matters — requirements, location, budget, timeline, and qualification details.</li>
-              <li>It hands the qualified opportunity to sales with the conversation attached — context first, not "hello, calling regarding your enquiry."</li>
-            </ul>
-          </div>
-        </div>
-        <p class="dodont-closer reveal">By the time your salesperson gets involved, they aren't calling a lead. They are following up on an opportunity.</p>
-        <div class="dodont-cta reveal">
-          <a href="tel:+918498826986" class="btn btn-dark btn-md">Call +91 84988 26986</a>
         </div>
       </div>
     </section>
@@ -146,13 +106,54 @@
           </div>
 
           <!-- Transcript -->
-          <div class="transcript">
+          <div class="transcript" id="transcript">
             <div class="transcript-bar">
               <span class="transcript-label">Call Transcript</span>
               <span class="extraction-badge">✓ Extracted: Solar · Rooftop · Bill ₹3K · Qualified</span>
+              <button class="transcript-toggle" id="transcript-toggle" aria-expanded="false">View transcript ▾</button>
             </div>
             <div class="dialogue-list" id="dialogue-list"><!-- populated by JS --></div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         FIRST CONVERSATION — what it does / doesn't do
+         ================================================================ -->
+    <section class="dodont" id="first-conversation">
+      <div class="shell">
+        <div class="section-head reveal">
+          <p class="eyebrow">First Line Sales for Solar</p>
+          <h2>The first conversation,<br>handled before sales starts.</h2>
+        </div>
+        <div class="dodont-grid reveal">
+          <div class="dodont-col dont">
+            <h3>What it doesn't do</h3>
+            <ul>
+              <li>It doesn't replace your sales team.</li>
+              <li>It doesn't negotiate your final price.</li>
+              <li>It doesn't conduct the site survey.</li>
+              <li>It doesn't replace the relationship with the customer.</li>
+              <li>It doesn't decide how you close the deal.</li>
+            </ul>
+          </div>
+          <div class="dodont-col do">
+            <h3>What it does do</h3>
+            <ul>
+              <li>It calls within seconds of a form submission — before they contact the next solar company.</li>
+              <li>It has the first conversation while the enquiry is fresh — not sitting in a CRM waiting for a salesperson.</li>
+              <li>It asks the first qualification questions, so your sales team skips the basic-details round.</li>
+              <li>It labels every lead by intent — High Intent, Callback, Info Needed, Not Interested, Wrong Number.</li>
+              <li>It records and transcribes every call — your salesperson gets full context before ever speaking to the customer.</li>
+              <li>It extracts what matters — requirements, location, budget, timeline, and qualification details.</li>
+              <li>It hands the qualified opportunity to sales with the conversation attached — context first, not "hello, calling regarding your enquiry."</li>
+            </ul>
+          </div>
+        </div>
+        <p class="dodont-closer reveal">By the time your salesperson gets involved, they aren't calling a lead. They are following up on an opportunity.</p>
+        <div class="dodont-cta reveal">
+          <a href="tel:+918498826986" class="btn btn-dark btn-md">Call +91 84988 26986</a>
         </div>
       </div>
     </section>
@@ -422,6 +423,36 @@
     <!-- ================================================================
          CREDO — blue radial sunburst
          ================================================================ -->
+    <!-- ================================================================
+         DASHBOARD — everything at one place (collage + call button)
+         ================================================================ -->
+    <section class="dash" id="dashboard">
+      <div class="shell">
+        <div class="section-head reveal">
+          <p class="eyebrow">Your mission control</p>
+          <h2>Everything at one place.</h2>
+          <p>Every call, every lead, every follow-up — one dashboard your whole team reads at a glance.</p>
+        </div>
+        <div class="dash-collage reveal">
+          <figure class="dash-shot">
+            <img src="dashboard-overview.png" alt="Dashboard overview — leads, dials and pipeline at a glance" loading="lazy">
+            <figcaption>Live overview — leads, dials, pipeline</figcaption>
+          </figure>
+          <figure class="dash-shot">
+            <img src="call-transcript.png" alt="Call records with transcripts and summaries" loading="lazy">
+            <figcaption>Every call recorded &amp; transcribed</figcaption>
+          </figure>
+          <figure class="dash-shot">
+            <img src="campaign-modal.png" alt="Campaign builder — dead-lead revival, survey confirms, reminders" loading="lazy">
+            <figcaption>Campaigns in one click</figcaption>
+          </figure>
+        </div>
+        <div class="dash-cta reveal">
+          <a href="tel:+918498826986" class="btn btn-dark btn-md">Call +91 84988 26986</a>
+        </div>
+      </div>
+    </section>
+
     <section class="credo">
       <div class="shell credo-inner reveal">
         <h2>Every lead deserves an answer.</h2>
@@ -460,6 +491,6 @@
     </div>
   </footer>
 
-  <script src="script.js?v=audiofix1"></script>
+  <script src="script.js?v=demo2"></script>
 </body>
 </html>

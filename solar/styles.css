@@ -174,19 +174,21 @@ section { padding: 110px 0; }
   .dodont { padding: 56px 0; }
 }
 
-/* ─── Demo section (cream) ─── */
-.demo-section { background: var(--cream); }
+/* ─── Demo section (cream) — compact, right below hero ─── */
+.demo-section { background: var(--cream); padding: 64px 0; }
+.demo-section .section-head { margin-bottom: 28px; }
+.demo-section .section-head h2 { font-size: clamp(1.7rem, 3.6vw, 2.5rem); }
 .demo-widget {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
-  padding: 36px 40px 40px;
+  padding: 28px 28px 30px;
   max-width: 960px; margin: 0 auto;
 }
 .demo-topbar {
   display: flex; justify-content: space-between; align-items: flex-start;
-  gap: 20px; flex-wrap: wrap; margin-bottom: 28px;
+  gap: 20px; flex-wrap: wrap; margin-bottom: 20px;
 }
 .demo-status { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
 .rec-badge {
@@ -265,7 +267,37 @@ section { padding: 110px 0; }
   background: #E4F4E8; border: 1px solid #BFE3C9;
   padding: 8px 16px; border-radius: 999px;
 }
-.dialogue-list { display: flex; flex-direction: column; gap: 10px; max-height: 380px; overflow-y: auto; padding-right: 6px; }
+.dialogue-list { display: none; flex-direction: column; gap: 10px; max-height: 380px; overflow-y: auto; padding-right: 6px; }
+.transcript.open .dialogue-list { display: flex; }
+.transcript-toggle {
+  font-size: .82rem; font-weight: 600; color: var(--ink);
+  border: 1.5px solid var(--border); border-radius: 999px;
+  padding: 7px 16px; background: #fff;
+  transition: border-color .2s var(--ease);
+}
+.transcript-toggle:hover { border-color: rgba(20,20,20,.4); }
+
+/* ─── Dashboard: everything at one place ─── */
+.dash { background: var(--lavender); padding: 72px 0; }
+.dash .section-head { text-align: center; margin-bottom: 36px; }
+.dash-collage {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+  max-width: 1120px; margin: 0 auto;
+}
+.dash-shot {
+  background: #fff; border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+  box-shadow: var(--shadow-card); margin: 0;
+}
+.dash-shot img { width: 100%; height: auto; display: block; }
+.dash-shot figcaption {
+  padding: 12px 16px; font-size: .85rem; font-weight: 600; color: var(--muted);
+}
+.dash-cta { text-align: center; margin-top: 34px; }
+@media (max-width: 860px) {
+  .dash-collage { grid-template-columns: 1fr; max-width: 520px; }
+  .dash { padding: 56px 0; }
+}
 .dialogue-row {
   display: flex; gap: 14px; padding: 14px 16px; border-radius: 16px;
   background: #F8F4EB; border: 1px solid transparent;
