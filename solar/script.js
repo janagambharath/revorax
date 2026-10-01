@@ -189,57 +189,32 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  /* ─── Play / Pause (hardened for iOS Safari) ─── */
-  let stallRetries = 0;
-  const MAX_STALL_RETRIES = 3;
-
+  /* ─── Play / Pause ─── */
   function showAudioError(msg) {
     if (timeTxt) timeTxt.textContent = msg;
   }
 
-  // iOS Safari sometimes reports the element playable before data is
-  // actually buffered (preload="metadata" races). Ensure we really have
-  // data before calling play(), otherwise the first seconds can stall
-  // or a premature 'ended' can fire and kill playback.
-  function ensureReady() {
-    if (audio.readyState >= 2) return Promise.resolve(true); // HAVE_CURRENT_DATA+
-    return new Promise(resolve => {
-      const to = setTimeout(() => { cleanup(); resolve(false); }, 8000);
-      const onCan = () => { cleanup(); resolve(true); };
-      const onErr = () => { cleanup(); resolve(false); };
-      function cleanup() {
-        clearTimeout(to);
-        audio.removeEventListener('canplay', onCan);
-        audio.removeEventListener('error', onErr);
-      }
-      audio.addEventListener('canplay', onCan);
-      audio.addEventListener('error', onErr);
-      try { audio.load(); } catch (e) { cleanup(); resolve(false); }
-    });
-  }
-
-  async function toggle() {
+  // play() MUST be called synchronously inside the tap handler. The old
+  // code awaited a readiness gate first — on mobile that expires the
+  // user-gesture activation and the browser refuses to play; the old
+  // stall handler then made it worse by seeking back on every stall,
+  // so playback crawled a second at a time. The browser buffers on its
+  // own — just call play() and let it.
+  function toggle() {
     if (!playing) {
       playing = true;
       setTranscript(true); // auto-expand the transcript so listeners can follow along
       iconPlay.style.display = 'none';
       iconPause.style.display = 'block';
       animWave(true);
-      stallRetries = 0;
       if (DATA[lang].hasAudio && audio) {
-        const ready = await ensureReady();
-        if (!ready) {
-          showAudioError('Audio failed to load — tap play to retry');
-          pause();
-          return;
-        }
-        try {
-          await audio.play();
-        } catch (err) {
-          // Never fake-play silently: surface the failure so it can be retried
+        const p = audio.play(); // synchronous, in-gesture — iOS/Android safe
+        if (p) p.catch(() => {
+          // Surface it so the next tap (media now fetched) can succeed
           showAudioError('Tap play again to start audio');
           pause();
-        }
+          try { audio.load(); } catch (e) { /* element gone — ignore */ }
+        });
       } else { simPlay(); }
     } else { pause(); }
   }
@@ -280,19 +255,9 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       pause(); updateScrub(0, dur);
     });
-    // Network stall recovery: nudge playback instead of dying silently
-    audio.addEventListener('stalled', () => {
-      if (!playing || stallRetries >= MAX_STALL_RETRIES) return;
-      stallRetries++;
-      const pos = audio.currentTime || 0;
-      setTimeout(() => {
-        if (!playing) return;
-        try {
-          audio.currentTime = pos;
-          audio.play().catch(() => {});
-        } catch (e) { /* let the error handler surface it */ }
-      }, 1500);
-    });
+    // No stall handler: seeking back on every 'stalled' event made
+    // playback crawl a second at a time. The browser's own buffering
+    // recovers from network stalls without help.
     audio.addEventListener('error', () => {
       if (playing) showAudioError('Audio error — tap play to retry');
     });
