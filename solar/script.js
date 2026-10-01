@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const DATA = {
     te: {
       hasAudio: true,
-      src: 'assets/telugu-demo-solar-v3.mp3',
+      src: 'assets/telugu-demo-solar-v4.mp3',
       title: 'Inbound Ad Follow-Up — Solar Lead (Telugu)',
       desc: 'Telugu Native Speech · Instant Qualification · Facebook Lead',
       extraction: '✓ Extracted: Solar · Rooftop · Bill ₹3K · Qualified',
@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     en: {
       hasAudio: true,
-      src: 'assets/english-demo-solar-v3.mp3',
+      src: 'assets/english-demo-solar-v4.mp3',
       title: 'Inbound Ad Follow-Up — Solar Lead (English)',
       desc: 'English Native Speech · Instant Qualification · Facebook Lead',
       extraction: '✓ Extracted: Solar · Independent House · Bill ₹3K · Qualified',
@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     hi: {
       hasAudio: true,
-      src: 'assets/hindi-demo-solar-v3.mp3',
+      src: 'assets/hindi-demo-solar-v4.mp3',
       title: 'Inbound Ad Follow-Up — Solar Lead (Hindi)',
       desc: 'Hindi Native Speech · Instant Qualification · Facebook Lead',
       extraction: '✓ Extracted: Solar · Independent House · Bill ₹3K · Qualified',
