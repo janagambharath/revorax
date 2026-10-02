@@ -1,7 +1,7 @@
 /**
  * Revorax Solar — Interaction Scripts
  * Audio player, waveform visualiser, transcript switcher, scroll reveals
- * Telugu-only demo (v5: all-female Sarvam voices — priya AI + ritu customer)
+ * Telugu-only demo (v8: single-voice Cartesia Shanti — no conversation)
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -41,28 +41,22 @@ document.addEventListener('DOMContentLoaded', () => {
   const DATA = {
     te: {
       hasAudio: true,
-      src: 'assets/telugu-demo-solar-v5.mp3',
+      src: 'assets/telugu-demo-solar-v8.mp3',
       title: 'Outbound Follow-Up — Solar Lead (Telugu)',
       desc: 'Telugu Native Speech · Instant Qualification · Facebook Lead',
       extraction: '✓ Extracted: Solar · Rooftop · Bill ₹3K · Qualified',
       lines: [
-        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'హలో... దేవా గారు మాట్లాడుతున్నారా అండి?', t: 0 },
-        { who: 'prospect',  name: 'Deva (Prospect)', text: 'అవునండి, మాట్లాడుతున్నాను. ఎవరండి?', t: 3.6 },
-        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'నమస్తే అండి, నేను ప్రియాని... శ్రీ సూర్యా సోలార్ నుంచి కాల్ చేస్తున్నాను.', t: 6.4 },
-        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'మీరు రూఫ్‌టాప్ సోలార్ గురించి... ఫేస్‌బుక్‌లో ఎంక్వైరీ చేశారు కదండీ?', t: 12.2 },
-        { who: 'prospect',  name: 'Deva (Prospect)', text: 'ఆ, చేశానండి. చెప్పండి.', t: 17.4 },
-        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'ఓకే అండి... అయితే, రెండు చిన్న విషయాలు అడుగుతాను.', t: 20 },
-        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'మీది ఇండిపెండెంట్ హౌసా అండి?', t: 24.5 },
-        { who: 'prospect',  name: 'Deva (Prospect)', text: 'అవునండి, ఇండిపెండెంట్ హౌసే.', t: 27.1 },
-        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'ఓకే... టెర్రస్ మీద ఖాళీ స్థలం ఉందా అండి?', t: 29.8 },
-        { who: 'prospect',  name: 'Deva (Prospect)', text: 'ఉందండి, పైన ఖాళీగానే ఉంది.', t: 33.9 },
-        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'మంచిదండి. మరి... నెలకు కరెంట్ బిల్లు ఎంత వస్తుంది?', t: 36.5 },
-        { who: 'prospect',  name: 'Deva (Prospect)', text: 'మ్మ్... మూడు వేల దాకా వస్తుందండి.', t: 41.2 },
-        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'అర్థమైంది అండి... అంటే, ఇండిపెండెంట్ హౌస్, టెర్రస్ ఖాళీ, బిల్లు మూడు వేలు — కదండీ?', t: 44.5 },
-        { who: 'prospect',  name: 'Deva (Prospect)', text: 'అవునండి, కరెక్ట్.', t: 51.8 },
-        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'సరేనండి, అయితే మీ ఎంక్వైరీ క్వాలిఫైడ్ అయింది.', t: 53.5 },
-        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'మా టీమ్... సైట్ సర్వే కోసం మిమ్మల్ని కాంటాక్ట్ చేస్తారు.', t: 57.9 },
-        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'థాంక్యూ అండి, దేవా గారు!', t: 64 },
+        { who: 'ai', name: 'AI Voice Agent (Shanti)', text: 'హలో... దేవా గారు మాట్లాడుతున్నారా అండి?', t: 0 },
+        { who: 'ai', name: 'AI Voice Agent (Shanti)', text: 'నమస్తే అండి, నేను శాంతిని... శ్రీ సూర్యా సోలార్ నుంచి కాల్ చేస్తున్నాను.', t: 3.35 },
+        { who: 'ai', name: 'AI Voice Agent (Shanti)', text: 'మీరు రూఫ్‌టాప్ సోలార్ గురించి... ఫేస్‌బుక్‌లో ఎంక్వైరీ చేశారు కదండీ?', t: 8.84 },
+        { who: 'ai', name: 'AI Voice Agent (Shanti)', text: 'ఓకే అండి... అయితే, రెండు చిన్న విషయాలు అడుగుతాను.', t: 14.17 },
+        { who: 'ai', name: 'AI Voice Agent (Shanti)', text: 'మీది ఇండిపెండెంట్ హౌసా అండి?', t: 18.46 },
+        { who: 'ai', name: 'AI Voice Agent (Shanti)', text: 'ఓకే... టెర్రస్ మీద ఖాళీ స్థలం ఉందా అండి?', t: 21.15 },
+        { who: 'ai', name: 'AI Voice Agent (Shanti)', text: 'మంచిదండి. మరి... నెలకు కరెంట్ బిల్లు ఎంత వస్తుంది?', t: 25.05 },
+        { who: 'ai', name: 'AI Voice Agent (Shanti)', text: 'అర్థమైంది అండి... అంటే, ఇండిపెండెంట్ హౌస్, టెర్రస్ ఖాళీ, బిల్లు మూడు వేలు — కదండీ?', t: 29.99 },
+        { who: 'ai', name: 'AI Voice Agent (Shanti)', text: 'సరేనండి, అయితే మీ ఎంక్వైరీ క్వాలిఫైడ్ అయింది.', t: 37.18 },
+        { who: 'ai', name: 'AI Voice Agent (Shanti)', text: 'మా టీమ్... సైట్ సర్వే కోసం మిమ్మల్ని కాంటాక్ట్ చేస్తారు.', t: 41.23 },
+        { who: 'ai', name: 'AI Voice Agent (Shanti)', text: 'థాంక్యూ అండి, దేవా గారు!', t: 45.59 },
       ],
     },
   };
@@ -71,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let playing  = false;
   let simTimer = null;
   let simSec   = 0;
-  const SIM_DUR = 34;
+  const SIM_DUR = 48;
 
   /* ─── Render transcript ─── */
   function renderTranscript(key) {
