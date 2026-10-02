@@ -1,6 +1,7 @@
 /**
  * Revorax Solar — Interaction Scripts
  * Audio player, waveform visualiser, transcript switcher, scroll reveals
+ * Telugu-only demo (v5: all-female Sarvam voices — priya AI + ritu customer)
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -13,7 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const scrubber  = document.getElementById('scrubber');
   const scrubFill = document.getElementById('scrubber-fill');
   const timeTxt   = document.getElementById('time-display');
-  const langPills = document.querySelectorAll('.lang-pill');
   const dlList    = document.getElementById('dialogue-list');
 
   /* ─── Transcript collapse (compact demo section) ─── */
@@ -37,83 +37,37 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   const bars = waveform.querySelectorAll('.bar');
 
-  /* ─── Dialogue Data ─── */
+  /* ─── Dialogue Data (Telugu only) ─── */
   const DATA = {
     te: {
       hasAudio: true,
-      src: 'assets/telugu-demo-solar-v4.mp3',
+      src: 'assets/telugu-demo-solar-v5.mp3',
       title: 'Inbound Ad Follow-Up — Solar Lead (Telugu)',
       desc: 'Telugu Native Speech · Instant Qualification · Facebook Lead',
       extraction: '✓ Extracted: Solar · Rooftop · Bill ₹3K · Qualified',
       lines: [
         { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'హలో... దేవా గారు మాట్లాడుతున్నారా అండి?', t: 0 },
-        { who: 'prospect',  name: 'Deva (Prospect)', text: 'అవునండి, మాట్లాడుతున్నాను. ఎవరండి?', t: 2.7 },
-        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'నమస్తే అండి, నేను ప్రియాని... శ్రీ సూర్యా సోలార్ నుంచి కాల్ చేస్తున్నాను.', t: 5.9 },
-        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'మీరు రూఫ్‌టాప్ సోలార్ గురించి... ఫేస్‌బుక్‌లో ఎంక్వైరీ చేశారు కదండీ?', t: 10.2 },
-        { who: 'prospect',  name: 'Deva (Prospect)', text: 'ఆ, చేశానండి. చెప్పండి.', t: 14.5 },
-        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'ఓకే అండి... అయితే, రెండు చిన్న విషయాలు అడుగుతాను.', t: 16.9 },
-        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'మీది ఇండిపెండెంట్ హౌసా అండి?', t: 20.2 },
-        { who: 'prospect',  name: 'Deva (Prospect)', text: 'అవునండి, ఇండిపెండెంట్ హౌసే.', t: 22.6 },
-        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'ఓకే... టెర్రస్ మీద ఖాళీ స్థలం ఉందా అండి?', t: 24.9 },
-        { who: 'prospect',  name: 'Deva (Prospect)', text: 'ఉందండి, పైన ఖాళీగానే ఉంది.', t: 28.1 },
-        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'మంచిదండి. మరి... నెలకు కరెంట్ బిల్లు ఎంత వస్తుంది?', t: 30.6 },
-        { who: 'prospect',  name: 'Deva (Prospect)', text: 'మ్మ్... మూడు వేల దాకా వస్తుందండి.', t: 34.6 },
-        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'అర్థమైంది అండి... అంటే, ఇండిపెండెంట్ హౌస్, టెర్రస్ ఖాళీ, బిల్లు మూడు వేలు — కదండీ?', t: 37.6 },
-        { who: 'prospect',  name: 'Deva (Prospect)', text: 'అవునండి, కరెక్ట్.', t: 43.1 },
-        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'సరేనండి, అయితే మీ ఎంక్వైరీ క్వాలిఫైడ్ అయింది.', t: 44.9 },
-        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'మా టీమ్... సైట్ సర్వే కోసం మిమ్మల్ని కాంటాక్ట్ చేస్తారు.', t: 48.6 },
-        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'థాంక్యూ అండి, దేవా గారు!', t: 52.1 },
-      ],
-    },
-    en: {
-      hasAudio: true,
-      src: 'assets/english-demo-solar-v4.mp3',
-      title: 'Inbound Ad Follow-Up — Solar Lead (English)',
-      desc: 'English Native Speech · Instant Qualification · Facebook Lead',
-      extraction: '✓ Extracted: Solar · Independent House · Bill ₹3K · Qualified',
-      lines: [
-        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'Hello... am I speaking with Deva?', t: 0 },
-        { who: 'prospect',  name: 'Deva (Prospect)', text: 'Yes, speaking. Who\'s this?', t: 3 },
-        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'Hi, I\'m Priya... calling from Sri Surya Solar.', t: 6.1 },
-        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'You\'d enquired about rooftop solar... on Facebook, right?', t: 10.3 },
-        { who: 'prospect',  name: 'Deva (Prospect)', text: 'Yes, I did. Tell me.', t: 14.6 },
-        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'Great... so just two quick things. Yours is an independent house, correct?', t: 16.9 },
-        { who: 'prospect',  name: 'Deva (Prospect)', text: 'Yes, independent house.', t: 22.4 },
-        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'Nice. And... is there open space on the terrace?', t: 24.8 },
-        { who: 'prospect',  name: 'Deva (Prospect)', text: 'Yes, the terrace is mostly empty.', t: 28.9 },
-        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'Got it... so what\'s the monthly electricity bill like?', t: 31.6 },
-        { who: 'prospect',  name: 'Deva (Prospect)', text: 'Hmm... around three thousand.', t: 35.5 },
-        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'Understood... so, independent house, empty terrace, three-thousand bill — correct?', t: 38.7 },
-        { who: 'prospect',  name: 'Deva (Prospect)', text: 'Yes, that\'s right.', t: 45.7 },
-        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'Then your enquiry qualifies. Our team... will contact you for the site survey. Thank you!', t: 47.5 },
-      ],
-    },
-    hi: {
-      hasAudio: true,
-      src: 'assets/hindi-demo-solar-v4.mp3',
-      title: 'Inbound Ad Follow-Up — Solar Lead (Hindi)',
-      desc: 'Hindi Native Speech · Instant Qualification · Facebook Lead',
-      extraction: '✓ Extracted: Solar · Independent House · Bill ₹3K · Qualified',
-      lines: [
-        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'नमस्ते... देवा जी बात कर रहे हैं?', t: 0 },
-        { who: 'prospect',  name: 'Deva (Prospect)', text: 'हाँ, बोल रहा हूँ। कौन?', t: 3.4 },
-        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'नमस्ते, मैं प्रिया बोल रही हूँ... श्री सूर्या सोलर से कॉल कर रही हूँ।', t: 6.6 },
-        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'आपने रूफटॉप सोलर के बारे में... फेसबुक पर इन्क्वायरी की थी, है ना?', t: 11.9 },
-        { who: 'prospect',  name: 'Deva (Prospect)', text: 'हाँ, की थी। बताइए।', t: 16.6 },
-        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'ठीक है... तो दो छोटी बातें पूछूँगी। आपका इंडिपेंडेंट हाउस है ना?', t: 19.2 },
-        { who: 'prospect',  name: 'Deva (Prospect)', text: 'हाँ, इंडिपेंडेंट हाउस ही है।', t: 24.9 },
-        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'बढ़िया। और... छत पर खाली जगह है?', t: 27.3 },
-        { who: 'prospect',  name: 'Deva (Prospect)', text: 'हाँ, छत खाली ही है।', t: 31.2 },
-        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'अच्छा... तो महीने का बिजली बिल कितना आता है?', t: 33.5 },
-        { who: 'prospect',  name: 'Deva (Prospect)', text: 'हम्म... तीन हज़ार तक आ जाता है।', t: 38 },
-        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'समझ गई... मतलब, इंडिपेंडेंट हाउस, छत खाली, बिल तीन हज़ार — सही है ना?', t: 41 },
-        { who: 'prospect',  name: 'Deva (Prospect)', text: 'हाँ, बिल्कुल सही।', t: 48.1 },
-        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'तो आपकी इन्क्वायरी क्वालिफाई हो गई है। हमारी टीम... साइट सर्वे के लिए संपर्क करेगी। धन्यवाद!', t: 50.2 },
+        { who: 'prospect',  name: 'Deva (Prospect)', text: 'అవునండి, మాట్లాడుతున్నాను. ఎవరండి?', t: 3.6 },
+        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'నమస్తే అండి, నేను ప్రియాని... శ్రీ సూర్యా సోలార్ నుంచి కాల్ చేస్తున్నాను.', t: 6.4 },
+        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'మీరు రూఫ్‌టాప్ సోలార్ గురించి... ఫేస్‌బుక్‌లో ఎంక్వైరీ చేశారు కదండీ?', t: 12.2 },
+        { who: 'prospect',  name: 'Deva (Prospect)', text: 'ఆ, చేశానండి. చెప్పండి.', t: 17.4 },
+        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'ఓకే అండి... అయితే, రెండు చిన్న విషయాలు అడుగుతాను.', t: 20 },
+        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'మీది ఇండిపెండెంట్ హౌసా అండి?', t: 24.5 },
+        { who: 'prospect',  name: 'Deva (Prospect)', text: 'అవునండి, ఇండిపెండెంట్ హౌసే.', t: 27.1 },
+        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'ఓకే... టెర్రస్ మీద ఖాళీ స్థలం ఉందా అండి?', t: 29.8 },
+        { who: 'prospect',  name: 'Deva (Prospect)', text: 'ఉందండి, పైన ఖాళీగానే ఉంది.', t: 33.9 },
+        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'మంచిదండి. మరి... నెలకు కరెంట్ బిల్లు ఎంత వస్తుంది?', t: 36.5 },
+        { who: 'prospect',  name: 'Deva (Prospect)', text: 'మ్మ్... మూడు వేల దాకా వస్తుందండి.', t: 41.2 },
+        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'అర్థమైంది అండి... అంటే, ఇండిపెండెంట్ హౌస్, టెర్రస్ ఖాళీ, బిల్లు మూడు వేలు — కదండీ?', t: 44.5 },
+        { who: 'prospect',  name: 'Deva (Prospect)', text: 'అవునండి, కరెక్ట్.', t: 51.8 },
+        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'సరేనండి, అయితే మీ ఎంక్వైరీ క్వాలిఫైడ్ అయింది.', t: 53.5 },
+        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'మా టీమ్... సైట్ సర్వే కోసం మిమ్మల్ని కాంటాక్ట్ చేస్తారు.', t: 57.9 },
+        { who: 'ai',        name: 'AI Voice Agent (Priya)', text: 'థాంక్యూ అండి, దేవా గారు!', t: 64 },
       ],
     },
   };
 
-  let lang     = 'te';
+  const lang     = 'te';
   let playing  = false;
   let simTimer = null;
   let simSec   = 0;
@@ -272,24 +226,6 @@ document.addEventListener('DOMContentLoaded', () => {
       audio.currentTime = pct * audio.duration;
       updateScrub(audio.currentTime, audio.duration);
     } else { simSec = pct * SIM_DUR; updateScrub(simSec, SIM_DUR); }
-  });
-
-  /* Language pills */
-  langPills.forEach(pill => {
-    pill.addEventListener('click', () => {
-      langPills.forEach(p => { p.classList.remove('active'); p.setAttribute('aria-selected', 'false'); });
-      pill.classList.add('active');
-      pill.setAttribute('aria-selected', 'true');
-      lang = pill.dataset.lang;
-      pause();
-      if (audio) {
-        if (DATA[lang].hasAudio && DATA[lang].src) { audio.src = DATA[lang].src; }
-        try { audio.currentTime = 0; } catch (e) { /* metadata not ready yet */ }
-      }
-      simSec = 0;
-      updateScrub(0, SIM_DUR);
-      renderTranscript(lang);
-    });
   });
 
   /* ─── Audit form ─── */
