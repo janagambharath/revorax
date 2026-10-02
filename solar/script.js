@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     te: {
       hasAudio: true,
       src: 'assets/telugu-demo-solar-v5.mp3',
-      title: 'Inbound Ad Follow-Up — Solar Lead (Telugu)',
+      title: 'Outbound Follow-Up — Solar Lead (Telugu)',
       desc: 'Telugu Native Speech · Instant Qualification · Facebook Lead',
       extraction: '✓ Extracted: Solar · Rooftop · Bill ₹3K · Qualified',
       lines: [
