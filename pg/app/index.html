@@ -16,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=pgapp3">
+  <link rel="stylesheet" href="styles.css?v=pgapp4">
 </head>
 <body>
   <div class="bg-orbs" aria-hidden="true"><i class="o1"></i><i class="o2"></i><i class="o3"></i></div>
@@ -35,7 +35,7 @@
         <p class="app-eyebrow">Revorax PG</p>
         <h1 id="pg-name-title">My PG</h1>
       </div>
-      <button class="icon-btn glass" id="settings-btn" aria-label="Settings">⚙️</button>
+      <button class="icon-btn glass" id="settings-btn" aria-label="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
     </header>
 
     <div class="glass hero-card">
@@ -61,6 +61,12 @@
     <h2 class="sec-title">Needs attention</h2>
     <div id="attention-list" class="res-list"></div>
     <div id="attention-empty" class="empty hidden">🎉 All rents collected. Nothing to chase.</div>
+    <div id="demo-cta" class="glass demo-cta hidden">
+      <div class="demo-cta-ico">🏠</div>
+      <h3>See it in action</h3>
+      <p class="muted small">Load 12 sample residents with realistic dues and watch the dashboard come alive.</p>
+      <button class="btn-primary demo-btn">✨ Load demo data</button>
+    </div>
   </section>
 
   <!-- ══ RESIDENTS ══ -->
@@ -78,7 +84,7 @@
       <button data-f="overdue">Overdue</button>
     </div>
     <div id="res-list" class="res-list"></div>
-    <div id="res-empty" class="empty hidden">No residents yet.<br>Tap + to add your first one.</div>
+    <div id="res-empty" class="empty hidden">No residents yet.<br><br><button class="btn-primary demo-btn">✨ Load demo data</button><br><br><span class="muted small">or tap + to add manually</span></div>
     <button class="fab" id="add-btn" aria-label="Add resident">＋</button>
   </section>
 
@@ -109,9 +115,9 @@
 
   <!-- ══ TAB BAR ══ -->
   <nav class="tabbar glass">
-    <button class="tab active" data-scr="scr-home"><span class="tab-ico">🏠</span><span>Home</span></button>
-    <button class="tab" data-scr="scr-residents"><span class="tab-ico">👥</span><span>Residents</span></button>
-    <button class="tab" data-scr="scr-remind"><span class="tab-ico">🔔</span><span>Remind</span></button>
+    <button class="tab active" data-scr="scr-home"><span class="tab-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span><span>Home</span></button>
+    <button class="tab" data-scr="scr-residents"><span class="tab-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span>Residents</span></button>
+    <button class="tab" data-scr="scr-remind"><span class="tab-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></span><span>Remind</span></button>
   </nav>
 
   <!-- ══ ADD / EDIT SHEET ══ -->
@@ -151,7 +157,8 @@
       <div class="detail-status" id="d-status"></div>
       <div class="detail-btns">
         <button class="btn-primary" id="d-paid">✓ Mark paid</button>
-        <button class="btn-wa" id="d-remind">💬 WhatsApp</button>
+        <a class="btn-wa" id="d-remind" href="#" target="_blank" rel="noopener">💬 WhatsApp</a>
+        <a class="btn-call" id="d-call" href="#">📞</a>
       </div>
       <h3 class="sec-title" style="margin-top:18px">Payment history</h3>
       <div id="d-history" class="hist-list"></div>
@@ -181,6 +188,6 @@
   </div>
 
   <div class="toast hidden" id="toast"></div>
-  <script src="app.js?v=pgapp3"></script>
+  <script src="app.js?v=pgapp4"></script>
 </body>
 </html>
