@@ -106,6 +106,7 @@
     });
     DB.onboarded = true;
     save(); renderAll();
+    $('onboard').classList.add('hidden');
     toast('Demo data loaded — 12 residents ✨');
   }
   document.addEventListener('click', function (e) { if (e.target.closest('.demo-btn')) loadDemo(); });
@@ -345,7 +346,8 @@
     $('d-due').textContent = 'Day ' + (r.dueDay || 1);
     var pill = $('d-pill');
     pill.className = 'pill' + (st === 'paid' ? ' paid' : st === 'overdue' ? ' over' : ' unpaid');
-    pill.textContent = st === 'paid' ? 'Paid' : st === 'overdue' ? (daysOverdue(r) + 'd overdue') : 'Unpaid';
+    var dOd = daysOverdue(r);
+    pill.textContent = st === 'paid' ? 'Paid' : st === 'overdue' ? (dOd > 0 ? dOd + 'd overdue' : 'Overdue') : 'Unpaid';
     var h = $('d-history');
     if (r.payments && r.payments.length) {
       h.innerHTML = r.payments.slice().reverse().map(function (p) {

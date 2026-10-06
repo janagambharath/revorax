@@ -1,5 +1,5 @@
 /* Revorax PG app shell — cache-first */
-const CACHE = 'revorax-pg-v2';
+const CACHE = 'revorax-pg-v3';
 const ASSETS = [
   '/pg/app/',
   '/pg/app/index.html',
