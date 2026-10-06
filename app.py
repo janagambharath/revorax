@@ -71,6 +71,12 @@ def pg_home() -> RedirectResponse:
     return RedirectResponse(url="/pg/", status_code=307)
 
 
+@app.get("/pg/app", include_in_schema=False)
+def pg_app_home() -> RedirectResponse:
+    """App lives at /pg/app/ -- redirect the slash-less URL there directly."""
+    return RedirectResponse(url="/pg/app/", status_code=307)
+
+
 app.mount(
     "/renewal-desk",
     StaticFiles(directory=LANDING_DIR, html=True),
