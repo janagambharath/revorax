@@ -313,6 +313,5 @@ section { padding: 110px 0; }
 .footer-col a:hover { color: var(--leaf-dark); }
 .footer-base { grid-column: 1 / -1; border-top: 1px solid var(--border); padding-top: 22px; color: var(--muted); font-size: .85rem; }
 
-/* pricing: crossed setup fee + free badge */
+/* pricing: crossed setup fee style (unused for now) */
 .price-setup s { text-decoration-color: #c62828; text-decoration-thickness: 2px; }
-.free-badge { background: #1fa855; color: #fff; font-weight: 800; font-size: .75rem; padding: 3px 12px; border-radius: 999px; letter-spacing: .04em; }
