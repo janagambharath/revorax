@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     reminder: {
       hasAudio: true,
-      src: 'assets/telugu-demo-dental-followup-v1.mp3',
+      src: 'assets/telugu-demo-dental-followup-v2.mp3',
       lines: [
         { who: 'ai', name: 'AI Voice Agent (Priya)', text: 'హలో... రమేష్ గారు మాట్లాడుతున్నారా?', t: 0 },
         { who: 'ai', name: 'AI Voice Agent (Priya)', text: 'నమస్తే, నేను ప్రియని... స్మైల్ కేర్ డెంటల్ క్లినిక్ నుంచి కాల్ చేస్తున్నాను.', t: 3.56 },
