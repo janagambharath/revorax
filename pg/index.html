@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Revorax PG — Rent Collection on Autopilot for PGs & Hostels</title>
+  <meta name="description" content="Snap a photo of your tenant list. Revorax reads it, tracks every due date, and sends WhatsApp payment reminders automatically — with a UPI pay link inside. 2 weeks free.">
+  <link rel="canonical" href="https://revorax.online/pg">
+  <meta property="og:title" content="Revorax PG — Rent Collection on Autopilot">
+  <meta property="og:description" content="Stop chasing tenants for rent. Automatic WhatsApp reminders with UPI pay links. 2 weeks free.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://revorax.online/pg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="styles.css?v=pg1">
+</head>
+<body>
+
+  <!-- ─── NAV ─── -->
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a href="/" class="brand"><strong>Revorax</strong></a>
+      <nav class="header-nav" aria-label="Primary">
+        <a href="#demo">Live Demo</a>
+        <a href="#how">How It Works</a>
+        <a href="#pricing">Pricing</a>
+      </nav>
+      <div class="header-actions">
+        <a href="https://wa.me/917995854994?text=Hi%2C%20I%20run%20a%20PG%2Fhostel%20and%20want%20the%202-week%20free%20trial%20of%20Revorax%20rent%20reminders." target="_blank" rel="noopener" class="btn btn-black btn-sm">2 Weeks Free</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ================================================================
+         HERO
+         ================================================================ -->
+    <section class="hero" id="top">
+      <div class="shell hero-inner reveal">
+        <p class="eyebrow">Rent Collection for PGs &amp; Hostels</p>
+        <h1>Your Tenants Pay Late.<br>Stop Chasing Them.</h1>
+        <p class="hero-sub">Snap a photo of your tenant list. We read it, track every due date, and send WhatsApp payment reminders automatically.</p>
+        <p class="hero-body">No app for tenants to install. No software to learn. Just a WhatsApp message with a UPI pay link — sent before rent is due, and again when it's late.</p>
+        <div class="hero-actions">
+          <a href="https://wa.me/917995854994?text=Hi%2C%20I%20run%20a%20PG%2Fhostel%20and%20want%20the%202-week%20free%20trial%20of%20Revorax%20rent%20reminders." target="_blank" rel="noopener" class="btn btn-white btn-md">Try 2 Weeks Free</a>
+          <a href="#demo" class="btn btn-ghost btn-md">See It Work ↓</a>
+        </div>
+        <p class="hero-note">Setup in 20 minutes from your existing list · No hardware · Cancel anytime</p>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         INTERACTIVE DEMO
+         ================================================================ -->
+    <section class="demo-section" id="demo">
+      <div class="shell">
+        <div class="section-head reveal">
+          <p class="eyebrow">Interactive Demo</p>
+          <h2>From a photo of your register<br>to rent in your account.</h2>
+          <p>Try the exact flow your PG would use. Demo data — nothing leaves your phone.</p>
+        </div>
+
+        <div class="demo-widget reveal">
+          <!-- step tabs -->
+          <div class="demo-steps">
+            <button class="demo-step active" data-step="1"><span>1</span> Snap &amp; Read</button>
+            <button class="demo-step" data-step="2"><span>2</span> Verify</button>
+            <button class="demo-step" data-step="3"><span>3</span> Auto-Remind</button>
+          </div>
+
+          <!-- STEP 1 : upload + OCR -->
+          <div class="demo-pane active" id="pane-1">
+            <div class="upload-zone" id="upload-zone">
+              <input type="file" id="photo-input" accept="image/*" hidden>
+              <div class="upload-inner" id="upload-inner">
+                <div class="upload-icon">📸</div>
+                <p><strong>Tap to upload a photo</strong> of your tenant list / register</p>
+                <p class="muted">or <button class="link-btn" id="sample-btn" type="button">use a sample register photo</button></p>
+              </div>
+              <div class="scan-view" id="scan-view" hidden>
+                <img id="scan-img" alt="Uploaded register">
+                <div class="scan-line"></div>
+                <p class="scan-text" id="scan-text">Reading names &amp; phone numbers…</p>
+              </div>
+            </div>
+            <p class="pane-note">Our system reads names and phone numbers straight from the photo — even handwritten lists.</p>
+          </div>
+
+          <!-- STEP 2 : verify / edit -->
+          <div class="demo-pane" id="pane-2">
+            <p class="pane-title">We read <strong id="extract-count">6</strong> residents. <span class="muted">Tap any field to correct it.</span></p>
+            <div class="resident-table" id="resident-table"><!-- JS rows --></div>
+            <div class="pane-actions">
+              <button class="btn btn-black btn-md" id="verify-btn" type="button">Looks Good — Start Tracking →</button>
+            </div>
+          </div>
+
+          <!-- STEP 3 : dashboard + reminders -->
+          <div class="demo-pane" id="pane-3">
+            <div class="dash-stats">
+              <div class="dash-stat ok"><b id="st-paid">0</b><span>Paid</span></div>
+              <div class="dash-stat warn"><b id="st-unpaid">0</b><span>Unpaid</span></div>
+              <div class="dash-stat bad"><b id="st-overdue">0</b><span>Overdue</span></div>
+            </div>
+            <div class="dash-cols">
+              <div class="dash-list" id="dash-list"><!-- JS rows --></div>
+              <div class="wa-preview">
+                <p class="wa-label">What your tenant receives — automatically</p>
+                <div class="wa-bubble">
+                  <p>Namaste <span id="wa-name">Ravi</span> garu 🙏<br>Your room rent of <strong id="wa-amt">₹6,500</strong> was due on <strong id="wa-date">5 Oct</strong>.</p>
+                  <p>Pay now: <span class="wa-link">upi://pay?revorax-pg</span></p>
+                  <p class="wa-time">9:00 AM ✓✓</p>
+                </div>
+                <div class="recur-row">
+                  <label class="switch"><input type="checkbox" id="recur-toggle" checked><span class="slider"></span></label>
+                  <p><strong>Recurring reminders ON</strong><br><span class="muted" id="recur-desc">2 days before due date · on due date · 3 &amp; 7 days overdue</span></p>
+                </div>
+              </div>
+            </div>
+            <div class="pane-actions center">
+              <a href="https://wa.me/917995854994?text=Hi%2C%20I%20run%20a%20PG%2Fhostel%20and%20want%20the%202-week%20free%20trial%20of%20Revorax%20rent%20reminders." target="_blank" rel="noopener" class="btn btn-dark btn-md">Get This For My PG — 2 Weeks Free</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         HOW IT WORKS
+         ================================================================ -->
+    <section class="how" id="how">
+      <div class="shell">
+        <div class="section-head reveal">
+          <p class="eyebrow">How It Works</p>
+          <h2>Four steps. Twenty minutes.<br>Then it runs itself.</h2>
+        </div>
+        <div class="how-grid reveal">
+          <div class="how-card">
+            <div class="how-num">1</div>
+            <h3>Snap the list</h3>
+            <p>Photo of your register, notebook, or Excel — whatever you use today. Our system reads names and phone numbers automatically.</p>
+          </div>
+          <div class="how-card">
+            <div class="how-num">2</div>
+            <h3>Verify once</h3>
+            <p>You glance at the extracted list, fix anything in one tap. Add each resident's room, rent amount and due date.</p>
+          </div>
+          <div class="how-card">
+            <div class="how-num">3</div>
+            <h3>We remind</h3>
+            <p>WhatsApp reminders go out automatically — before the due date, on it, and when rent goes overdue. Each with a UPI pay link.</p>
+          </div>
+          <div class="how-card">
+            <div class="how-num">4</div>
+            <h3>You collect</h3>
+            <p>Watch paid / unpaid / overdue on one screen. No knocking on doors. No awkward conversations on the 1st.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         PRICING
+         ================================================================ -->
+    <section class="pricing" id="pricing">
+      <div class="shell">
+        <div class="section-head reveal">
+          <p class="eyebrow">Pricing</p>
+          <h2>One recovered rent<br>pays for months.</h2>
+        </div>
+        <div class="price-card reveal">
+          <p class="price-eyebrow">Revorax PG</p>
+          <p class="price-line"><span class="price-big">₹799</span><span class="price-per">/month</span></p>
+          <p class="price-setup">+ ₹1,499 one-time setup <span class="muted">(we do it for you)</span></p>
+          <ul class="price-feats">
+            <li>✓ Unlimited residents &amp; rooms</li>
+            <li>✓ Automatic WhatsApp reminders with UPI pay link</li>
+            <li>✓ Recurring schedule — before due, on due, overdue</li>
+            <li>✓ Paid / unpaid / overdue dashboard</li>
+            <li>✓ Photo-to-list setup from your register</li>
+          </ul>
+          <p class="price-trial">🎉 <strong>2 weeks free trial.</strong> If collections don't improve, we remove everything.</p>
+          <a href="https://wa.me/917995854994?text=Hi%2C%20I%20run%20a%20PG%2Fhostel%20and%20want%20the%202-week%20free%20trial%20of%20Revorax%20rent%20reminders." target="_blank" rel="noopener" class="btn btn-black btn-md">Start Free Trial</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         FAQ
+         ================================================================ -->
+    <section class="faq">
+      <div class="shell">
+        <div class="section-head reveal">
+          <p class="eyebrow">FAQ</p>
+          <h2>Asked by every PG owner.</h2>
+        </div>
+        <div class="faq-list reveal">
+          <details class="faq-item" open>
+            <summary>My list is in a notebook / on paper. Will this work?</summary>
+            <p>Yes — that's exactly what the photo upload is for. Snap the pages, we read the names and numbers, you verify once. No typing the whole list.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Do tenants need to install an app?</summary>
+            <p>No. Reminders arrive as ordinary WhatsApp messages with a pay link. Nothing to install, nothing to learn.</p>
+          </details>
+          <details class="faq-item">
+            <summary>What if a tenant doesn't have WhatsApp?</summary>
+            <p>We fall back to SMS for those numbers automatically. Same reminder, same pay link.</p>
+          </details>
+          <details class="faq-item">
+            <summary>I already use a PG management app. Why do I need this?</summary>
+            <p>Most apps <em>track</em> rent — they don't <em>collect</em> it. Revorax is the collection layer: automatic reminders with pay links, plus a simple paid/unpaid/overdue view. It works alongside whatever you use.</p>
+          </details>
+          <details class="faq-item">
+            <summary>What happens after the 2-week trial?</summary>
+            <p>If your collections improved, it's ₹799/month. If not, we switch everything off — you keep your list, no charge, no hard feelings.</p>
+          </details>
+        </div>
+        <div class="center reveal">
+          <a href="https://wa.me/917995854994?text=Hi%2C%20I%20run%20a%20PG%2Fhostel%20and%20want%20the%202-week%20free%20trial%20of%20Revorax%20rent%20reminders." target="_blank" rel="noopener" class="btn btn-dark btn-md">Chat on WhatsApp</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ─── FOOTER ─── -->
+  <footer class="site-footer">
+    <div class="shell">
+      <div class="footer-card reveal">
+        <div class="footer-brand">
+          <strong>Revorax</strong>
+          <p>Automation for PGs &amp; hostels.<br>Built in Hyderabad, India.</p>
+        </div>
+        <div class="footer-cols">
+          <div class="footer-col">
+            <h4>Products</h4>
+            <a href="/">All Products</a>
+            <a href="/renewal-desk">Renewal Desk</a>
+            <a href="/dental">Revorax Dental</a>
+            <a href="/solar">Solar</a>
+            <a href="/realestate">Real Estate</a>
+          </div>
+          <div class="footer-col">
+            <h4>Contact</h4>
+            <a href="https://wa.me/917995854994" target="_blank" rel="noopener">WhatsApp Us</a>
+            <a href="tel:+918498826986">Call +91 84988 26986</a>
+          </div>
+        </div>
+        <div class="footer-base">© 2026 Revorax · All rights reserved.</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js?v=pg1"></script>
+</body>
+</html>
