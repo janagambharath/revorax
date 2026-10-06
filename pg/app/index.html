@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Revorax PG — Rent Collection</title>
+  <meta name="description" content="Track PG residents, due dates and send WhatsApp rent reminders.">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#146034">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Revorax PG">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="styles.css?v=pgapp1">
+</head>
+<body>
+
+  <!-- ══ HOME ══ -->
+  <section class="screen active" id="scr-home">
+    <header class="app-head">
+      <div>
+        <p class="app-eyebrow">Revorax PG</p>
+        <h1 id="pg-name-title">My PG</h1>
+      </div>
+      <button class="icon-btn" id="settings-btn" aria-label="Settings">⚙️</button>
+    </header>
+
+    <div class="stats-row">
+      <div class="stat-card ok"><b id="h-paid">0</b><span>Paid</span></div>
+      <div class="stat-card warn"><b id="h-unpaid">0</b><span>Unpaid</span></div>
+      <div class="stat-card bad"><b id="h-overdue">0</b><span>Overdue</span></div>
+    </div>
+
+    <div class="money-row">
+      <div class="money-card"><span>Collected</span><b id="h-collected">₹0</b></div>
+      <div class="money-card"><span>Pending</span><b id="h-pending">₹0</b></div>
+    </div>
+
+    <h2 class="sec-title">Needs attention</h2>
+    <div id="attention-list" class="res-list"></div>
+    <div id="attention-empty" class="empty hidden">🎉 All rents collected. Nothing to chase.</div>
+  </section>
+
+  <!-- ══ RESIDENTS ══ -->
+  <section class="screen" id="scr-residents">
+    <header class="app-head">
+      <div><p class="app-eyebrow">Revorax PG</p><h1>Residents</h1></div>
+    </header>
+    <div class="search-row">
+      <input id="search" type="search" placeholder="Search name, room, phone…" autocomplete="off">
+    </div>
+    <div id="res-list" class="res-list"></div>
+    <div id="res-empty" class="empty hidden">No residents yet.<br>Tap + to add your first one.</div>
+    <button class="fab" id="add-btn" aria-label="Add resident">＋</button>
+  </section>
+
+  <!-- ══ REMIND ══ -->
+  <section class="screen" id="scr-remind">
+    <header class="app-head">
+      <div><p class="app-eyebrow">Revorax PG</p><h1>Reminders</h1></div>
+    </header>
+    <div class="lang-row">
+      <span>Message language</span>
+      <div class="seg" id="lang-seg">
+        <button data-lang="en" class="on">English</button>
+        <button data-lang="te">తెలుగు</button>
+      </div>
+    </div>
+    <div class="tpl-preview" id="tpl-preview"></div>
+    <h2 class="sec-title">Unpaid &amp; overdue <span class="muted" id="remind-count"></span></h2>
+    <div id="remind-list" class="res-list"></div>
+    <div id="remind-empty" class="empty hidden">Nobody to remind. 🎉</div>
+  </section>
+
+  <!-- ══ TAB BAR ══ -->
+  <nav class="tabbar">
+    <button class="tab active" data-scr="scr-home"><span class="tab-ico">🏠</span><span>Home</span></button>
+    <button class="tab" data-scr="scr-residents"><span class="tab-ico">👥</span><span>Residents</span></button>
+    <button class="tab" data-scr="scr-remind"><span class="tab-ico">🔔</span><span>Remind</span></button>
+  </nav>
+
+  <!-- ══ ADD / EDIT SHEET ══ -->
+  <div class="sheet-backdrop hidden" id="sheet-backdrop">
+    <div class="sheet">
+      <div class="sheet-grip"></div>
+      <h2 id="sheet-title">Add resident</h2>
+      <div class="scan-actions">
+        <button class="btn-outline" id="scan-btn">📸 Scan from photo <span class="pill-demo">demo</span></button>
+        <input type="file" id="scan-input" accept="image/*" hidden>
+      </div>
+      <div id="scan-status" class="scan-status hidden"><div class="scan-bar"></div><p>Reading photo…</p></div>
+      <label>Name<input id="f-name" placeholder="Ravi Kumar" autocomplete="off"></label>
+      <label>Phone (10 digits)<input id="f-phone" inputmode="numeric" placeholder="98765 43210" autocomplete="off"></label>
+      <div class="frow">
+        <label>Room<input id="f-room" placeholder="101" autocomplete="off"></label>
+        <label>Rent ₹<input id="f-rent" inputmode="numeric" placeholder="6500" autocomplete="off"></label>
+        <label>Due day<input id="f-due" inputmode="numeric" placeholder="5" autocomplete="off"></label>
+      </div>
+      <div class="sheet-btns">
+        <button class="btn-danger hidden" id="del-btn">Delete</button>
+        <span class="flex"></span>
+        <button class="btn-ghost2" id="sheet-cancel">Cancel</button>
+        <button class="btn-primary" id="sheet-save">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ RESIDENT DETAIL SHEET ══ -->
+  <div class="sheet-backdrop hidden" id="detail-backdrop">
+    <div class="sheet">
+      <div class="sheet-grip"></div>
+      <h2 id="d-name">—</h2>
+      <p class="muted" id="d-sub">—</p>
+      <div class="detail-status" id="d-status"></div>
+      <div class="detail-btns">
+        <button class="btn-primary" id="d-paid">✓ Mark paid</button>
+        <button class="btn-wa" id="d-remind">💬 WhatsApp reminder</button>
+      </div>
+      <div class="sheet-btns">
+        <button class="btn-ghost2" id="d-edit">Edit</button>
+        <span class="flex"></span>
+        <button class="btn-ghost2" id="d-close">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SETTINGS SHEET ══ -->
+  <div class="sheet-backdrop hidden" id="settings-backdrop">
+    <div class="sheet">
+      <div class="sheet-grip"></div>
+      <h2>PG Settings</h2>
+      <label>PG / hostel name<input id="s-pgname" placeholder="Sri Lakshmi PG" autocomplete="off"></label>
+      <label>UPI ID for payments<input id="s-upi" placeholder="mopg@upi" autocomplete="off"></label>
+      <p class="muted small">UPI ID is added to every reminder as a pay link.</p>
+      <div class="sheet-btns">
+        <button class="btn-danger" id="wipe-btn">Erase all data</button>
+        <span class="flex"></span>
+        <button class="btn-ghost2" id="s-cancel">Cancel</button>
+        <button class="btn-primary" id="s-save">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js?v=pgapp1"></script>
+</body>
+</html>
