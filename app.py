@@ -18,6 +18,7 @@ LANDING_DIR = ROOT_DIR / "renewal-desk"
 DENTAL_DIR = ROOT_DIR / "dental" / "out"
 REALESTATE_DIR = ROOT_DIR / "realestate"
 SOLAR_DIR = ROOT_DIR / "solar"
+PG_DIR = ROOT_DIR / "pg"
 
 app = FastAPI(
     title="Revorax",
@@ -38,6 +39,7 @@ def health_check() -> dict[str, str]:
 def revorax_home() -> FileResponse:
     """Serve the Revorax product index."""
     return FileResponse(ROOT_DIR / "index.html")
+
 
 
 @app.get("/renewal-desk", include_in_schema=False)
@@ -61,12 +63,21 @@ def realestate_home() -> RedirectResponse:
 @app.get("/solar", include_in_schema=False)
 def solar_home() -> RedirectResponse:
     """Keep the canonical solar landing-page URL working without a trailing slash."""
-    return RedirectResponse(url="/solar/", status_code=307)
+    return RedirectResponse(url="/solar/", status_code=307) 
+    @app.get("/pg", include_in_schema=False)
+    def pg_home() -> RedirectResponse:
+            """Keep the canonical PG landing-page URL working without a trailing slash."""
+        return RedirectResponse(url="/pg/", status_code=307)
+    
 
 
 app.mount(
+
     "/renewal-desk",
     StaticFiles(directory=LANDING_DIR, html=True),
+
+
+
     name="renewal-desk",
 )
 
@@ -86,5 +97,6 @@ app.mount(
     "/solar",
     StaticFiles(directory=SOLAR_DIR, html=True),
     name="solar",
+    app.mount("/pg", StaticFiles(directory=PG_DIR, html=True), name="pg")
 )
 
