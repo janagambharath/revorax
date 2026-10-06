@@ -66,6 +66,48 @@
     return 'https://wa.me/91' + cleanPhone(r.phone) + '?text=' + encodeURIComponent(msgFor(r, DB.lang));
   }
 
+  /* ---------- demo data: 12 Telugu residents ---------- */
+  function prevYM() {
+    var d = new Date(); d.setMonth(d.getMonth() - 1);
+    return ym(d);
+  }
+  var DEMO = [
+    { name: 'Srinivas Goud',   phone: '9812345670', room: '101', rent: '6500', dueDay: '5',  paid: true  },
+    { name: 'Venkatesh Yadav', phone: '9948123456', room: '102', rent: '6000', dueDay: '5',  paid: false },
+    { name: 'Nagaraju Mudiraj',phone: '9034567890', room: '103', rent: '5500', dueDay: '10', paid: false },
+    { name: 'Ramesh Chary',    phone: '9849012345', room: '104', rent: '7000', dueDay: '5',  paid: true  },
+    { name: 'Lakshmi Devi',    phone: '9701234567', room: '201', rent: '6500', dueDay: '5',  paid: false },
+    { name: 'Priya Sharma',    phone: '9123456789', room: '202', rent: '7500', dueDay: '10', paid: false },
+    { name: 'Anitha Reddy',    phone: '9989012345', room: '203', rent: '6000', dueDay: '5',  paid: true  },
+    { name: 'Divya Sri',       phone: '9705678901', room: '204', rent: '6500', dueDay: '5',  paid: false },
+    { name: 'Kavya Reddy',     phone: '9640123456', room: '301', rent: '7000', dueDay: '10', paid: false },
+    { name: 'Santosh Kumar',   phone: '9866543210', room: '302', rent: '5500', dueDay: '5',  paid: true  },
+    { name: 'Pradeep Singh',   phone: '9000123456', room: '303', rent: '6500', dueDay: '5',  paid: false },
+    { name: 'Mahesh Babu',     phone: '9885543210', room: '304', rent: '6000', dueDay: '10', paid: false }
+  ];
+  function loadDemo() {
+    DB.residents = DEMO.map(function (d) {
+      var r = {
+        id: 'r' + (DB.seq++), name: d.name, phone: d.phone,
+        room: d.room, rent: d.rent, dueDay: d.dueDay, payments: []
+      };
+      if (d.paid) {
+        r.paidFor = curYM;
+        r.payments.push({ ym: prevYM(), date: prevYM() + '-06', amount: Number(d.rent) });
+        r.payments.push({ ym: curYM, date: curYM + '-04', amount: Number(d.rent) });
+      } else {
+        r.paidFor = '';
+        r.payments.push({ ym: prevYM(), date: prevYM() + '-07', amount: Number(d.rent) });
+      }
+      return r;
+    });
+    save(); renderAll();
+    toast('Demo data loaded — 12 residents ✨');
+  }
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('.demo-btn')) loadDemo();
+  });
+
   /* ---------- tabs ---------- */
   var tabs = document.querySelectorAll('.tab');
   tabs.forEach(function (t) {
@@ -132,8 +174,10 @@
     });
     var list = document.getElementById('attention-list');
     list.innerHTML = '';
-    document.getElementById('attention-empty').classList.toggle('hidden', attn.length > 0);
-    attn.slice(0, 8).forEach(function (x) { list.appendChild(resRow(x.r, x.st, true)); });
+    var isEmpty = DB.residents.length === 0;
+    document.getElementById('demo-cta').classList.toggle('hidden', !isEmpty);
+    document.getElementById('attention-empty').classList.toggle('hidden', attn.length > 0 || isEmpty);
+    if (!isEmpty) attn.slice(0, 8).forEach(function (x) { list.appendChild(resRow(x.r, x.st, true)); });
   }
 
   var curFilter = 'all';
@@ -286,6 +330,8 @@
       (st === 'overdue' ? '<span class="overdue-tag">' + daysOverdue(r) + ' days overdue</span>' :
        r.paidFor ? '<span class="muted small">paid for ' + r.paidFor + '</span>' : '');
     document.getElementById('d-paid').style.display = st === 'paid' ? 'none' : '';
+    document.getElementById('d-remind').href = waLink(r);
+    document.getElementById('d-call').href = 'tel:+91' + cleanPhone(r.phone);
     var hist = document.getElementById('d-history');
     hist.innerHTML = '';
     var pays = (r.payments || []).slice().reverse();
@@ -313,10 +359,6 @@
       toast(inr(r.rent) + ' marked paid ✓');
     }
     detailBd.classList.add('hidden'); renderAll();
-  });
-  document.getElementById('d-remind').addEventListener('click', function () {
-    var r = DB.residents.find(function (x) { return x.id === detailId; });
-    if (r) window.open(waLink(r), '_blank');
   });
 
   /* ---------- settings ---------- */
