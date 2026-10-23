@@ -42,6 +42,14 @@
   .col li:last-child{border-bottom:0}
   .x{color:var(--no);font-weight:700;flex:none}
   .tick{color:var(--ok);font-weight:700;flex:none}
+  .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:22px}
+  @media(max-width:760px){.pillars{grid-template-columns:1fr}}
+  .pillar{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px}
+  .pillar .tag{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--acc);background:var(--acc2);display:inline-block;padding:4px 10px;border-radius:999px}
+  .pillar h3{font-size:18px;margin-top:12px}
+  .pillar p{color:var(--mut);font-size:14.5px;margin-top:8px}
+  .rd-cta{text-align:center;margin-top:26px}
+  .rd-cta a{display:inline-block;background:var(--ink);color:#fff;font-weight:700;font-size:15px;padding:12px 24px;border-radius:11px;text-decoration:none}
   .payoff{text-align:center;font-size:19px;font-weight:600;max-width:700px;margin:34px auto 0;line-height:1.5}
   .payoff span{color:var(--acc)}
   .products{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
@@ -121,6 +129,30 @@
       </div>
     </div>
     <p class="payoff">By the time your team gets involved, they aren't chasing a cold enquiry. <span>They are following up on an opportunity.</span></p>
+  </section>
+
+  <section>
+    <div class="eyebrow" style="padding-top:0">For Gym Owners</div>
+    <h2>Renewal Desk — Memberships That Renew Themselves</h2>
+    <p class="sec-sub">Renewal Desk reads every member's attendance, payments and expiry — and acts on WhatsApp before a member quietly quits. We call it RRR.</p>
+    <div class="pillars">
+      <div class="pillar">
+        <span class="tag">Revenue</span>
+        <h3>Renewals, chased automatically</h3>
+        <p>A renewal reminder ladder with a payment QR lands on the member's WhatsApp at the right time. Your dashboard shows Revenue at Risk, Revenue Recovered and your Recovery Rate.</p>
+      </div>
+      <div class="pillar">
+        <span class="tag">Retain</span>
+        <h3>Spot the member who's drifting</h3>
+        <p>Visits drop by half? They get a check-in nudge. No visit in 14 days? A "we miss you" goes out — while there's still time to save the membership.</p>
+      </div>
+      <div class="pillar">
+        <span class="tag">Recover</span>
+        <h3>Win back the expired</h3>
+        <p>Expired members get a win-back sequence on day 3, 7 and 14. Door access blocks on expiry and unblocks the moment they pay — through your biometric.</p>
+      </div>
+    </div>
+    <div class="rd-cta"><a href="/renewal-desk">See Renewal Desk →</a></div>
   </section>
 
   <section>
