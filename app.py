@@ -19,6 +19,7 @@ DENTAL_DIR = ROOT_DIR / "dental" / "out"
 REALESTATE_DIR = ROOT_DIR / "realestate"
 SOLAR_DIR = ROOT_DIR / "solar"
 PG_DIR = ROOT_DIR / "pg"
+KITS_DIR = ROOT_DIR / "kits"
 
 app = FastAPI(
     title="Revorax",
@@ -105,4 +106,10 @@ app.mount(
     "/pg",
     StaticFiles(directory=PG_DIR, html=True),
     name="pg",
+)
+
+app.mount(
+    "/kits",
+    StaticFiles(directory=KITS_DIR, html=True),
+    name="kits",
 )
