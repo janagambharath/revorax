@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>First Line Front Desk for Med Spas — White-Label Demo</title>
+<style>
+  :root{--ink:#101828;--mut:#475467;--line:#e4e7ec;--bg:#fbfcfe;--card:#fff;--acc:#175cd3;--acc2:#eef4ff;--ok:#067647;--okbg:#ecfdf3;--no:#b42318;--nobg:#fef3f2}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,'Segoe UI',Inter,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
+  .wrap{max-width:1060px;margin:0 auto;padding:0 20px 64px}
+  header{display:flex;align-items:center;justify-content:space-between;padding:18px 0;border-bottom:1px solid var(--line)}
+  .agency{display:flex;align-items:center;gap:12px}
+  .logo{width:40px;height:40px;border-radius:10px;background:var(--acc);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px}
+  .agency b{font-size:16px}.agency span{display:block;font-size:12px;color:var(--mut);font-weight:400}
+  .badge{font-size:12px;font-weight:600;color:var(--acc);background:var(--acc2);padding:6px 12px;border-radius:999px}
+  .eyebrow{text-align:center;text-transform:uppercase;letter-spacing:.14em;font-size:12.5px;font-weight:700;color:var(--acc);padding:54px 0 14px}
+  .hero{text-align:center}
+  .hero h1{font-size:44px;line-height:1.12;letter-spacing:-.02em;max-width:760px;margin:0 auto}
+  .hero .punch{font-size:20px;font-weight:700;margin-top:22px}
+  .hero p{color:var(--mut);font-size:17px;max-width:640px;margin:14px auto 0}
+  @media(max-width:760px){.hero h1{font-size:31px}}
+  section{margin-top:56px}
+  h2{font-size:27px;letter-spacing:-.01em;text-align:center}
+  .sec-sub{color:var(--mut);font-size:15.5px;text-align:center;margin:10px auto 22px;max-width:560px}
+  .sample-note{font-size:12px;color:#b54708;background:#fffaeb;border:1px solid #fedf89;padding:4px 11px;border-radius:999px;white-space:nowrap}
+  .demo-wrap{max-width:380px;margin:0 auto}
+  .phone{background:#0b1220;border-radius:28px;padding:18px 16px;color:#e4e7ec;min-height:430px;display:flex;flex-direction:column;box-shadow:0 18px 40px rgba(16,24,40,.18)}
+  .phone .p-head{text-align:center;padding-bottom:12px;border-bottom:1px solid #1d2939}
+  .phone .p-head b{color:#fff;font-size:14px;display:block}
+  .phone .p-head span{font-size:11.5px;color:#98a2b3}
+  .msgs{flex:1;padding:14px 2px;display:flex;flex-direction:column;gap:10px;overflow:hidden}
+  .msg{max-width:85%;padding:9px 12px;border-radius:14px;font-size:13.5px;opacity:0;transform:translateY(6px);transition:all .35s}
+  .msg.show{opacity:1;transform:none}
+  .msg.agent{background:#175cd3;color:#fff;align-self:flex-start;border-bottom-left-radius:4px}
+  .msg.caller{background:#1d2939;align-self:flex-end;border-bottom-right-radius:4px}
+  .msg.sys{background:var(--okbg);color:var(--ok);align-self:center;font-size:12px;font-weight:600;border-radius:999px}
+  .play-btn{width:100%;background:var(--acc);color:#fff;border:0;border-radius:12px;padding:13px;font-size:15px;font-weight:600;cursor:pointer}
+  .play-btn:hover{background:#1849a9}
+  .contrast{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:8px}
+  @media(max-width:760px){.contrast{grid-template-columns:1fr}}
+  .col{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px}
+  .col h3{font-size:17px;margin-bottom:14px}
+  .col ul{list-style:none}
+  .col li{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14.5px}
+  .col li:last-child{border-bottom:0}
+  .x{color:var(--no);font-weight:700;flex:none}
+  .tick{color:var(--ok);font-weight:700;flex:none}
+  .payoff{text-align:center;font-size:19px;font-weight:600;max-width:680px;margin:34px auto 0;line-height:1.5}
+  .payoff span{color:var(--acc)}
+  .samples{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:760px){.samples{grid-template-columns:1fr}}
+  .mini{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px}
+  .mini h3{font-size:16px;margin-bottom:8px}
+  .mini p{font-size:14px;color:var(--mut)}
+  .mini .row{display:flex;justify-content:space-between;font-size:13.5px;padding:8px 0;border-bottom:1px solid var(--line)}
+  .mini .row:last-child{border-bottom:0}
+  .pill{font-size:11.5px;font-weight:600;padding:2px 9px;border-radius:999px;background:var(--okbg);color:var(--ok)}
+  footer{margin-top:56px;background:var(--ink);color:#fff;border-radius:16px;padding:32px 28px;text-align:center}
+  footer h3{font-size:22px}
+  footer p{color:#d0d5dd;font-size:14.5px;margin-top:8px}
+  .fineprint{text-align:center;color:var(--mut);font-size:12px;margin-top:18px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="agency">
+      <div class="logo">L</div>
+      <b>Leadhub<span>White-label partner demo</span></b>
+    </div>
+    <div class="badge">Your brand on top — we build it</div>
+  </header>
+
+  <div class="eyebrow">First Line Front Desk for Med Spas</div>
+
+  <div class="hero">
+    <h1>A New Patient Called.<br>Who Answered?</h1>
+    <p class="punch">Your Client Paid For That Inquiry. Don't Let It Die In Voicemail.</p>
+    <p>Every inquiry gets an immediate first conversation — before they call the next med spa. Intent identified, appointment booked, conversation captured — handed to the front desk ready to welcome, not chase.</p>
+  </div>
+
+  <section>
+    <h2>Experience the Voice AI. Instantly.</h2>
+    <p class="sec-sub">An after-hours patient inquiry, booked live on the call — press play.<br><span class="sample-note">Simulated demo — “Lumière Med Spa” is a fictional business; all names &amp; data are illustrative</span></p>
+    <div class="demo-wrap">
+      <div class="phone">
+        <div class="p-head"><b>Lumière Med Spa</b><span>Incoming call · 8:47 PM · after hours</span></div>
+        <div class="msgs" id="msgs"></div>
+        <button class="play-btn" id="play">▶ &nbsp;Play the call</button>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow" style="padding-top:0">First Line Front Desk for Med Spas</div>
+    <h2>The first conversation, handled before the front desk starts.</h2>
+    <div class="contrast" style="margin-top:22px">
+      <div class="col">
+        <h3>What it doesn't do</h3>
+        <ul>
+          <li><span class="x">✕</span>It doesn't replace the front desk team.</li>
+          <li><span class="x">✕</span>It doesn't give medical advice or diagnose anything.</li>
+          <li><span class="x">✕</span>It doesn't decide treatments or prices.</li>
+          <li><span class="x">✕</span>It doesn't replace the relationship with the patient.</li>
+          <li><span class="x">✕</span>It doesn't decide how the practice runs its day.</li>
+        </ul>
+      </div>
+      <div class="col">
+        <h3>What it does do</h3>
+        <ul>
+          <li><span class="tick">✓</span>It answers on the first ring, 24/7 — before the caller tries the next med spa.</li>
+          <li><span class="tick">✓</span>It has the first conversation while the inquiry is fresh — not sitting in voicemail waiting for a callback.</li>
+          <li><span class="tick">✓</span>It asks the first questions, so the team skips the basic-details round — new or returning, treatment of interest, preferred time.</li>
+          <li><span class="tick">✓</span>It labels every inquiry — Booked, Callback, Info Needed, Not Interested, Wrong Number.</li>
+          <li><span class="tick">✓</span>It records and transcribes every call — the team gets full context before speaking to the patient.</li>
+          <li><span class="tick">✓</span>It extracts what matters — treatment, preferred provider, timeline, and contact details.</li>
+          <li><span class="tick">✓</span>It hands the booked appointment to the team with the conversation attached — context first, not “hi, returning your call.”</li>
+        </ul>
+      </div>
+    </div>
+    <p class="payoff">By the time your client's team gets involved, they aren't returning a missed call. <span>They are welcoming a booked patient.</span></p>
+  </section>
+
+  <section>
+    <h2 style="text-align:left;font-size:21px">Also in this kit</h2>
+    <div class="samples" style="margin-top:16px">
+      <div class="mini">
+        <h3>Website sample</h3>
+        <p>The front door the call sits behind — a clean, fast site build for the same demo med spa: physician-led positioning, treatment pages, booking in under a minute. Built to the same standard for every client you sign.</p>
+      </div>
+      <div class="mini">
+        <h3>Morning dashboard <span class="sample-note" style="margin-left:6px">Sample data</span></h3>
+        <div class="row"><span>Calls answered this month</span><b>128</b></div>
+        <div class="row"><span>Appointments booked</span><b>41</b></div>
+        <div class="row"><span>After-hours inquiries captured</span><b>23</b></div>
+        <div class="row"><span>Sarah M. — Botox consult, Sat 11:30 AM</span><span class="pill">Confirmed by text</span></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <h3>You sell it. We build and deliver it.</h3>
+    <p>Your brand on everything the client sees. Your margin on every sale.<br>Reply to the message that sent you this link and we'll put your agency's name on this kit.</p>
+  </footer>
+
+  <p class="fineprint">Demonstration page — simulated conversation, fictional business, illustrative sample data. No real patients, calls, or results are shown.</p>
+
+</div>
+
+<script>
+  var script = [
+    {who:'caller', text:"Hi… are you open? I was hoping to ask about Botox."},
+    {who:'agent',  text:"Hi, this is Lumière Med Spa. We're closed right now, but I can help you book. Have you visited us before?"},
+    {who:'caller', text:"No, first time. I wanted a consultation sometime this weekend if possible."},
+    {who:'agent',  text:"Of course. I have Saturday at 11:30 AM or 2:15 PM with Dr. Patel for a consultation. Which suits you better?"},
+    {who:'caller', text:"11:30 works."},
+    {who:'agent',  text:"You're booked — Saturday 11:30 AM, Botox consultation with Dr. Patel. Can I take your name and mobile number for the confirmation text?"},
+    {who:'caller', text:"Sarah Miller, and this number is fine."},
+    {who:'sys',    text:"✓ Appointment booked · Confirmation text sent to Sarah M."}
+  ];
+  var playing = false;
+  document.getElementById('play').addEventListener('click', function(){
+    if (playing) return; playing = true;
+    var box = document.getElementById('msgs'); box.innerHTML = '';
+    this.textContent = 'Playing…';
+    var i = 0, btn = this;
+    (function step(){
+      if (i >= script.length) { btn.textContent = '↻ Replay the call'; playing = false; return; }
+      var m = script[i]; var d = document.createElement('div');
+      d.className = 'msg ' + m.who; d.textContent = m.text;
+      box.appendChild(d); requestAnimationFrame(function(){ d.classList.add('show'); });
+      i++; setTimeout(step, m.who === 'sys' ? 600 : 1250);
+    })();
+  });
+</script>
+</body>
+</html>
